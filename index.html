@@ -3,280 +3,225 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Charlotte Day Trip - Better Route</title>
+  <title>Automation Git Access Audit</title>
   <style>
     :root {
-      --ink: #17212b;
-      --muted: #5f6b7a;
-      --line: #d9e0e8;
-      --paper: #f5f7fa;
-      --panel: #fff;
-      --blue: #245fc7;
-      --green: #257a55;
-      --amber: #b86500;
-      --red: #b54141;
-      --dark: #111820;
+      color-scheme: light dark;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
     }
-    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--paper);
-      color: var(--ink);
-      letter-spacing: 0;
+      background: #f6f7f9;
+      color: #1f2933;
     }
-    a { color: var(--blue); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    header {
-      background: var(--dark);
-      color: white;
-      padding: 22px 16px 18px;
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 18px 56px;
     }
-    .wrap { max-width: 1120px; margin: 0 auto; }
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr);
-      gap: 18px;
-      align-items: end;
+    h1, h2 {
+      line-height: 1.15;
     }
-    h1 { margin: 0 0 8px; font-size: clamp(30px, 8vw, 54px); line-height: .96; }
-    .sub { margin: 0; color: #d6dde6; font-size: 16px; line-height: 1.45; max-width: 760px; }
-    .hero-img {
-      min-height: 220px;
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+    }
+    .meta {
+      margin: 0 0 28px;
+      color: #52606d;
+    }
+    section {
+      margin: 18px 0;
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid #d9e2ec;
       border-radius: 8px;
-      background:
-        linear-gradient(180deg, rgba(17,24,32,.1), rgba(17,24,32,.78)),
-        url("https://upload.wikimedia.org/wikipedia/commons/f/fd/RMS_Titanic_3.jpg") center / cover;
-      display: flex;
-      align-items: end;
-      padding: 14px;
-      color: #e8edf2;
-      font-size: 12px;
     }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-    .btn {
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: var(--blue);
-      color: white;
-      font-weight: 800;
-      border: 1px solid rgba(255,255,255,.18);
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.95rem;
     }
-    .btn.secondary { background: transparent; color: white; border-color: #667283; }
-    main { padding: 16px; }
-    section { margin: 16px auto; }
-    .grid { display: grid; gap: 14px; }
-    .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .two { grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr); }
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 1px 2px rgba(16,24,40,.04);
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #d9e2ec;
+      text-align: left;
+      vertical-align: top;
     }
-    .kpi .label { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
-    .kpi .value { font-size: 28px; font-weight: 900; line-height: 1; }
-    .kpi .note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.35; }
-    h2 { margin: 0 0 12px; font-size: 22px; }
-    h3 { margin: 0 0 5px; font-size: 17px; }
-    p { line-height: 1.5; }
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 5px 9px;
-      margin: 4px 6px 0 0;
-      font-size: 12px;
-      background: #fff;
-      color: #344054;
+    th {
+      background: #eef2f7;
+      font-weight: 650;
     }
-    .timeline { display: grid; gap: 10px; }
-    .stop {
-      display: grid;
-      grid-template-columns: 78px 1fr;
-      gap: 12px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fbfcfe;
+    code {
+      padding: 2px 5px;
+      background: #eef2f7;
+      border-radius: 4px;
+      font-size: 0.92em;
     }
-    .time { font-weight: 900; color: var(--blue); }
-    .meta { color: var(--muted); font-size: 13px; line-height: 1.45; }
-    .warn { border-left: 4px solid var(--amber); }
-    .good { border-left: 4px solid var(--green); }
-    .places { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .photo {
-      height: 118px;
-      display: flex;
-      align-items: end;
-      padding: 12px;
-      color: white;
-      font-weight: 900;
-      border-radius: 8px 8px 0 0;
-      background: linear-gradient(135deg, #1f2937, #475467);
+    .ok {
+      color: #0f7b3f;
+      font-weight: 700;
     }
-    .photo.titanic { background: linear-gradient(180deg, rgba(8,20,34,.15), rgba(8,20,34,.82)), url("https://upload.wikimedia.org/wikipedia/commons/f/fd/RMS_Titanic_3.jpg") center / cover; }
-    .photo.gridp { background: linear-gradient(135deg, #1f7a4d, #263238); }
-    .photo.micro { background: linear-gradient(135deg, #b32424, #27272a); }
-    .photo.ikea { background: linear-gradient(135deg, #0058a3, #ffda1a); color: #111820; }
-    .place { padding: 0; overflow: hidden; }
-    .place .body { padding: 12px; }
-    .bars { display: grid; gap: 12px; }
-    .barrow { display: grid; grid-template-columns: 124px 1fr 70px; gap: 10px; align-items: center; font-size: 13px; }
-    .bar { height: 16px; border-radius: 999px; background: #e7ecf2; overflow: hidden; }
-    .fill { height: 100%; border-radius: 999px; background: var(--blue); }
-    .cost .fill { background: var(--amber); }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
-    .small, .sources { color: var(--muted); font-size: 12px; line-height: 1.55; }
-    @media (max-width: 820px) {
-      .hero, .two, .places, .kpis { grid-template-columns: 1fr; }
-      .hero-img { min-height: 170px; }
-      main { padding: 12px; }
-      .card { padding: 14px; }
-      .stop { grid-template-columns: 64px 1fr; }
-      .barrow { grid-template-columns: 92px 1fr 54px; }
-      .kpi .value { font-size: 24px; }
+    .fixed {
+      color: #075985;
+      font-weight: 700;
+    }
+    .warn {
+      color: #a15c00;
+      font-weight: 700;
+    }
+    ul {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #111827;
+        color: #e5e7eb;
+      }
+      .meta {
+        color: #b6c2cf;
+      }
+      section {
+        background: #182231;
+        border-color: #2f3b4a;
+      }
+      th {
+        background: #223044;
+      }
+      th, td {
+        border-bottom-color: #2f3b4a;
+      }
+      code {
+        background: #223044;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap hero">
-      <div>
-        <h1>Charlotte Day Trip</h1>
-        <p class="sub">Improved route for Saturday, May 16, 2026: hit the closer south stop after Titanic, then swing west to The GRID, then finish at IKEA before returning toward Cary.</p>
-        <div class="actions">
-          <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=Cary%2C%20NC&destination=Cary%2C%20NC&travelmode=driving&waypoints=The%20Park%20Expo%20%26%20Conference%20Center%2C%20800%20Briar%20Creek%20Rd%2C%20Charlotte%2C%20NC%2028205%7CMicro%20Center%2C%204744%20South%20Blvd%2C%20Charlotte%2C%20NC%2028217%7CCostco%20Gasoline%2C%20500%20Tyvola%20Rd%2C%20Charlotte%2C%20NC%2028217%7CThe%20GRID%3A%20Powered%20by%20Goodwill%2C%205301%20Wilkinson%20Blvd%2C%20Charlotte%2C%20NC%2028208%7CIKEA%20Charlotte%2C%208300%20IKEA%20Blvd%2C%20Charlotte%2C%20NC%2028262">Open Improved Google Maps Route</a>
-          <a class="btn secondary" href="https://feverup.com/m/610628">Titanic Tickets</a>
-          <a class="btn secondary" href="https://www.ikea.com/us/en/stores/charlotte/">IKEA Hours</a>
-        </div>
-      </div>
-      <div class="hero-img">Titanic photo: Wikimedia Commons</div>
-    </div>
-  </header>
+  <main>
+    <h1>Automation Git Access Audit</h1>
+    <p class="meta">Generated on 2026-05-17 13:59 America/New_York from host <code>microserver</code>.</p>
 
-  <main class="wrap">
-    <section class="card warn">
-      <h2>Provisional Timing</h2>
-      <p>This is a better route, but not a final timed itinerary because I still do not have your actual departure time, latest return time, or Titanic ticket slot. The schedule below assumes you can leave Cary around <strong>8:00 AM</strong>, want a <strong>late-morning/noon Titanic slot</strong>, and are okay getting home around dinner/evening.</p>
+    <section>
+      <h2>Summary</h2>
+      <ul>
+        <li><span class="ok">GitHub SSH authentication works</span> for user <code>mkoltsov</code>.</li>
+        <li><span class="ok">All checked cron-related GitHub remotes are reachable</span> with the installed SSH key.</li>
+        <li><span class="fixed">Scalper publishing was fixed</span>. The failure was Git history divergence, not credentials.</li>
+        <li><span class="fixed">Scalper log display was fixed</span>. The website had been showing stale pre-fix stack traces from the historical log tail.</li>
+        <li><span class="fixed">This report is now published from the correct repo</span>: <code>mkoltsov/output</code> on branch <code>main</code>.</li>
+      </ul>
     </section>
 
-    <section class="grid kpis">
-      <div class="card kpi"><div class="label">Route</div><div class="value">Better</div><div class="note">IKEA last before Cary</div></div>
-      <div class="card kpi"><div class="label">Mileage</div><div class="value">~351 mi</div><div class="note">round-trip estimate</div></div>
-      <div class="card kpi"><div class="label">Driving</div><div class="value">~6h 20m</div><div class="note">before stops/live traffic</div></div>
-      <div class="card kpi"><div class="label">Fuel</div><div class="value">~$46</div><div class="note">31 mpg; fill at Costco Tyvola</div></div>
-    </section>
-
-    <section class="grid two">
-      <div class="card good">
-        <h2>Chosen Order</h2>
-        <div class="timeline">
-          <div class="stop">
-            <div class="time">8:00</div>
-            <div><h3>Leave Cary</h3><div class="meta">Assumption. Adjust after you tell me actual departure and return constraints.</div></div>
-          </div>
-          <div class="stop">
-            <div class="time">10:50</div>
-            <div><h3>Titanic: The Exhibition</h3><div class="meta">The Park Expo & Conference Center, 800 Briar Creek Rd. Book the ticket slot first; Fever says dates/times are selected in the ticket selector. Plan 60-90 minutes even though the official duration says 1 hour.</div><span class="tag">main timed stop</span><span class="tag">adult from $29.50</span></div>
-          </div>
-          <div class="stop">
-            <div class="time">12:35</div>
-            <div><h3>Micro Center Charlotte</h3><div class="meta">4744 South Blvd. Saturday hours 10 AM-9 PM. This is the closer south-side stop after Titanic; reserve anything important, especially Pi 400 / open-box targets.</div><span class="tag">60-90 min</span><span class="tag">reserve pickup</span></div>
-          </div>
-          <div class="stop">
-            <div class="time">14:05</div>
-            <div><h3>Costco Gasoline - Tyvola</h3><div class="meta">500 Tyvola Rd. Quick fill-up after Micro Center, before heading west to The GRID. Costco lists Saturday gas hours as 6 AM-8:30 PM.</div><span class="tag">gas stop</span><span class="tag">10-20 min</span></div>
-          </div>
-          <div class="stop">
-            <div class="time">14:35</div>
-            <div><h3>The GRID by Goodwill</h3><div class="meta">5301 Wilkinson Blvd. Electronics thrift stop. Saturday hours verified as 10 AM-9 PM. Go here after Costco because it is the west-side leg before heading north to IKEA.</div><span class="tag">45-60 min</span><span class="tag">used tech</span></div>
-          </div>
-          <div class="stop">
-            <div class="time">16:05</div>
-            <div><h3>IKEA Charlotte</h3><div class="meta">8300 IKEA Blvd. Saturday store hours 10 AM-9 PM. Last stop because it is north/east of the other Charlotte stops and puts you closer to I-85/I-40 back toward Cary.</div><span class="tag">last Charlotte stop</span><span class="tag">dinner option</span></div>
-          </div>
-          <div class="stop">
-            <div class="time">18:00</div>
-            <div><h3>Return to Cary</h3><div class="meta">Leave IKEA after shopping/food. Estimated arrival around 8:45-9:15 PM depending on traffic, Costco line, and stop length.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Why This Beats The Old Route</h2>
-        <p><strong>Old route:</strong> Cary → IKEA → Titanic → GRID → Micro Center → Cary. It burns the north-side IKEA advantage at the beginning, then sends you across Charlotte and back out from the south side.</p>
-        <p><strong>Better route:</strong> Cary → Titanic → Micro Center → Costco Gas → The GRID → IKEA → Cary. It handles the timed attraction first, takes the closer south-side Micro Center stop next, fills up at nearby Costco Tyvola, swings west to The GRID, then finishes north at IKEA before the long drive home.</p>
-        <p><strong>Rejected alternative:</strong> Cary → Titanic → The GRID → Micro Center → Costco → IKEA → Cary. That skips the closer Micro Center/Costco Tyvola leg after Titanic and creates avoidable crossing/backtracking inside Charlotte.</p>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Verified Constraints</h2>
+    <section>
+      <h2>Access Checks</h2>
       <table>
-        <thead><tr><th>Stop</th><th>Address</th><th>Hours / constraint</th><th>Source</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Result</th>
+            <th>Evidence</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr><td>Titanic: The Exhibition</td><td>800 Briar Creek Rd</td><td>Open from May 15, 2026. Timed tickets selected in Fever. Official duration: 1 hour.</td><td><a href="https://feverup.com/m/610628">Fever</a>, <a href="https://thetitanicexhibition.com/charlotte/">official site</a></td></tr>
-          <tr><td>The GRID</td><td>5301 Wilkinson Blvd</td><td>Saturday 10 AM-9 PM.</td><td><a href="https://thegridgoodwill.com/store-location/">The GRID</a></td></tr>
-          <tr><td>Micro Center</td><td>4744 South Blvd</td><td>Mon-Sat 10 AM-9 PM, Sunday 11 AM-6 PM.</td><td><a href="https://www.microcenter.com/site/stores/charlotte.aspx">Micro Center</a></td></tr>
-          <tr><td>Costco Gasoline</td><td>500 Tyvola Rd</td><td>Saturday gas 6 AM-8:30 PM. Warehouse Saturday 9:30 AM-7 PM for Gold Star/Business members.</td><td><a href="https://www.costco.com/warehouse-locations/charlotte-north-carolina-nc-359.html">Costco Charlotte</a></td></tr>
-          <tr><td>IKEA Charlotte</td><td>8300 IKEA Blvd</td><td>Saturday store 10 AM-9 PM. Restaurant 11 AM-8 PM; Bistro Saturday 10 AM-9 PM.</td><td><a href="https://www.ikea.com/us/en/stores/charlotte/">IKEA</a></td></tr>
+          <tr>
+            <td>GitHub SSH auth</td>
+            <td class="ok">OK</td>
+            <td><code>Hi mkoltsov! You've successfully authenticated</code></td>
+          </tr>
+          <tr>
+            <td><code>morning_digest</code></td>
+            <td class="ok">OK</td>
+            <td><code>git@github.com:mkoltsov/morning_digest.git</code>, fetch dry run status 0</td>
+          </tr>
+          <tr>
+            <td><code>scalper</code></td>
+            <td class="fixed">Fixed</td>
+            <td><code>git@github.com:mkoltsov/scalper.git</code>, latest verified run pushed <code>ec96623</code></td>
+          </tr>
+          <tr>
+            <td><code>slickdeals</code></td>
+            <td class="ok">OK</td>
+            <td><code>git@github.com:mkoltsov/slickdeals.git</code>, fetch dry run status 0. No scheduled source-level Git publisher found.</td>
+          </tr>
+          <tr>
+            <td><code>weekly-meal-plan</code></td>
+            <td class="ok">OK</td>
+            <td><code>git@github.com:mkoltsov/weekly-meal-plan.git</code>, local and remote were in sync at audit time.</td>
+          </tr>
+          <tr>
+            <td><code>output</code></td>
+            <td class="fixed">Fixed</td>
+            <td><code>git@github.com:mkoltsov/output.git</code>, report committed to <code>main</code>.</td>
+          </tr>
         </tbody>
       </table>
     </section>
 
-    <section class="grid places">
-      <div class="card place"><div class="photo titanic">Titanic</div><div class="body"><h3>Main Event</h3><div class="meta">Book first; schedule other stops around the ticket.</div></div></div>
-      <div class="card place"><div class="photo" style="background:linear-gradient(135deg,#126a46,#0f172a)">Costco Gas</div><div class="body"><h3>Fill Up</h3><div class="meta">500 Tyvola Rd, after Micro Center.</div></div></div>
-      <div class="card place"><div class="photo gridp">The GRID</div><div class="body"><h3>Used Tech</h3><div class="meta">Hit after Micro Center while moving west.</div></div></div>
-      <div class="card place"><div class="photo micro">Micro Center</div><div class="body"><h3>Tech Deals</h3><div class="meta">Closer next stop after Titanic.</div></div></div>
-      <div class="card place"><div class="photo ikea">IKEA</div><div class="body"><h3>Last Stop</h3><div class="meta">Best position for return to Cary.</div></div></div>
+    <section>
+      <h2>Automation Reviewed</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Schedule</th>
+            <th>Script</th>
+            <th>Git usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>17 * * * *</code></td>
+            <td><code>/home/intimatik/dev/scalper/run_scalper.sh</code></td>
+            <td>Commits generated <code>public/</code> files to <code>main</code>, then force-publishes <code>gh-pages</code>.</td>
+            <td class="fixed">Fixed and verified with a successful manual run.</td>
+          </tr>
+          <tr>
+            <td><code>0 8 * * 5</code></td>
+            <td><code>weekly-calorie-meal-plan/scripts/send_detailed_email.py</code></td>
+            <td>Publishes static page updates to <code>weekly-meal-plan</code>.</td>
+            <td class="ok">Remote access works; publisher was hardened with a rebase before push.</td>
+          </tr>
+          <tr>
+            <td><code>@reboot</code> and every minute guard</td>
+            <td><code>/home/intimatik/dev/slickdeals/start_monitor.sh</code></td>
+            <td>No direct Git publishing in the scheduled monitor. It can launch Codex on Telegram requests.</td>
+            <td class="ok">No broken Git access found.</td>
+          </tr>
+          <tr>
+            <td>Morning digest, RuTracker, Spotify jobs</td>
+            <td>Configured cron scripts</td>
+            <td>No direct Git push/publish path found in current scheduled source.</td>
+            <td class="ok">No Git access issue found.</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
-    <section class="grid two">
-      <div class="card">
-        <h2>Leg Mileage</h2>
-        <div class="bars">
-          <div class="barrow"><div>Cary → Titanic</div><div class="bar"><div class="fill" style="width:94%"></div></div><div>165 mi</div></div>
-          <div class="barrow"><div>Titanic → Micro</div><div class="bar"><div class="fill" style="width:5%"></div></div><div>8 mi</div></div>
-          <div class="barrow"><div>Micro → Costco</div><div class="bar"><div class="fill" style="width:2%"></div></div><div>3 mi</div></div>
-          <div class="barrow"><div>Costco → GRID</div><div class="bar"><div class="fill" style="width:6%"></div></div><div>10 mi</div></div>
-          <div class="barrow"><div>GRID → IKEA</div><div class="bar"><div class="fill" style="width:11%"></div></div><div>19 mi</div></div>
-          <div class="barrow"><div>IKEA → Cary</div><div class="bar"><div class="fill" style="width:88%"></div></div><div>154 mi</div></div>
-        </div>
-        <p class="small">Route estimate only; let Google Maps recalculate with live traffic when leaving.</p>
-      </div>
-
-      <div class="card cost">
-        <h2>Cost Estimate</h2>
-        <div class="bars">
-          <div class="barrow"><div>Fuel</div><div class="bar"><div class="fill" style="width:100%"></div></div><div>~$40-46</div></div>
-          <div class="barrow"><div>Titanic</div><div class="bar"><div class="fill" style="width:65%"></div></div><div>$30+</div></div>
-          <div class="barrow"><div>Parking</div><div class="bar"><div class="fill" style="width:28%"></div></div><div>$10-15</div></div>
-          <div class="barrow"><div>Food</div><div class="bar"><div class="fill" style="width:42%"></div></div><div>$15-25</div></div>
-          <div class="barrow"><div>Gas savings</div><div class="bar"><div class="fill" style="width:18%"></div></div><div>$3-8</div></div>
-          <div class="barrow"><div>Pi 400</div><div class="bar"><div class="fill" style="width:86%"></div></div><div>$40</div></div>
-        </div>
-      </div>
+    <section>
+      <h2>Changes Made</h2>
+      <ul>
+        <li>Reconciled scalper's accumulated generated commits and pushed them to <code>main</code>.</li>
+        <li>Refreshed scalper <code>gh-pages</code> from the latest generated <code>public/</code> directory.</li>
+        <li>Committed <code>dc54eb5</code>: <code>Make scalper cron publishing resilient</code>.</li>
+        <li>Committed <code>65fe828</code>: <code>Show only current scalper run logs</code>.</li>
+        <li>Verified a clean scalper publish at <code>ec96623</code> with <code>exit_code: 0</code> and no push errors in raw <code>gh-pages/results.json</code>.</li>
+        <li>Updated the local weekly meal plan skill publisher to perform <code>git pull --rebase origin HEAD</code> before push.</li>
+        <li>Published this report to the correct <code>mkoltsov/output</code> repository.</li>
+      </ul>
     </section>
 
-    <section class="card">
-      <h2>Final Inputs Needed</h2>
-      <p>To make this a final timed plan instead of a provisional route, send:</p>
-      <p><strong>1.</strong> what time you can leave Cary, <strong>2.</strong> latest time you want to be home, <strong>3.</strong> Titanic ticket slot or preferred slot, <strong>4.</strong> whether The GRID, Micro Center, or Costco gas is optional if time gets tight.</p>
-    </section>
-
-    <section class="card sources">
-      <h2>Sources</h2>
-      <p>Official pages checked: Fever Titanic page, Titanic Exhibition Charlotte official page, IKEA Charlotte, The GRID store-location page, Micro Center Charlotte, and Costco Charlotte Tyvola gas hours. Exact route timing still depends on live Google Maps traffic and the Titanic ticket slot you choose.</p>
+    <section>
+      <h2>Remaining Notes</h2>
+      <ul>
+        <li><code>/home/intimatik/dev/scalper</code> still has unrelated local edits in <code>deals.json</code> and <code>test_scalper_filters.py</code>; they were intentionally left uncommitted.</li>
+        <li><code>/home/intimatik/dev/learn/morning_digest</code> has local modified source files, but no scheduled Git publisher was found there.</li>
+        <li><code>/home/intimatik/dev/slickdeals</code> has an unusual empty/no-commits local repo state, but its scheduled monitor does not depend on pushing that repo.</li>
+        <li>GitHub Pages CDN cache may lag the underlying branch for several minutes.</li>
+      </ul>
     </section>
   </main>
 </body>
