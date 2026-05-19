@@ -3,226 +3,259 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Automation Git Access Audit</title>
+  <title>Organizer Kurz Branded Print Preview</title>
   <style>
     :root {
-      color-scheme: light dark;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
+      color-scheme: dark;
+      --bg: #161716;
+      --panel: #20221f;
+      --panel-2: #292c27;
+      --text: #eeeeea;
+      --muted: #b9bdb2;
+      --line: #3b4038;
+      --accent: #72c17b;
+      --warn: #e0b35f;
     }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #f6f7f9;
-      color: #1f2933;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
     main {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 32px 18px 56px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      min-height: 100vh;
     }
-    h1, h2 {
-      line-height: 1.15;
+    #viewer {
+      position: relative;
+      min-height: 620px;
+      background: #111311;
+    }
+    canvas { display: block; width: 100%; height: 100%; }
+    .hud {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: rgba(22, 23, 22, 0.82);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    aside {
+      border-left: 1px solid var(--line);
+      background: var(--panel);
+      padding: 22px;
+      overflow: auto;
     }
     h1 {
       margin: 0 0 8px;
-      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: 0;
     }
-    .meta {
-      margin: 0 0 28px;
-      color: #52606d;
+    .sub {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
     }
-    section {
-      margin: 18px 0;
-      padding: 18px;
-      background: #ffffff;
-      border: 1px solid #d9e2ec;
-      border-radius: 8px;
+    .section {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 16px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 0.95rem;
+    h2 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
     }
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #d9e2ec;
-      text-align: left;
-      vertical-align: top;
+    dl {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 9px 12px;
+      margin: 0;
+      font-size: 14px;
     }
-    th {
-      background: #eef2f7;
-      font-weight: 650;
+    dt { color: var(--muted); }
+    dd { margin: 0; overflow-wrap: anywhere; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+      font-size: 13px;
     }
-    code {
-      padding: 2px 5px;
-      background: #eef2f7;
-      border-radius: 4px;
-      font-size: 0.92em;
+    .warning {
+      border: 1px solid color-mix(in srgb, var(--warn) 55%, var(--line));
+      background: rgba(224, 179, 95, 0.12);
+      color: #f1d598;
+      padding: 12px;
+      line-height: 1.42;
+      font-size: 14px;
     }
-    .ok {
-      color: #0f7b3f;
-      font-weight: 700;
-    }
-    .fixed {
-      color: #075985;
-      font-weight: 700;
-    }
-    .warn {
-      color: #a15c00;
-      font-weight: 700;
-    }
-    ul {
-      margin: 10px 0 0;
-      padding-left: 22px;
-    }
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: #111827;
-        color: #e5e7eb;
-      }
-      .meta {
-        color: #b6c2cf;
-      }
-      section {
-        background: #182231;
-        border-color: #2f3b4a;
-      }
-      th {
-        background: #223044;
-      }
-      th, td {
-        border-bottom-color: #2f3b4a;
-      }
-      code {
-        background: #223044;
-      }
+    a { color: var(--accent); }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      #viewer { min-height: 58vh; }
+      aside { border-left: 0; border-top: 1px solid var(--line); }
     }
   </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.164.1/build/three.module.js"
+      }
+    }
+  </script>
 </head>
 <body>
   <main>
-    <h1>Automation Git Access Audit</h1>
-    <p class="meta">Generated on 2026-05-17 13:59 America/New_York from host <code>microserver</code>.</p>
-
-    <section>
-      <h2>Summary</h2>
-      <ul>
-        <li><span class="ok">GitHub SSH authentication works</span> for user <code>mkoltsov</code>.</li>
-        <li><span class="ok">All checked cron-related GitHub remotes are reachable</span> with the installed SSH key.</li>
-        <li><span class="fixed">Scalper publishing was fixed</span>. The failure was Git history divergence, not credentials.</li>
-        <li><span class="fixed">Scalper log display was fixed</span>. The website had been showing stale pre-fix stack traces from the historical log tail.</li>
-        <li><span class="fixed">This report is now published from the correct repo</span>: <code>mkoltsov/output</code> on branch <code>main</code>.</li>
-      </ul>
+    <section id="viewer" aria-label="3D model preview">
+      <div class="hud">Drag to rotate. Scroll to zoom. Bed outline is 302 x 302 mm.</div>
     </section>
+    <aside>
+      <h1>Organizer_kurz_branded.stl</h1>
+      <p class="sub">Sliced with saved project defaults from <span class="badge">Z:\print\CFFFP_Blade.3mf</span>. G-code is staged at <span class="badge">Z:\print\Organizer_kurz_branded.gcode</span>.</p>
 
-    <section>
-      <h2>Access Checks</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Check</th>
-            <th>Result</th>
-            <th>Evidence</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>GitHub SSH auth</td>
-            <td class="ok">OK</td>
-            <td><code>Hi mkoltsov! You've successfully authenticated</code></td>
-          </tr>
-          <tr>
-            <td><code>morning_digest</code></td>
-            <td class="ok">OK</td>
-            <td><code>git@github.com:mkoltsov/morning_digest.git</code>, fetch dry run status 0</td>
-          </tr>
-          <tr>
-            <td><code>scalper</code></td>
-            <td class="fixed">Fixed</td>
-            <td><code>git@github.com:mkoltsov/scalper.git</code>, latest verified run pushed <code>ec96623</code></td>
-          </tr>
-          <tr>
-            <td><code>slickdeals</code></td>
-            <td class="ok">OK</td>
-            <td><code>git@github.com:mkoltsov/slickdeals.git</code>, fetch dry run status 0. No scheduled source-level Git publisher found.</td>
-          </tr>
-          <tr>
-            <td><code>weekly-meal-plan</code></td>
-            <td class="ok">OK</td>
-            <td><code>git@github.com:mkoltsov/weekly-meal-plan.git</code>, local and remote were in sync at audit time.</td>
-          </tr>
-          <tr>
-            <td><code>output</code></td>
-            <td class="fixed">Fixed</td>
-            <td><code>git@github.com:mkoltsov/output.git</code>, report committed to <code>main</code>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+      <div class="section">
+        <h2>Decision</h2>
+        <div class="warning">Slicer warning: detected long bridging extrusions. Supports are off, matching the project defaults. Review before approving the print.</div>
+      </div>
 
-    <section>
-      <h2>Automation Reviewed</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Schedule</th>
-            <th>Script</th>
-            <th>Git usage</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>17 * * * *</code></td>
-            <td><code>/home/intimatik/dev/scalper/run_scalper.sh</code></td>
-            <td>Commits generated <code>public/</code> files to <code>main</code>, then force-publishes <code>gh-pages</code>.</td>
-            <td class="fixed">Fixed and verified with a successful manual run.</td>
-          </tr>
-          <tr>
-            <td><code>0 8 * * 5</code></td>
-            <td><code>weekly-calorie-meal-plan/scripts/send_detailed_email.py</code></td>
-            <td>Publishes static page updates to <code>weekly-meal-plan</code>.</td>
-            <td class="ok">Remote access works; publisher was hardened with a rebase before push.</td>
-          </tr>
-          <tr>
-            <td><code>@reboot</code> and every minute guard</td>
-            <td><code>/home/intimatik/dev/slickdeals/start_monitor.sh</code></td>
-            <td>No direct Git publishing in the scheduled monitor. It can launch Codex on Telegram requests.</td>
-            <td class="ok">No broken Git access found.</td>
-          </tr>
-          <tr>
-            <td>Morning digest, RuTracker, Spotify jobs</td>
-            <td>Configured cron scripts</td>
-            <td>No direct Git push/publish path found in current scheduled source.</td>
-            <td class="ok">No Git access issue found.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+      <div class="section">
+        <h2>Print Estimate</h2>
+        <dl>
+          <dt>Normal</dt><dd>1d 8h 30m 39s</dd>
+          <dt>Silent</dt><dd>1d 9h 10m 14s</dd>
+          <dt>First layer</dt><dd>37m 23s</dd>
+          <dt>G-code size</dt><dd>25,936,880 bytes</dd>
+        </dl>
+      </div>
 
-    <section>
-      <h2>Changes Made</h2>
-      <ul>
-        <li>Reconciled scalper's accumulated generated commits and pushed them to <code>main</code>.</li>
-        <li>Refreshed scalper <code>gh-pages</code> from the latest generated <code>public/</code> directory.</li>
-        <li>Committed <code>dc54eb5</code>: <code>Make scalper cron publishing resilient</code>.</li>
-        <li>Committed <code>65fe828</code>: <code>Show only current scalper run logs</code>.</li>
-        <li>Verified a clean scalper publish at <code>ec96623</code> with <code>exit_code: 0</code> and no push errors in raw <code>gh-pages/results.json</code>.</li>
-        <li>Updated the local weekly meal plan skill publisher to perform <code>git pull --rebase origin HEAD</code> before push.</li>
-        <li>Published this report to the correct <code>mkoltsov/output</code> repository.</li>
-      </ul>
-    </section>
+      <div class="section">
+        <h2>Model</h2>
+        <dl>
+          <dt>Bounds</dt><dd>281.16 x 113.00 x 65.00 mm</dd>
+          <dt>Triangles</dt><dd>33,072</dd>
+          <dt>Placement</dt><dd>Lower-right project area</dd>
+          <dt>Rotation</dt><dd>Z 90 deg</dd>
+        </dl>
+      </div>
 
-    <section>
-      <h2>Remaining Notes</h2>
-      <ul>
-        <li><code>/home/intimatik/dev/scalper</code> still has unrelated local edits in <code>deals.json</code> and <code>test_scalper_filters.py</code>; they were intentionally left uncommitted.</li>
-        <li><code>/home/intimatik/dev/learn/morning_digest</code> has local modified source files, but no scheduled Git publisher was found there.</li>
-        <li><code>/home/intimatik/dev/slickdeals</code> has an unusual empty/no-commits local repo state, but its scheduled monitor does not depend on pushing that repo.</li>
-        <li>GitHub Pages CDN cache may lag the underlying branch for several minutes.</li>
-      </ul>
-    </section>
+      <div class="section">
+        <h2>Slice Settings</h2>
+        <dl>
+          <dt>Material</dt><dd>PLA</dd>
+          <dt>Nozzle</dt><dd>0.4 mm</dd>
+          <dt>Layer height</dt><dd>0.1 mm</dd>
+          <dt>First layer</dt><dd>0.3 mm</dd>
+          <dt>Infill</dt><dd>20% grid</dd>
+          <dt>Perimeters</dt><dd>2</dd>
+          <dt>Adhesion</dt><dd>Brim, 8 mm</dd>
+          <dt>Supports</dt><dd>Off</dd>
+          <dt>Temperatures</dt><dd>200 C nozzle, 60 C bed</dd>
+        </dl>
+      </div>
+
+      <div class="section">
+        <h2>Source</h2>
+        <dl>
+          <dt>STL</dt><dd><a href="assets/Organizer_kurz_branded.stl">Download model</a></dd>
+          <dt>Output</dt><dd>Z:\print\Organizer_kurz_branded.gcode</dd>
+        </dl>
+      </div>
+    </aside>
   </main>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "https://unpkg.com/three@0.164.1/examples/jsm/controls/OrbitControls.js";
+    import { STLLoader } from "https://unpkg.com/three@0.164.1/examples/jsm/loaders/STLLoader.js";
+
+    const container = document.querySelector("#viewer");
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x111311);
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
+    camera.position.set(250, -360, 240);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.prepend(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 0, 32);
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x394034, 2.2));
+    const key = new THREE.DirectionalLight(0xffffff, 2.4);
+    key.position.set(120, -180, 220);
+    scene.add(key);
+
+    const bed = new THREE.GridHelper(302, 16, 0x4d594b, 0x2f352e);
+    bed.rotation.x = Math.PI / 2;
+    scene.add(bed);
+
+    const bedEdge = new THREE.LineLoop(
+      new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-151, -151, 0),
+        new THREE.Vector3(151, -151, 0),
+        new THREE.Vector3(151, 151, 0),
+        new THREE.Vector3(-151, 151, 0)
+      ]),
+      new THREE.LineBasicMaterial({ color: 0x72c17b })
+    );
+    scene.add(bedEdge);
+
+    const loader = new STLLoader();
+    loader.load("assets/Organizer_kurz_branded.stl", (geometry) => {
+      geometry.computeBoundingBox();
+      const center = new THREE.Vector3();
+      geometry.boundingBox.getCenter(center);
+      geometry.translate(-center.x, -center.y, -geometry.boundingBox.min.z);
+      geometry.rotateZ(Math.PI / 2);
+      geometry.computeVertexNormals();
+
+      const mesh = new THREE.Mesh(
+        geometry,
+        new THREE.MeshStandardMaterial({ color: 0xbcc6b4, roughness: 0.58, metalness: 0.05 })
+      );
+      scene.add(mesh);
+
+      const box = new THREE.Box3().setFromObject(mesh);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      camera.position.set(maxDim * 0.95, -maxDim * 1.45, maxDim * 0.95);
+      controls.target.set(0, 0, size.z * 0.35);
+      controls.update();
+    });
+
+    function resize() {
+      const rect = container.getBoundingClientRect();
+      renderer.setSize(rect.width, rect.height);
+      camera.aspect = rect.width / Math.max(rect.height, 1);
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function animate() {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 </body>
 </html>
