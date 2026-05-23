@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>bua_bore G-code Preview</title>
+  <title>bua_bore Previous G-code Preview</title>
   <style>
     :root {
       color-scheme: light;
-      --bg: #f6f7f9;
+      --bg: #f7f8fa;
       --panel: #ffffff;
-      --ink: #14171a;
-      --muted: #5b6470;
-      --line: #d7dce2;
-      --accent: #c55316;
-      --support: #1f77b4;
+      --ink: #151719;
+      --muted: #59636f;
+      --line: #d8dde3;
+      --accent: #c85b1f;
+      --blue: #1f77b4;
     }
     * { box-sizing: border-box; }
     body {
@@ -25,19 +25,24 @@
     main {
       width: min(1280px, calc(100vw - 32px));
       margin: 0 auto;
-      padding: 24px 0 40px;
+      padding: 24px 0 42px;
     }
     header {
       display: flex;
       justify-content: space-between;
-      gap: 20px;
       align-items: flex-end;
-      padding: 0 0 18px;
+      gap: 24px;
+      padding-bottom: 18px;
       border-bottom: 1px solid var(--line);
     }
     h1 {
       margin: 0;
-      font-size: clamp(26px, 3vw, 42px);
+      font-size: clamp(27px, 3vw, 42px);
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
       letter-spacing: 0;
     }
     .sub {
@@ -47,56 +52,29 @@
       line-height: 1.45;
     }
     .status {
-      border: 1px solid var(--line);
       background: var(--panel);
+      border: 1px solid var(--line);
       padding: 10px 12px;
-      min-width: 240px;
+      min-width: 260px;
       font-size: 14px;
       line-height: 1.45;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-      margin-top: 20px;
-    }
     section {
+      margin-top: 20px;
       background: var(--panel);
       border: 1px solid var(--line);
       padding: 16px;
     }
-    h2 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      letter-spacing: 0;
-    }
-    .legend {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-    .key {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .swatch {
-      width: 18px;
-      height: 10px;
-      display: inline-block;
-      border: 1px solid rgba(0,0,0,.18);
-    }
-    .model { background: var(--accent); }
-    .support { background: var(--support); }
     img {
       display: block;
       width: 100%;
       height: auto;
       border: 1px solid var(--line);
       background: #fff;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: .95em;
     }
     .stats {
       display: grid;
@@ -105,9 +83,9 @@
       margin-top: 12px;
     }
     .stat {
+      background: #fbfcfd;
       border: 1px solid var(--line);
       padding: 10px;
-      background: #fbfcfd;
       min-height: 72px;
     }
     .label {
@@ -125,9 +103,14 @@
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      font-size: .95em;
+    .note {
+      border-left: 4px solid var(--accent);
+      padding: 8px 12px;
+      background: #fff7f2;
+      color: #4d2614;
+      margin: 0 0 12px;
+      font-size: 14px;
+      line-height: 1.45;
     }
     @media (max-width: 820px) {
       header { display: block; }
@@ -141,56 +124,51 @@
   <main>
     <header>
       <div>
-        <h1>bua_bore G-code Preview</h1>
-        <p class="sub">Corrected heavy-first orientation for <code>bua_bore_heavy_first_supported.gcode</code>.</p>
+        <h1>bua_bore Previous G-code Preview</h1>
+        <p class="sub">Primary visualization for the original sliced file: <code>bua_bore.gcode</code>.</p>
       </div>
       <div class="status">
         Print state checked before publishing: OctoPrint was idle. This page is visualization only.
       </div>
     </header>
 
-    <div class="grid">
-      <section>
-        <h2>Corrected Supported G-code</h2>
-        <div class="legend">
-          <span class="key"><span class="swatch model"></span>Model extrusion</span>
-          <span class="key"><span class="swatch support"></span>Build-plate support</span>
+    <section>
+      <h2>Previously Sliced G-code</h2>
+      <p class="note">This is the original 50% infill slice. The side views show the dense/complex section at the bed and the long cylinder extending upward.</p>
+      <img src="bua_bore_previous_slice_preview.png" alt="Preview of the previously sliced bua_bore.gcode">
+      <div class="stats">
+        <div class="stat">
+          <div class="label">File</div>
+          <div class="value">bua_bore.gcode</div>
         </div>
-        <img src="bua_bore_heavy_first_supported_preview.png" alt="Preview of corrected heavy-first supported bua_bore G-code">
-        <div class="stats">
-          <div class="stat">
-            <div class="label">Bounds</div>
-            <div class="value">80.6 x 80.6 x 284.0 mm</div>
-          </div>
-          <div class="stat">
-            <div class="label">Model path</div>
-            <div class="value">3,856,607 mm</div>
-          </div>
-          <div class="stat">
-            <div class="label">Support path</div>
-            <div class="value">386,866 mm</div>
-          </div>
-          <div class="stat">
-            <div class="label">Slicer estimate</div>
-            <div class="value">1d 6h 23m</div>
-          </div>
+        <div class="stat">
+          <div class="label">Bounds</div>
+          <div class="value">69.2 x 70.4 x 284.0 mm</div>
         </div>
-      </section>
+        <div class="stat">
+          <div class="label">Slicer estimate</div>
+          <div class="value">1d 3h 33m</div>
+        </div>
+        <div class="stat">
+          <div class="label">Bottom/top path ratio</div>
+          <div class="value">7.0x</div>
+        </div>
+      </div>
+    </section>
 
-      <section>
-        <h2>Comparison</h2>
-        <div class="compare">
-          <div>
-            <p class="sub">Corrected: heavy/complex end starts at the bed with support.</p>
-            <img src="bua_bore_heavy_first_supported_preview.png" alt="Corrected G-code preview">
-          </div>
-          <div>
-            <p class="sub">Canceled: long cylindrical section started first, complex end was high in Z.</p>
-            <img src="bua_bore_canceled_preview.png" alt="Canceled G-code preview">
-          </div>
+    <section>
+      <h2>Side-by-side</h2>
+      <div class="compare">
+        <div>
+          <p class="sub">Previous slice: <code>bua_bore.gcode</code>.</p>
+          <img src="bua_bore_previous_slice_preview.png" alt="Previous bua_bore.gcode preview">
         </div>
-      </section>
-    </div>
+        <div>
+          <p class="sub">Flipped supported slice kept for comparison only.</p>
+          <img src="bua_bore_heavy_first_supported_preview.png" alt="Flipped supported G-code preview">
+        </div>
+      </div>
+    </section>
   </main>
 </body>
 </html>
