@@ -1,0 +1,1929 @@
+{
+  "generatedAt": "2026-05-23T07:12:50.741495+00:00",
+  "calendarCount": 10,
+  "recurringEventCount": 56,
+  "activeRecurringEventCount": 14,
+  "inactiveRecurringEventCount": 42,
+  "calendars": [
+    {
+      "id": "acid_house@udm.ru",
+      "summary": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "vjsk9q10u7d3nb282d4ljv0u0g@group.calendar.google.com",
+      "summary": "Work complete!",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "family18021546530606505135@group.calendar.google.com",
+      "summary": "Family",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "e7bs6c5f5tq7j4648np7t8c9ss@group.calendar.google.com",
+      "summary": "Green",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "p#weeknum@group.v.calendar.google.com",
+      "summary": "Week Numbers",
+      "accessRole": "reader",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "en.usa.official#holiday@group.v.calendar.google.com",
+      "summary": "Holidays in United States",
+      "accessRole": "reader",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "pl.polish.official#holiday@group.v.calendar.google.com",
+      "summary": "Święta w Polsce",
+      "accessRole": "reader",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "intimatik@gmail.com",
+      "summary": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "c_5d59c11b981642ad30b7964ce2cc545d9dea17768b12507ed79a55be64a3abd8@group.calendar.google.com",
+      "summary": "WCPSS 25/26 Trad Calendar",
+      "accessRole": "reader",
+      "hidden": false,
+      "selected": true
+    },
+    {
+      "id": "c_283299eed09f30ce6218b259108716141ef4e7fc287c5f9b9941263b51404d13@group.calendar.google.com",
+      "summary": "WCPSS 26/27 Trad Calendar",
+      "accessRole": "reader",
+      "hidden": false,
+      "selected": true
+    }
+  ],
+  "errors": [],
+  "events": [
+    {
+      "calendarId": "e7bs6c5f5tq7j4648np7t8c9ss@group.calendar.google.com",
+      "calendar": "Green",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6d2jae9g6oqjee1k6gq38c9h6csj0da66cp3ihhm6t344d9i692j0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "3E59065784444113905F329F67FB522E00000000000000000000000000000000",
+      "summary": "Cut my hair",
+      "start": {
+        "dateTime": "2012-04-21T21:00:00+04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "end": {
+        "dateTime": "2012-04-21T22:00:00+04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=SA"
+      ],
+      "location": "Дом",
+      "created": "2012-04-03T14:31:44.000Z",
+      "updated": "2013-03-28T11:41:29.750Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZkMmphZTlnNm9xamVlMWs2Z3EzOGM5aDZjc2owZGE2NmNwM2loaG02dDM0NGQ5aTY5MmowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA0MjFUMTcwMDAwWiBlN2JzNmM1ZjV0cTdqNDY0OG5wN3Q4Yzlzc0Bn",
+      "creator": "acid_house@udm.ru",
+      "organizer": "e7bs6c5f5tq7j4648np7t8c9ss@group.calendar.google.com",
+      "recurrenceText": "every 2 weeks on Sat",
+      "futureOccurrence": {
+        "id": "_6d2jae9g6oqjee1k6gq38c9h6csj0da66cp3ihhm6t344d9i692j0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0_20260530T170000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=XzZkMmphZTlnNm9xamVlMWs2Z3EzOGM5aDZjc2owZGE2NmNwM2loaG02dDM0NGQ5aTY5MmowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAyNjA1MzBUMTcwMDAwWiBlN2JzNmM1ZjV0cTdqNDY0OG5wN3Q4Yzlzc0Bn",
+        "summary": "Cut my hair",
+        "start": {
+          "dateTime": "2026-05-30T20:00:00+03:00",
+          "timeZone": "Etc/GMT-4"
+        },
+        "end": {
+          "dateTime": "2026-05-30T21:00:00+03:00",
+          "timeZone": "Etc/GMT-4"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "e7bs6c5f5tq7j4648np7t8c9ss@group.calendar.google.com",
+      "calendar": "Green",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6p1j6gho890k4e2560pj8c9h750jghhk6p23edi674r44gpi8csj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "6C3B8BAB8E034119A8F46D76F96BC2C900000000000000000000000000000000",
+      "summary": "Check all what i've accomplished for this week, write what should i do for the next one",
+      "start": {
+        "dateTime": "2012-05-20T17:00:00+04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2012-05-20T18:00:00+04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;WKST=MO;UNTIL=20180428T205959Z;INTERVAL=1;BYDAY=SU"
+      ],
+      "location": "",
+      "created": "2012-05-10T05:10:13.000Z",
+      "updated": "2022-11-07T20:20:13.774Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZwMWo2Z2hvODkwazRlMjU2MHBqOGM5aDc1MGpnaGhrNnAyM2VkaTY3NHI0NGdwaThjc2owYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA1MjBUMTMwMDAwWiBlN2JzNmM1ZjV0cTdqNDY0OG5wN3Q4Yzlzc0Bn",
+      "creator": "acid_house@udm.ru",
+      "organizer": "e7bs6c5f5tq7j4648np7t8c9ss@group.calendar.google.com",
+      "recurrenceText": "weekly on Sun until 20180428T205959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "e7bs6c5f5tq7j4648np7t8c9ss@group.calendar.google.com",
+      "calendar": "Green",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "cgoj0d9l6ks3cb9g68sj0b9kchgjib9pccsj2bb6clj6achkcks64dpg70",
+      "iCalUID": "cgoj0d9l6ks3cb9g68sj0b9kchgjib9pccsj2bb6clj6achkcks64dpg70@google.com",
+      "summary": "The Reckoning",
+      "start": {
+        "dateTime": "2018-04-29T17:00:00+03:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2018-04-29T18:00:00+03:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;WKST=MO;INTERVAL=1;BYDAY=SU"
+      ],
+      "location": "",
+      "created": "2018-05-21T18:20:49.000Z",
+      "updated": "2018-05-21T18:20:49.749Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=Y2dvajBkOWw2a3MzY2I5ZzY4c2owYjlrY2hnamliOXBjY3NqMmJiNmNsajZhY2hrY2tzNjRkcGc3MF8yMDE4MDQyOVQxNDAwMDBaIGU3YnM2YzVmNXRxN2o0NjQ4bnA3dDhjOXNzQGc",
+      "creator": "intimatik@gmail.com",
+      "organizer": "e7bs6c5f5tq7j4648np7t8c9ss@group.calendar.google.com",
+      "recurrenceText": "weekly on Sun",
+      "futureOccurrence": {
+        "id": "cgoj0d9l6ks3cb9g68sj0b9kchgjib9pccsj2bb6clj6achkcks64dpg70_20260524T140000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=Y2dvajBkOWw2a3MzY2I5ZzY4c2owYjlrY2hnamliOXBjY3NqMmJiNmNsajZhY2hrY2tzNjRkcGc3MF8yMDI2MDUyNFQxNDAwMDBaIGU3YnM2YzVmNXRxN2o0NjQ4bnA3dDhjOXNzQGc",
+        "summary": "The Reckoning",
+        "start": {
+          "dateTime": "2026-05-24T17:00:00+03:00",
+          "timeZone": "Europe/Moscow"
+        },
+        "end": {
+          "dateTime": "2026-05-24T18:00:00+03:00",
+          "timeZone": "Europe/Moscow"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "linj9377fu22cqcq5m8na534lk",
+      "iCalUID": "linj9377fu22cqcq5m8na534lk@google.com",
+      "summary": "взять свежий F5",
+      "start": {
+        "dateTime": "2011-07-18T09:30:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "end": {
+        "dateTime": "2011-07-18T10:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20110821T133000Z;BYDAY=MO"
+      ],
+      "location": "осмп",
+      "created": "2011-07-18T18:44:23.000Z",
+      "updated": "2022-12-02T18:37:18.125Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=bGluajkzNzdmdTIyY3FjcTVtOG5hNTM0bGtfMjAxMTA3MThUMTMzMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Mon until 20110821T133000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6go30e2584sk2di16p1j8ha5750k6e218kp3ighm88oj0hhm8p230c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "4008EA9A6A6C4EE9AC8AE29B6B10F6FD00000000000000000000000000000000",
+      "summary": "Проверить выполненные за неделю цели,установить новые, зафиксировать результаты за неделю",
+      "start": {
+        "dateTime": "2011-08-14T11:00:00-04:00",
+        "timeZone": "Etc/UTC"
+      },
+      "end": {
+        "dateTime": "2011-08-14T12:00:00-04:00",
+        "timeZone": "Etc/UTC"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20120512T150000Z;BYDAY=SU"
+      ],
+      "location": "",
+      "created": "2011-10-11T20:34:49.000Z",
+      "updated": "2022-12-02T18:36:09.132Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZnbzMwZTI1ODRzazJkaTE2cDFqOGhhNTc1MGs2ZTIxOGtwM2lnaG04OG9qMGhobThwMjMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMTA4MTRUMTUwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sun until 20120512T150000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "gpajqf6hsgtv7t26m7tbg2ekt4",
+      "iCalUID": "gpajqf6hsgtv7t26m7tbg2ekt4@google.com",
+      "summary": "прочитать Сару",
+      "start": {
+        "dateTime": "2011-10-24T14:30:00-04:00",
+        "timeZone": "Etc/UTC"
+      },
+      "end": {
+        "dateTime": "2011-10-24T15:30:00-04:00",
+        "timeZone": "Etc/UTC"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;UNTIL=20120325T183000Z"
+      ],
+      "location": "",
+      "created": "2011-09-22T12:00:59.000Z",
+      "updated": "2022-12-02T18:36:56.581Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=Z3BhanFmNmhzZ3R2N3QyNm03dGJnMmVrdDRfMjAxMTEwMjRUMTgzMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "daily until 20120325T183000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_84pjcdq46ko32d1m8p238c238gsk4h1k752j8cpj8l138ghj68oj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "A367D50146FD40CD9BD49E433EB4B32100000000000000000000000000000000",
+      "summary": "Ol gratitude!",
+      "start": {
+        "dateTime": "2012-01-01T11:00:00-05:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "end": {
+        "dateTime": "2012-01-01T12:00:00-05:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20120512T160000Z;BYDAY=SU"
+      ],
+      "location": "",
+      "created": "2011-12-30T18:29:53.000Z",
+      "updated": "2022-12-02T18:36:24.505Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=Xzg0cGpjZHE0NmtvMzJkMW04cDIzOGMyMzhnc2s0aDFrNzUyajhjcGo4bDEzOGdoajY4b2owYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjAxMDFUMTYwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sun until 20120512T160000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_70q4cghg6d1jed9n6or38gq26gsk4e9k6kpj0ci28l14cg9n60pj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "84FB03C757664CB49B945302BEBFA70300000000000000000000000000000000",
+      "summary": "Проверить выполненные за неделю цели,установить новые, зафиксировать результаты за неделю",
+      "start": {
+        "dateTime": "2012-05-12T11:00:00-04:00",
+        "timeZone": "Etc/UTC"
+      },
+      "end": {
+        "dateTime": "2012-05-12T12:00:00-04:00",
+        "timeZone": "Etc/UTC"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20120518T150000Z;BYDAY=SA"
+      ],
+      "location": "",
+      "created": "2012-05-10T05:10:12.000Z",
+      "updated": "2022-12-02T18:36:20.254Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzcwcTRjZ2hnNmQxamVkOW42b3IzOGdxMjZnc2s0ZTlrNmtwajBjaTI4bDE0Y2c5bjYwcGowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA1MTJUMTUwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sat until 20120518T150000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6gsk4ea48914agpk6opj8c9n6os3eea36srjagi26l132dpj6koj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "49B9DBBEC4634176879C775BB5B1735100000000000000000000000000000000",
+      "summary": "Ol gratitude!",
+      "start": {
+        "dateTime": "2012-05-12T12:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "end": {
+        "dateTime": "2012-05-12T13:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20120519T160000Z;BYDAY=SA"
+      ],
+      "location": "",
+      "created": "2012-05-10T05:10:12.000Z",
+      "updated": "2022-12-02T18:36:11.555Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZnc2s0ZWE0ODkxNGFncGs2b3BqOGM5bjZvczNlZWEzNnNyamFnaTI2bDEzMmRwajZrb2owYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA1MTJUMTYwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sat until 20120519T160000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6gr3gh9g6oo48g9j6kq38ghj88s4ccq28cq32dpj6co4agph8gq30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "468E060DA3544B3B8F3BC417330EC1D400000000000000000000000000000000",
+      "summary": "Ol gratitude!",
+      "start": {
+        "dateTime": "2012-05-18T12:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "end": {
+        "dateTime": "2012-05-18T13:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20130322T160000Z;BYDAY=FR"
+      ],
+      "location": "",
+      "created": "2012-05-10T05:10:13.000Z",
+      "updated": "2022-12-02T18:36:11.555Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZncjNnaDlnNm9vNDhnOWo2a3EzOGdoajg4czRjY3EyOGNxMzJkcGo2Y280YWdwaDhncTMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA1MThUMTYwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Fri until 20130322T160000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6913ie9n6gpkch1h6co38chp68sj0chj8osj8cpl6l0jgd9n60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "2B99743FD13042929023F94355A8570000000000000000000000000000000000",
+      "summary": "Пробежать 7 км",
+      "start": {
+        "dateTime": "2012-06-13T13:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "end": {
+        "dateTime": "2012-06-13T14:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;UNTIL=20120619T170000Z"
+      ],
+      "location": "",
+      "created": "2012-06-13T04:57:36.000Z",
+      "updated": "2022-12-02T18:36:06.910Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzY5MTNpZTluNmdwa2NoMWg2Y28zOGNocDY4c2owY2hqOG9zajhjcGw2bDBqZ2Q5bjYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA2MTNUMTcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "daily until 20120619T170000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6l0j2dpn6cq30ha36kr38ci66h0k2c9o8oq32c9h6srk2e9h8gr30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "5A177340EC5642F4AA18F411177A91D600000000000000000000000000000000",
+      "summary": "Пробежать 7 км, после прием пищи 450",
+      "start": {
+        "dateTime": "2012-06-20T13:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "end": {
+        "dateTime": "2012-06-20T14:00:00-04:00",
+        "timeZone": "Etc/GMT-4"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;UNTIL=20120624T170000Z"
+      ],
+      "location": "",
+      "created": "2012-06-20T04:29:41.000Z",
+      "updated": "2022-12-02T18:36:15.831Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZsMGoyZHBuNmNxMzBoYTM2a3IzOGNpNjZoMGsyYzlvOG9xMzJjOWg2c3JrMmU5aDhncjMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA2MjBUMTcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "daily until 20120624T170000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "59v8ct3179tehj9cbverl85jas",
+      "iCalUID": "59v8ct3179tehj9cbverl85jas@google.com",
+      "summary": "EC with Michael Koltsov",
+      "start": {
+        "dateTime": "2013-02-07T12:30:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2013-02-07T14:00:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;COUNT=8;BYDAY=MO,TH"
+      ],
+      "location": "skype",
+      "created": "2013-02-04T17:27:43.000Z",
+      "updated": "2022-12-02T18:35:38.542Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NTl2OGN0MzE3OXRlaGo5Y2J2ZXJsODVqYXNfMjAxMzAyMDdUMTczMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "kovin.vladimir@gmail.com",
+      "organizer": "kovin.vladimir@gmail.com",
+      "recurrenceText": "weekly on Mon, Thu for 8 times",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "d1fnejk3ti5r3tr9h8c4sr3tps",
+      "iCalUID": "d1fnejk3ti5r3tr9h8c4sr3tps@google.com",
+      "summary": "EC with Micheal Koltsov",
+      "start": {
+        "dateTime": "2013-06-21T23:00:00-04:00",
+        "timeZone": "Pacific/Auckland"
+      },
+      "end": {
+        "dateTime": "2013-06-22T00:30:00-04:00",
+        "timeZone": "Pacific/Auckland"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20130720T030000Z;BYDAY=SU,SA"
+      ],
+      "location": "",
+      "created": "2013-06-09T22:31:22.000Z",
+      "updated": "2024-09-10T19:47:34.160Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=ZDFmbmVqazN0aTVyM3RyOWg4YzRzcjN0cHNfMjAxMzA2MjJUMDMwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "karynestein@gmail.com",
+      "organizer": "karynestein@gmail.com",
+      "recurrenceText": "weekly on Sun, Sat until 20130720T030000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "1k1i47499jnk4qcdv1qg84mljc",
+      "iCalUID": "1k1i47499jnk4qcdv1qg84mljc@google.com",
+      "summary": "Start exercising",
+      "start": {
+        "dateTime": "2013-12-24T12:00:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2013-12-24T13:00:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;WKST=MO;UNTIL=20140203T165959Z"
+      ],
+      "location": "",
+      "created": "2013-12-24T05:46:47.000Z",
+      "updated": "2014-02-03T13:43:06.106Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=MWsxaTQ3NDk5am5rNHFjZHYxcWc4NG1samNfMjAxMzEyMjRUMTcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "daily until 20140203T165959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "t9mv6ed5cbeutofgtv6pkvtuno",
+      "iCalUID": "t9mv6ed5cbeutofgtv6pkvtuno@google.com",
+      "summary": "Start exercising, say at least 5 compliments",
+      "start": {
+        "dateTime": "2014-02-03T12:00:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2014-02-03T13:00:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;WKST=MO;UNTIL=20140204T165959Z"
+      ],
+      "location": "",
+      "created": "2014-02-03T13:43:06.000Z",
+      "updated": "2014-02-04T12:07:44.797Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=dDltdjZlZDVjYmV1dG9mZ3R2NnBrdnR1bm9fMjAxNDAyMDNUMTcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "daily until 20140204T165959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "in3sbqbnsfv81mluaoct8pdhpk",
+      "iCalUID": "in3sbqbnsfv81mluaoct8pdhpk@google.com",
+      "summary": "EC",
+      "start": {
+        "dateTime": "2014-02-24T01:00:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2014-02-24T02:30:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;WKST=MO;UNTIL=20140602T060000Z;BYDAY=MO"
+      ],
+      "location": "Luxoft 2.07",
+      "created": "2014-02-27T08:05:23.000Z",
+      "updated": "2014-02-27T11:07:24.138Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=aW4zc2JxYm5zZnY4MW1sdWFvY3Q4cGRocGtfMjAxNDAyMjRUMDYwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Mon until 20140602T060000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "pgf25uev36v4h0jcu883acsdi4",
+      "iCalUID": "pgf25uev36v4h0jcu883acsdi4@google.com",
+      "summary": "EC",
+      "start": {
+        "dateTime": "2014-02-27T01:00:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2014-02-27T02:30:00-05:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;WKST=MO;UNTIL=20140605T060000Z;BYDAY=TH"
+      ],
+      "location": "Luxoft 2.07",
+      "created": "2014-02-27T08:05:22.000Z",
+      "updated": "2014-05-29T04:00:26.558Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=cGdmMjV1ZXYzNnY0aDBqY3U4ODNhY3NkaTRfMjAxNDAyMjdUMDYwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Thu until 20140605T060000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "4eiv0hpv8gomeo51344r4ptdk8",
+      "iCalUID": "4eiv0hpv8gomeo51344r4ptdk8@google.com",
+      "summary": "EC",
+      "start": {
+        "dateTime": "2014-07-24T08:00:00-04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2014-07-24T09:30:00-04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20141027T130000Z;BYDAY=MO,TH"
+      ],
+      "location": "",
+      "created": "2014-07-22T11:46:59.000Z",
+      "updated": "2014-10-27T13:55:44.919Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NGVpdjBocHY4Z29tZW81MTM0NHI0cHRkazhfMjAxNDA3MjRUMTIwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Mon, Thu until 20141027T130000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "23qbfm3kvnjal2s4b9ms5mgsqg",
+      "iCalUID": "23qbfm3kvnjal2s4b9ms5mgsqg@google.com",
+      "summary": "I need to take Kira from the kindergarten",
+      "start": {
+        "dateTime": "2014-08-12T12:00:00-04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2014-08-12T13:00:00-04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;COUNT=8;BYDAY=TU,TH"
+      ],
+      "location": "",
+      "created": "2014-08-11T13:31:13.000Z",
+      "updated": "2014-09-04T16:18:19.782Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=MjNxYmZtM2t2bmphbDJzNGI5bXM1bWdzcWdfMjAxNDA4MTJUMTYwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Tue, Thu for 8 times",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "epbg5ru5h63d42k0er217v3kd4",
+      "iCalUID": "epbg5ru5h63d42k0er217v3kd4@google.com",
+      "summary": "Send water measurements",
+      "start": {
+        "dateTime": "2014-09-16T16:00:00-04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2014-09-16T17:00:00-04:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;WKST=MO;UNTIL=20150215T205959Z;BYMONTHDAY=16"
+      ],
+      "location": "",
+      "created": "2014-09-16T16:49:02.000Z",
+      "updated": "2015-02-15T21:05:16.283Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=ZXBiZzVydTVoNjNkNDJrMGVyMjE3djNrZDRfMjAxNDA5MTZUMjAwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "monthly until 20150215T205959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "47c4ep7orckjmrbdhkaeqmh64c",
+      "iCalUID": "47c4ep7orckjmrbdhkaeqmh64c@google.com",
+      "summary": "Start the day with a line of code",
+      "start": {
+        "date": "2014-11-17"
+      },
+      "end": {
+        "date": "2014-11-18"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;COUNT=35;BYDAY=MO,TU,WE,TH,FR"
+      ],
+      "location": "",
+      "created": "2014-11-16T06:41:48.000Z",
+      "updated": "2015-08-25T18:31:07.608Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NDdjNGVwN29yY2tqbXJiZGhrYWVxbWg2NGNfMjAxNDExMTcgaW50aW1hdGlrQG0",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Mon, Tue, Wed, Thu, Fri for 35 times",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "munb4afv29il4o1lgjgjbrmfb4",
+      "iCalUID": "munb4afv29il4o1lgjgjbrmfb4@google.com",
+      "summary": "PAYDAY",
+      "start": {
+        "dateTime": "2015-03-10T03:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2015-03-10T05:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;UNTIL=20161009T215959Z"
+      ],
+      "location": "",
+      "created": "2015-03-11T18:39:43.000Z",
+      "updated": "2016-10-10T07:47:19.872Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=bXVuYjRhZnYyOWlsNG8xbGdqZ2picm1mYjRfMjAxNTAzMTBUMDcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "monthly until 20161009T215959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "tejffe8ogujfqfgmoe3olrjobc",
+      "iCalUID": "tejffe8ogujfqfgmoe3olrjobc@google.com",
+      "summary": "My personal time",
+      "start": {
+        "dateTime": "2015-04-21T13:00:00-04:00",
+        "timeZone": "Europe/Belgrade"
+      },
+      "end": {
+        "dateTime": "2015-04-21T18:00:00-04:00",
+        "timeZone": "Europe/Belgrade"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;BYDAY=SU,TU,TH"
+      ],
+      "location": "",
+      "created": "2015-04-18T21:44:34.000Z",
+      "updated": "2024-07-18T20:25:31.965Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=dGVqZmZlOG9ndWpmcWZnbW9lM29scmpvYmNfMjAxNTA0MjFUMTcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sun, Tue, Thu",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "5f1982k68ngs33ardb3old7430",
+      "iCalUID": "5f1982k68ngs33ardb3old7430@google.com",
+      "summary": "do my Polish homework",
+      "start": {
+        "dateTime": "2015-09-21T14:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2015-09-21T15:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20151223T190000Z;BYDAY=MO,WE"
+      ],
+      "location": "",
+      "created": "2015-09-24T19:58:51.000Z",
+      "updated": "2015-12-07T19:11:42.944Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NWYxOTgyazY4bmdzMzNhcmRiM29sZDc0MzBfMjAxNTA5MjFUMTgwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Mon, Wed until 20151223T190000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "mdgi9k6d6b20h3hqio8fefncq4",
+      "iCalUID": "mdgi9k6d6b20h3hqio8fefncq4@google.com",
+      "summary": "Polish lesson @ inspiro language school",
+      "start": {
+        "dateTime": "2016-04-05T11:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2016-04-05T12:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20160613T215959Z;BYDAY=TU"
+      ],
+      "location": "",
+      "created": "2016-03-30T21:16:45.000Z",
+      "updated": "2016-06-13T11:30:37.265Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=bWRnaTlrNmQ2YjIwaDNocWlvOGZlZm5jcTRfMjAxNjA0MDVUMTUwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Tue until 20160613T215959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "puk1lc7e4nmssne5kk7iq422gc",
+      "iCalUID": "puk1lc7e4nmssne5kk7iq422gc@google.com",
+      "summary": "Polish lesson @ inspiro language school",
+      "start": {
+        "dateTime": "2016-06-17T11:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2016-06-17T12:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;COUNT=18;BYDAY=FR"
+      ],
+      "location": "",
+      "created": "2016-03-30T21:16:45.000Z",
+      "updated": "2016-06-13T11:30:37.265Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=cHVrMWxjN2U0bm1zc25lNWtrN2lxNDIyZ2NfMjAxNjA2MTdUMTUwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Fri for 18 times",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "4ltthhgs3ibevjej8h48mhf100",
+      "iCalUID": "4ltthhgs3ibevjej8h48mhf100@google.com",
+      "summary": "PAYDAY",
+      "start": {
+        "dateTime": "2016-10-15T02:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2016-10-15T04:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;BYMONTHDAY=15"
+      ],
+      "location": "",
+      "created": "2015-03-11T18:39:43.000Z",
+      "updated": "2018-11-15T06:51:25.339Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NGx0dGhoZ3MzaWJldmplajhoNDhtaGYxMDBfMjAxNjEwMTVUMDYwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "monthly",
+      "futureOccurrence": {
+        "id": "4ltthhgs3ibevjej8h48mhf100_20260615T060000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NGx0dGhoZ3MzaWJldmplajhoNDhtaGYxMDBfMjAyNjA2MTVUMDYwMDAwWiBpbnRpbWF0aWtAbQ",
+        "summary": "PAYDAY",
+        "start": {
+          "dateTime": "2026-06-15T02:00:00-04:00",
+          "timeZone": "Europe/Warsaw"
+        },
+        "end": {
+          "dateTime": "2026-06-15T04:00:00-04:00",
+          "timeZone": "Europe/Warsaw"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "6gsmcdpl6krj0bb661gj6b9k6hj6cb9p60s3eb9n6pgj2dj260s36ob1c8",
+      "iCalUID": "6gsmcdpl6krj0bb661gj6b9k6hj6cb9p60s3eb9n6pgj2dj260s36ob1c8@google.com",
+      "summary": "Internet reimbursement",
+      "start": {
+        "dateTime": "2020-02-05T14:30:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2020-02-05T15:30:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;WKST=MO;UNTIL=20210204T225959Z;INTERVAL=3;BYMONTHDAY=5"
+      ],
+      "location": "",
+      "created": "2020-02-04T08:41:08.000Z",
+      "updated": "2021-03-01T00:58:52.068Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NmdzbWNkcGw2a3JqMGJiNjYxZ2o2YjlrNmhqNmNiOXA2MHMzZWI5bjZwZ2oyZGoyNjBzMzZvYjFjOF8yMDIwMDIwNVQxOTMwMDBaIGludGltYXRpa0Bt",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "every 3 months until 20210204T225959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "22jb8ak93lhd7g4efrknime6fc",
+      "iCalUID": "22jb8ak93lhd7g4efrknime6fc@google.com",
+      "summary": "Guitar practice",
+      "start": {
+        "dateTime": "2020-02-15T12:00:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2020-02-15T14:00:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;WKST=MO;UNTIL=20211229T225959Z;BYDAY=SA,TH,TU"
+      ],
+      "location": "",
+      "created": "2020-02-13T22:03:23.000Z",
+      "updated": "2021-12-30T13:31:58.849Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=MjJqYjhhazkzbGhkN2c0ZWZya25pbWU2ZmNfMjAyMDAyMTVUMTcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sat, Thu, Tue until 20211229T225959Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "6a452oa8mccdogntdnomddjjjn",
+      "iCalUID": "6a452oa8mccdogntdnomddjjjn@google.com",
+      "summary": "bicycle ride",
+      "start": {
+        "dateTime": "2020-05-24T11:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2020-05-24T13:00:00-04:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;BYDAY=SU"
+      ],
+      "location": "",
+      "created": "2020-05-24T21:28:11.000Z",
+      "updated": "2020-05-24T21:28:11.539Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NmE0NTJvYThtY2Nkb2dudGRub21kZGpqam5fMjAyMDA1MjRUMTUwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sun",
+      "futureOccurrence": {
+        "id": "6a452oa8mccdogntdnomddjjjn_20260524T150000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NmE0NTJvYThtY2Nkb2dudGRub21kZGpqam5fMjAyNjA1MjRUMTUwMDAwWiBpbnRpbWF0aWtAbQ",
+        "summary": "bicycle ride",
+        "start": {
+          "dateTime": "2026-05-24T11:00:00-04:00",
+          "timeZone": "Europe/Warsaw"
+        },
+        "end": {
+          "dateTime": "2026-05-24T13:00:00-04:00",
+          "timeZone": "Europe/Warsaw"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "ccpmachlc8qj0b9ocgqjab9k74p64b9o6gpjeb9l71i64p1i74p6aopl6k",
+      "iCalUID": "ccpmachlc8qj0b9ocgqjab9k74p64b9o6gpjeb9l71i64p1i74p6aopl6k@google.com",
+      "summary": "Teeth cleaning",
+      "start": {
+        "dateTime": "2021-03-05T04:30:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2021-03-05T05:30:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=YEARLY;WKST=TU"
+      ],
+      "location": "",
+      "created": "2021-03-05T08:40:44.000Z",
+      "updated": "2021-03-05T08:40:44.966Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=Y2NwbWFjaGxjOHFqMGI5b2NncWphYjlrNzRwNjRiOW82Z3BqZWI5bDcxaTY0cDFpNzRwNmFvcGw2a18yMDIxMDMwNVQwOTMwMDBaIGludGltYXRpa0Bt",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "yearly",
+      "futureOccurrence": {
+        "id": "ccpmachlc8qj0b9ocgqjab9k74p64b9o6gpjeb9l71i64p1i74p6aopl6k_20270305T093000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=Y2NwbWFjaGxjOHFqMGI5b2NncWphYjlrNzRwNjRiOW82Z3BqZWI5bDcxaTY0cDFpNzRwNmFvcGw2a18yMDI3MDMwNVQwOTMwMDBaIGludGltYXRpa0Bt",
+        "summary": "Teeth cleaning",
+        "start": {
+          "dateTime": "2027-03-05T04:30:00-05:00",
+          "timeZone": "Europe/Warsaw"
+        },
+        "end": {
+          "dateTime": "2027-03-05T05:30:00-05:00",
+          "timeZone": "Europe/Warsaw"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "7cp8lkhm8561uvam40ci6n9s36",
+      "iCalUID": "7cp8lkhm8561uvam40ci6n9s36@google.com",
+      "summary": "Internet reimbursement",
+      "start": {
+        "dateTime": "2021-03-10T14:30:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2021-03-10T15:30:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;WKST=TU"
+      ],
+      "location": "",
+      "created": "2020-02-04T08:41:08.000Z",
+      "updated": "2026-01-12T04:03:49.567Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=N2NwOGxraG04NTYxdXZhbTQwY2k2bjlzMzZfMjAyMTAzMTBUMTkzMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "monthly",
+      "futureOccurrence": {
+        "id": "7cp8lkhm8561uvam40ci6n9s36_20260610T183000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=N2NwOGxraG04NTYxdXZhbTQwY2k2bjlzMzZfMjAyNjA2MTBUMTgzMDAwWiBpbnRpbWF0aWtAbQ",
+        "summary": "Internet reimbursement",
+        "start": {
+          "dateTime": "2026-06-10T14:30:00-04:00",
+          "timeZone": "Europe/Warsaw"
+        },
+        "end": {
+          "dateTime": "2026-06-10T15:30:00-04:00",
+          "timeZone": "Europe/Warsaw"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "22jb8ak93lhd7g4efrknime6fc_R20211230T170000",
+      "iCalUID": "22jb8ak93lhd7g4efrknime6fc_R20211230T170000@google.com",
+      "summary": "Piano practice",
+      "start": {
+        "dateTime": "2021-12-30T12:00:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2021-12-30T14:00:00-05:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;WKST=MO;BYDAY=SA,TH,TU"
+      ],
+      "location": "",
+      "created": "2020-02-13T22:03:23.000Z",
+      "updated": "2021-12-30T13:31:58.849Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=MjJqYjhhazkzbGhkN2c0ZWZya25pbWU2ZmNfMjAyMTEyMzBUMTcwMDAwWiBpbnRpbWF0aWtAbQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "weekly on Sat, Thu, Tue",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "intimatik@gmail.com",
+      "calendar": "Red",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "g5g5m9v9vdolqlbl5b9tsgill0",
+      "iCalUID": "g5g5m9v9vdolqlbl5b9tsgill0@google.com",
+      "summary": "Happy birthday!",
+      "start": {
+        "date": "2024-08-06"
+      },
+      "end": {
+        "date": "2024-08-07"
+      },
+      "recurrence": [
+        "RRULE:FREQ=YEARLY"
+      ],
+      "location": "",
+      "created": "2025-01-14T15:38:43.000Z",
+      "updated": "2025-02-17T15:31:46.042Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=ZzVnNW05djl2ZG9scWxibDViOXRzZ2lsbDBfMjAyNDA4MDYgaW50aW1hdGlrQG0",
+      "creator": "intimatik@gmail.com",
+      "organizer": "intimatik@gmail.com",
+      "recurrenceText": "yearly",
+      "futureOccurrence": {
+        "id": "g5g5m9v9vdolqlbl5b9tsgill0_20260806",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZzVnNW05djl2ZG9scWxibDViOXRzZ2lsbDBfMjAyNjA4MDYgaW50aW1hdGlrQG0",
+        "summary": "Happy birthday!",
+        "start": {
+          "date": "2026-08-06"
+        },
+        "end": {
+          "date": "2026-08-07"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "uj67r5gobu8vdr1jf0fc40i40k",
+      "iCalUID": "uj67r5gobu8vdr1jf0fc40i40k@google.com",
+      "summary": "Конец периода",
+      "start": {
+        "date": "2008-06-01"
+      },
+      "end": {
+        "date": "2008-06-02"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;UNTIL=20101130;BYMONTHDAY=1"
+      ],
+      "location": "",
+      "created": "2010-02-08T08:46:28.000Z",
+      "updated": "2022-11-09T01:03:07.629Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=dWo2N3I1Z29idTh2ZHIxamYwZmM0MGk0MGtfMjAwODA2MDEgYWNpZF9ob3VzZUB1ZG0ucnU",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "monthly until 20101130",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "oq0s29od5aa6r3lo782785n68g",
+      "iCalUID": "oq0s29od5aa6r3lo782785n68g@google.com",
+      "summary": "Прочитать сказку",
+      "start": {
+        "dateTime": "2009-06-09T17:00:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-06-09T17:30:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20100208T160000Z;BYDAY=TU"
+      ],
+      "location": "",
+      "created": "2010-02-08T08:46:30.000Z",
+      "updated": "2022-11-09T01:02:56.476Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=b3EwczI5b2Q1YWE2cjNsbzc4Mjc4NW42OGdfMjAwOTA2MDlUMTUwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "weekly on Tue until 20100208T160000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "t2gs5fvd2jcttl31tj0lgck8h0",
+      "iCalUID": "t2gs5fvd2jcttl31tj0lgck8h0@google.com",
+      "summary": "Прочитать книгу по 8.2",
+      "start": {
+        "dateTime": "2009-11-23T18:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-11-23T20:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;WKST=MO;UNTIL=20091128T170000Z"
+      ],
+      "location": "",
+      "created": "2009-11-16T09:18:54.000Z",
+      "updated": "2022-11-09T01:02:58.724Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=dDJnczVmdmQyamN0dGwzMXRqMGxnY2s4aDBfMjAwOTExMjNUMTcwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20091128T170000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "59523m1eg7h497m03jq6eaanfo",
+      "iCalUID": "59523m1eg7h497m03jq6eaanfo@google.com",
+      "summary": "прочитать книгу по SQL ",
+      "start": {
+        "dateTime": "2009-11-24T18:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-11-24T19:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;WKST=MO;UNTIL=20091130T170000Z"
+      ],
+      "location": "",
+      "created": "0001-01-01T00:00:00.000Z",
+      "updated": "2022-11-09T01:01:36.847Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NTk1MjNtMWVnN2g0OTdtMDNqcTZlYWFuZm9fMjAwOTExMjRUMTcwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20091130T170000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "v2l4hp06is3k52qhpul26t6o54",
+      "iCalUID": "v2l4hp06is3k52qhpul26t6o54@google.com",
+      "summary": "Прочитать книгу по СКД",
+      "start": {
+        "dateTime": "2009-11-30T18:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-11-30T20:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;WKST=MO;UNTIL=20091205T170000Z"
+      ],
+      "location": "",
+      "created": "2009-11-16T09:31:09.000Z",
+      "updated": "2022-11-09T01:03:08.712Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=djJsNGhwMDZpczNrNTJxaHB1bDI2dDZvNTRfMjAwOTExMzBUMTcwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20091205T170000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "26co6i901qa27hif997u4or50g",
+      "iCalUID": "26co6i901qa27hif997u4or50g@google.com",
+      "summary": "просмотреть видео-урок по Оракл",
+      "start": {
+        "dateTime": "2009-12-07T19:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-12-07T20:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;WKST=MO;UNTIL=20091220T180000Z"
+      ],
+      "location": "",
+      "created": "2009-12-06T15:54:39.000Z",
+      "updated": "2022-11-09T01:01:08.990Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=MjZjbzZpOTAxcWEyN2hpZjk5N3U0b3I1MGdfMjAwOTEyMDdUMTgwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20091220T180000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_88p4cc1n612j8ba26co3cb9k88q3gb9p6p0j4ba570p3gd1m850k4h9k6g",
+      "iCalUID": "B2F070E4-B306-4B48-96A2-E82846AABE44",
+      "summary": "Перечитываю Аллена",
+      "start": {
+        "dateTime": "2009-12-17T06:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-12-17T07:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=YEARLY"
+      ],
+      "location": "",
+      "created": "2009-12-27T20:06:26.000Z",
+      "updated": "2022-11-09T01:02:30.803Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=Xzg4cDRjYzFuNjEyajhiYTI2Y28zY2I5azg4cTNnYjlwNnAwajRiYTU3MHAzZ2QxbTg1MGs0aDlrNmdfMjAwOTEyMTdUMDUwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "yearly",
+      "futureOccurrence": {
+        "id": "_88p4cc1n612j8ba26co3cb9k88q3gb9p6p0j4ba570p3gd1m850k4h9k6g_20261217T050000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=Xzg4cDRjYzFuNjEyajhiYTI2Y28zY2I5azg4cTNnYjlwNnAwajRiYTU3MHAzZ2QxbTg1MGs0aDlrNmdfMjAyNjEyMTdUMDUwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+        "summary": "Перечитываю Аллена",
+        "start": {
+          "dateTime": "2026-12-17T06:00:00+01:00",
+          "timeZone": "Europe/Moscow"
+        },
+        "end": {
+          "dateTime": "2026-12-17T07:00:00+01:00",
+          "timeZone": "Europe/Moscow"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_88rjid1i8cpj4ba26ko32b9k84rk2b9p6krjcb9m751j2ghh6crk4c9o70",
+      "iCalUID": "B7942C32-B501-4A7A-9576-69C1B137B188",
+      "summary": "Watch motivational video with my spouse",
+      "start": {
+        "dateTime": "2009-12-21T14:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-12-21T15:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;BYMONTHDAY=21"
+      ],
+      "location": "",
+      "created": "2009-12-28T03:37:27.000Z",
+      "updated": "2022-11-09T01:02:31.989Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=Xzg4cmppZDFpOGNwajRiYTI2a28zMmI5azg0cmsyYjlwNmtyamNiOW03NTFqMmdoaDZjcms0YzlvNzBfMjAwOTEyMjFUMTMwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "monthly",
+      "futureOccurrence": {
+        "id": "_88rjid1i8cpj4ba26ko32b9k84rk2b9p6krjcb9m751j2ghh6crk4c9o70_20260621T130000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=Xzg4cmppZDFpOGNwajRiYTI2a28zMmI5azg0cmsyYjlwNmtyamNiOW03NTFqMmdoaDZjcms0YzlvNzBfMjAyNjA2MjFUMTMwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+        "summary": "Watch motivational video with my spouse",
+        "start": {
+          "dateTime": "2026-06-21T15:00:00+02:00",
+          "timeZone": "Europe/Moscow"
+        },
+        "end": {
+          "dateTime": "2026-06-21T16:00:00+02:00",
+          "timeZone": "Europe/Moscow"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "1h8vasuf1dk53at93rum5lsgtc",
+      "iCalUID": "1h8vasuf1dk53at93rum5lsgtc@google.com",
+      "summary": "Читать Oracle,Java or 1C в 21:00",
+      "start": {
+        "dateTime": "2009-12-25T19:30:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2009-12-25T20:30:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;UNTIL=20100102T183000Z"
+      ],
+      "location": "",
+      "created": "2009-12-25T09:33:12.000Z",
+      "updated": "2022-11-09T01:01:06.789Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=MWg4dmFzdWYxZGs1M2F0OTNydW01bHNndGNfMjAwOTEyMjVUMTgzMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20100102T183000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6p138ea384oj0dhk6op38e1n8h0jgcph6krk8hi16oo3iha5852j0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "6B49CA106462487DA83157DFA609EEAE00000000000000000000000000000000",
+      "summary": "Читать Oracle,Java or 1C в 21:00",
+      "start": {
+        "dateTime": "2010-01-03T12:30:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2010-01-03T13:30:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;UNTIL=20100114T113000Z"
+      ],
+      "location": "",
+      "created": "2010-01-02T18:16:10.000Z",
+      "updated": "2022-11-09T01:02:10.287Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZwMTM4ZWEzODRvajBkaGs2b3AzOGUxbjhoMGpnY3BoNmtyazhoaTE2b28zaWhhNTg1MmowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMDAxMDNUMTEzMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20100114T113000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6os3echg70s3ghhk70oj8d258os30e1i70r3acho752jig9l65330c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "68720888F48144EF8082865289E9A51F00000000000000000000000000000000",
+      "summary": "Читать Oracle,Java or 1C в 21:00",
+      "start": {
+        "dateTime": "2010-01-15T18:30:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2010-01-15T19:30:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;UNTIL=20100209T173000Z"
+      ],
+      "location": "",
+      "created": "2010-01-15T11:54:06.000Z",
+      "updated": "2022-11-09T01:02:08.072Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZvczNlY2hnNzBzM2doaGs3MG9qOGQyNThvczMwZTFpNzByM2FjaG83NTJqaWc5bDY1MzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMDAxMTVUMTczMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20100209T173000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_60s32da6651j4cpg74pj8d9n8p0k2e1n6cqk2gq169336cq46ssj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "0815F1C23093457FAA8735ACA2F33D7900000000000000000000000000000000",
+      "summary": "Проверить выполненные за неделю цели,установить новые",
+      "start": {
+        "dateTime": "2010-02-14T17:00:00+01:00",
+        "timeZone": "Etc/UTC"
+      },
+      "end": {
+        "dateTime": "2010-02-14T18:00:00+01:00",
+        "timeZone": "Etc/UTC"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20110813T160000Z;BYDAY=SU"
+      ],
+      "location": "",
+      "created": "2010-02-10T19:46:22.000Z",
+      "updated": "2022-11-09T01:01:45.734Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzYwczMyZGE2NjUxajRjcGc3NHBqOGQ5bjhwMGsyZTFuNmNxazJncTE2OTMzNmNxNDZzc2owYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMDAyMTRUMTYwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "weekly on Sun until 20110813T160000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_74r46h2168pj6ghn6or38h9i6514ad1g74qkacq68l14ce9p8cqj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "96CDA233B7664E21BE4095E3FEBF99C500000000000000000000000000000000",
+      "summary": "Check my to-do plan for a month",
+      "start": {
+        "dateTime": "2010-04-17T08:00:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2010-04-17T09:00:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RDATE;TZID=Europe/Moscow:20110317T090000",
+        "RRULE:FREQ=MONTHLY;BYMONTHDAY=17"
+      ],
+      "location": "",
+      "created": "0001-01-01T00:00:00.000Z",
+      "updated": "2022-11-09T01:02:23.034Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=Xzc0cjQ2aDIxNjhwajZnaG42b3IzOGg5aTY1MTRhZDFnNzRxa2FjcTY4bDE0Y2U5cDhjcWowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMDA0MTdUMDYwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "RDATE;TZID=Europe/Moscow:20110317T090000; monthly",
+      "futureOccurrence": {
+        "id": "_74r46h2168pj6ghn6or38h9i6514ad1g74qkacq68l14ce9p8cqj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0_20260617T070000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=Xzc0cjQ2aDIxNjhwajZnaG42b3IzOGg5aTY1MTRhZDFnNzRxa2FjcTY4bDE0Y2U5cDhjcWowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAyNjA2MTdUMDcwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+        "summary": "Check my to-do plan for a month",
+        "start": {
+          "dateTime": "2026-06-17T09:00:00+02:00",
+          "timeZone": "Europe/Moscow"
+        },
+        "end": {
+          "dateTime": "2026-06-17T10:00:00+02:00",
+          "timeZone": "Europe/Moscow"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_8h23ae218d0k4c1h8gsj8d238p0jih9i70qjcc1n8ko3idhh6csj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "DD58ACAB01D944CFA9E285607E09613900000000000000000000000000000000",
+      "summary": "Хочу получить сертификат специалиста",
+      "start": {
+        "dateTime": "2010-04-20T18:30:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2010-04-20T19:30:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=DAILY;UNTIL=20100505T163000Z"
+      ],
+      "location": "",
+      "created": "2010-02-10T17:30:23.000Z",
+      "updated": "2022-11-09T01:02:41.391Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzhoMjNhZTIxOGQwazRjMWg4Z3NqOGQyMzhwMGppaDlpNzBxamNjMW44a28zaWRoaDZjc2owYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMDA0MjBUMTYzMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "daily until 20100505T163000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_8cs3gea671142ga374p38e1n6h0jcghl612jacpg6p13gc9i8kpj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "C889F8BAAC924874A6B50E5306B812E300000000000000000000000000000000",
+      "summary": "Write down monthly budget",
+      "start": {
+        "date": "2010-12-01"
+      },
+      "end": {
+        "date": "2010-12-02"
+      },
+      "recurrence": [
+        "RRULE:FREQ=MONTHLY;BYMONTHDAY=1"
+      ],
+      "location": "",
+      "created": "2010-12-27T18:45:12.000Z",
+      "updated": "2022-11-09T01:02:38.698Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzhjczNnZWE2NzExNDJnYTM3NHAzOGUxbjZoMGpjZ2hsNjEyamFjcGc2cDEzZ2M5aThrcGowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMDEyMDEgYWNpZF9ob3VzZUB1ZG0ucnU",
+      "creator": "intimatik@gmail.com",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "monthly",
+      "futureOccurrence": {
+        "id": "_8cs3gea671142ga374p38e1n6h0jcghl612jacpg6p13gc9i8kpj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0_20260601",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=XzhjczNnZWE2NzExNDJnYTM3NHAzOGUxbjZoMGpjZ2hsNjEyamFjcGc2cDEzZ2M5aThrcGowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAyNjA2MDEgYWNpZF9ob3VzZUB1ZG0ucnU",
+        "summary": "Write down monthly budget",
+        "start": {
+          "date": "2026-06-01"
+        },
+        "end": {
+          "date": "2026-06-02"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_70s46ha18p348dq670oj8d9k6kskadi18h13cea674pkad9p8oqj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "88CEAFFD7F8145459E6ADB69F93E59F500000000000000000000000000000000",
+      "summary": "Закупиться акциями для посленовогоднего ралли",
+      "start": {
+        "dateTime": "2010-12-01T13:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2010-12-01T14:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=YEARLY"
+      ],
+      "location": "",
+      "created": "0001-01-01T00:00:00.000Z",
+      "updated": "2022-11-09T01:02:16.392Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzcwczQ2aGExOHAzNDhkcTY3MG9qOGQ5azZrc2thZGkxOGgxM2NlYTY3NHBrYWQ5cDhvcWowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMDEyMDFUMTIwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "yearly",
+      "futureOccurrence": {
+        "id": "_70s46ha18p348dq670oj8d9k6kskadi18h13cea674pkad9p8oqj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0_20261201T120000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=XzcwczQ2aGExOHAzNDhkcTY3MG9qOGQ5azZrc2thZGkxOGgxM2NlYTY3NHBrYWQ5cDhvcWowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAyNjEyMDFUMTIwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+        "summary": "Закупиться акциями для посленовогоднего ралли",
+        "start": {
+          "dateTime": "2026-12-01T13:00:00+01:00",
+          "timeZone": "Europe/Moscow"
+        },
+        "end": {
+          "dateTime": "2026-12-01T14:00:00+01:00",
+          "timeZone": "Europe/Moscow"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_8kp3ed1p70ok2g9h85338cpl6l13gh2489232h1o74s3eca688s30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "E274981AA1AF4355B8DDBD1D89871FB800000000000000000000000000000000",
+      "summary": "Английские выходные",
+      "start": {
+        "date": "2011-11-12"
+      },
+      "end": {
+        "date": "2011-11-14"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20120803;BYDAY=SA"
+      ],
+      "location": "",
+      "created": "2011-11-04T11:17:20.000Z",
+      "updated": "2022-11-09T01:02:42.515Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzhrcDNlZDFwNzBvazJnOWg4NTMzOGNwbDZsMTNnaDI0ODkyMzJoMW83NHMzZWNhNjg4czMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMTExMTIgYWNpZF9ob3VzZUB1ZG0ucnU",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "weekly on Sat until 20120803",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "4aag5ndonretmb89flfht0mpho",
+      "iCalUID": "4aag5ndonretmb89flfht0mpho@google.com",
+      "summary": "EC with Michael Koltsov",
+      "start": {
+        "dateTime": "2012-05-20T06:00:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2012-05-20T07:30:00+02:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20120715T040000Z;BYDAY=SU,SA"
+      ],
+      "location": "skype",
+      "created": "2012-05-19T04:41:17.000Z",
+      "updated": "2022-11-09T01:01:15.774Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NGFhZzVuZG9ucmV0bWI4OWZsZmh0MG1waG9fMjAxMjA1MjBUMDQwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "kovin.vladimir@gmail.com",
+      "organizer": "kovin.vladimir@gmail.com",
+      "recurrenceText": "weekly on Sun, Sat until 20120715T040000Z",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "_6l348ghp8krj8c1k6so38cpm850k4dhm84o36e226d14ad1g6sq30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+      "iCalUID": "5FDB9E740470436AAB66A038B3BE407400000000000000000000000000000000",
+      "summary": "Выходные на природе+английские выходные",
+      "start": {
+        "date": "2012-08-04"
+      },
+      "end": {
+        "date": "2012-08-06"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=20130323;BYDAY=SA"
+      ],
+      "location": "",
+      "created": "2012-07-30T08:45:25.000Z",
+      "updated": "2022-11-09T01:02:05.828Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=XzZsMzQ4Z2hwOGtyajhjMWs2c28zOGNwbTg1MGs0ZGhtODRvMzZlMjI2ZDE0YWQxZzZzcTMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzBfMjAxMjA4MDQgYWNpZF9ob3VzZUB1ZG0ucnU",
+      "creator": "acid_house@udm.ru",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "weekly on Sat until 20130323",
+      "futureOccurrence": null,
+      "active": false
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "k7kpt4nhuruosm5n8i34l01dc8",
+      "iCalUID": "k7kpt4nhuruosm5n8i34l01dc8@google.com",
+      "summary": "Massage",
+      "start": {
+        "dateTime": "2014-02-17T22:00:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "end": {
+        "dateTime": "2014-02-17T22:30:00+01:00",
+        "timeZone": "Europe/Moscow"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;BYDAY=MO"
+      ],
+      "location": "",
+      "created": "2014-02-18T18:55:51.000Z",
+      "updated": "2019-11-10T21:50:08.273Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=azdrcHQ0bmh1cnVvc201bjhpMzRsMDFkYzhfMjAxNDAyMTdUMjEwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "weekly on Mon",
+      "futureOccurrence": {
+        "id": "k7kpt4nhuruosm5n8i34l01dc8_20260524T220000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=azdrcHQ0bmh1cnVvc201bjhpMzRsMDFkYzhfMjAyNjA1MjRUMjIwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+        "summary": "Massage",
+        "start": {
+          "dateTime": "2026-05-25T00:00:00+02:00",
+          "timeZone": "Europe/Moscow"
+        },
+        "end": {
+          "dateTime": "2026-05-25T00:30:00+02:00",
+          "timeZone": "Europe/Moscow"
+        }
+      },
+      "active": true
+    },
+    {
+      "calendarId": "acid_house@udm.ru",
+      "calendar": "Yellow",
+      "accessRole": "owner",
+      "hidden": false,
+      "selected": true,
+      "eventId": "f44590rd55mi2obfvpq0179ac0",
+      "iCalUID": "f44590rd55mi2obfvpq0179ac0@google.com",
+      "summary": "MALL DAY",
+      "start": {
+        "dateTime": "2014-02-20T19:00:00+01:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "end": {
+        "dateTime": "2014-02-20T20:00:00+01:00",
+        "timeZone": "Europe/Warsaw"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;BYDAY=TH"
+      ],
+      "location": "",
+      "created": "2014-02-18T18:21:29.000Z",
+      "updated": "2019-02-01T17:06:29.898Z",
+      "htmlLink": "https://www.google.com/calendar/event?eid=ZjQ0NTkwcmQ1NW1pMm9iZnZwcTAxNzlhYzBfMjAxNDAyMjBUMTgwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+      "creator": "intimatik@gmail.com",
+      "organizer": "acid_house@udm.ru",
+      "recurrenceText": "weekly on Thu",
+      "futureOccurrence": {
+        "id": "f44590rd55mi2obfvpq0179ac0_20260528T170000Z",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZjQ0NTkwcmQ1NW1pMm9iZnZwcTAxNzlhYzBfMjAyNjA1MjhUMTcwMDAwWiBhY2lkX2hvdXNlQHVkbS5ydQ",
+        "summary": "MALL DAY",
+        "start": {
+          "dateTime": "2026-05-28T19:00:00+02:00",
+          "timeZone": "Europe/Warsaw"
+        },
+        "end": {
+          "dateTime": "2026-05-28T20:00:00+02:00",
+          "timeZone": "Europe/Warsaw"
+        }
+      },
+      "active": true
+    }
+  ]
+}
