@@ -536,6 +536,107 @@
         background: #f0f8f3;
       }
 
+      .backend-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .backend-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 0;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(26, 115, 232, 0.08);
+        color: #174ea6;
+        font-size: 14px;
+        font-weight: 820;
+      }
+
+      .live-list,
+      .vote-board {
+        display: grid;
+        gap: 10px;
+      }
+
+      .live-row,
+      .vote-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+        align-items: center;
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--soft);
+      }
+
+      .live-row strong,
+      .vote-row strong {
+        display: block;
+        font-size: 15px;
+      }
+
+      .live-row span,
+      .vote-row span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.42;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 9px;
+        border-radius: 999px;
+        border: 1px solid rgba(24, 128, 56, 0.22);
+        color: var(--green);
+        background: rgba(24, 128, 56, 0.1);
+        font-size: 12px;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+
+      .counter {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .counter output {
+        min-width: 38px;
+        min-height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: #fff;
+        border: 1px solid var(--line);
+        font-weight: 900;
+      }
+
+      .vote {
+        min-width: 42px;
+        min-height: 34px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--ink);
+        color: #fff;
+        font: inherit;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .vote:disabled {
+        cursor: progress;
+        opacity: 0.7;
+      }
+
       .sources {
         color: var(--muted);
         font-size: 14px;
@@ -555,7 +656,8 @@
 
       @media (max-width: 880px) {
         .hero,
-        .planner {
+        .planner,
+        .backend-grid {
           grid-template-columns: 1fr;
         }
 
@@ -622,6 +724,7 @@
           <span>Firebase Free Launch Kit</span>
         </a>
         <div class="nav-links" aria-label="Page sections">
+          <a href="#backend">Live backend</a>
           <a href="#free">Free features</a>
           <a href="#planner">Plan check</a>
           <a href="#limits">Watch-outs</a>
@@ -636,12 +739,11 @@
           <div class="eyebrow"><span class="pulse"></span> Deployed on Firebase Hosting</div>
           <h1 id="hero-title">Build a real web app on Firebase for zero dollars.</h1>
           <p class="lede">
-            The Spark plan can host a static site, serve a database-backed app, authenticate users, ship push
-            messages, and collect app health signals without a card. The limits matter, so this page puts them
-            in one place.
+            The Spark plan can host a site and run a small database-backed app without a card. This page is not
+            just static: the live counters and feature rows below are served by Firebase Realtime Database.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#free">See free features</a>
+            <a class="button primary" href="#backend">Try the backend</a>
             <a class="button" href="#planner">Check a launch plan</a>
           </div>
         </div>
@@ -655,10 +757,10 @@
             <div class="deploy-line">
               <div class="meter">$0</div>
               <div>
-                <strong>Static site + client app</strong>
-                <small>Firebase Hosting, CDN, SSL, custom domain support</small>
+                <strong>Hosting + Realtime Database</strong>
+                <small>Static frontend with live JSON data and constrained writes</small>
               </div>
-              <div class="status">Spark-ready</div>
+              <div class="status">Backend online</div>
             </div>
             <div class="usage-grid">
               <div class="usage">
@@ -684,6 +786,30 @@
             </div>
           </div>
         </aside>
+      </section>
+
+      <section class="section" id="backend">
+        <div class="shell backend-grid">
+          <div class="panel">
+            <h2>Live Firebase backend</h2>
+            <p class="narrow-copy">
+              These rows are read from Firebase Realtime Database at page load. The frontend is still just static
+              files on Hosting, but the content is coming from Firebase's hosted JSON database.
+            </p>
+            <div class="backend-status" id="backendStatus"><span class="pulse"></span> Connecting to Realtime Database</div>
+            <div class="live-list" id="liveFeatureList" aria-live="polite"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Write to the backend</h2>
+            <p class="narrow-copy">
+              Click a button to increment a fixed counter in Realtime Database. Security rules allow only one-step
+              increments on known counters and deny everything else.
+            </p>
+            <div class="backend-status"><span class="pulse"></span> Public read, constrained public write</div>
+            <div class="vote-board" id="voteBoard" aria-live="polite"></div>
+          </div>
+        </div>
       </section>
 
       <section class="section" id="free">
@@ -891,6 +1017,7 @@
             <a href="https://firebase.google.com/docs/hosting/usage-quotas-pricing">Hosting quotas and pricing</a>,
             <a href="https://firebase.google.com/docs/firestore/pricing">Cloud Firestore billing</a>,
             <a href="https://firebase.google.com/docs/database/usage/limits">Realtime Database limits</a>,
+            <a href="https://firebase.google.com/docs/database/rest/start">Realtime Database REST and setup</a>,
             and
             <a href="https://firebase.google.com/docs/projects/billing/firebase-pricing-plans">Firebase pricing plans</a>.
           </p>
@@ -900,13 +1027,39 @@
 
     <footer class="footer">
       <div class="shell">
-        This site is static and intentionally contains no Firebase API keys, credentials, private project IDs, or user data.
+        This site uses Firebase Hosting plus Realtime Database. It contains only the public Firebase web app config
+        required by browser SDKs; no private credentials or user data are embedded.
       </div>
     </footer>
 
-    <script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+      import {
+        getDatabase,
+        onValue,
+        ref,
+        runTransaction
+      } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBpmNJVWjI1wH_fjv63XKh2H02G8J8JaJ0",
+        authDomain: "vuejstestproject-ee411.firebaseapp.com",
+        databaseURL: "https://vuejstestproject-ee411.firebaseio.com",
+        projectId: "vuejstestproject-ee411",
+        storageBucket: "vuejstestproject-ee411.firebasestorage.app",
+        messagingSenderId: "135223515034",
+        appId: "1:135223515034:web:cf9b52135f864943844c23"
+      };
+
+      const featureOrder = ["hosting", "firestore", "realtime", "auth", "messaging"];
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
       const chips = [...document.querySelectorAll(".chip")];
       const cards = [...document.querySelectorAll("#featureCards .card")];
+      const backendStatus = document.querySelector("#backendStatus");
+      const liveFeatureList = document.querySelector("#liveFeatureList");
+      const voteBoard = document.querySelector("#voteBoard");
 
       chips.forEach((chip) => {
         chip.addEventListener("click", () => {
@@ -956,6 +1109,87 @@
 
       checks.forEach((item) => item.addEventListener("change", updateReadout));
       updateReadout();
+
+      function clear(element) {
+        while (element.firstChild) element.removeChild(element.firstChild);
+      }
+
+      function renderFeatures(features) {
+        clear(liveFeatureList);
+        featureOrder
+          .filter((id) => features[id])
+          .forEach((id) => {
+            const feature = features[id];
+            const row = document.createElement("div");
+            row.className = "live-row";
+
+            const copy = document.createElement("div");
+            const title = document.createElement("strong");
+            title.textContent = feature.name;
+            const detail = document.createElement("span");
+            detail.textContent = feature.free;
+            copy.append(title, detail);
+
+            const pill = document.createElement("div");
+            pill.className = "pill";
+            pill.textContent = feature.backend ? "Backend" : "Hosting";
+
+            row.append(copy, pill);
+            liveFeatureList.append(row);
+          });
+      }
+
+      function renderVotes(votes) {
+        clear(voteBoard);
+        featureOrder.forEach((id) => {
+          const row = document.createElement("div");
+          row.className = "vote-row";
+
+          const copy = document.createElement("div");
+          const title = document.createElement("strong");
+          title.textContent = id === "realtime" ? "Realtime Database" : id[0].toUpperCase() + id.slice(1);
+          const detail = document.createElement("span");
+          detail.textContent = "Stored live in Firebase Realtime Database";
+          copy.append(title, detail);
+
+          const controls = document.createElement("div");
+          controls.className = "counter";
+          const output = document.createElement("output");
+          output.value = votes[id] ?? 0;
+          output.textContent = String(votes[id] ?? 0);
+          const button = document.createElement("button");
+          button.className = "vote";
+          button.type = "button";
+          button.textContent = "+1";
+          button.addEventListener("click", async () => {
+            button.disabled = true;
+            try {
+              await runTransaction(ref(db, `freeShowcase/votes/${id}`), (current) => (current ?? 0) + 1);
+            } finally {
+              button.disabled = false;
+            }
+          });
+          controls.append(output, button);
+
+          row.append(copy, controls);
+          voteBoard.append(row);
+        });
+      }
+
+      onValue(
+        ref(db, "freeShowcase/features"),
+        (snapshot) => {
+          backendStatus.innerHTML = '<span class="pulse"></span> Connected to Realtime Database';
+          renderFeatures(snapshot.val() || {});
+        },
+        () => {
+          backendStatus.textContent = "Database read failed. Check rules or network access.";
+        }
+      );
+
+      onValue(ref(db, "freeShowcase/votes"), (snapshot) => {
+        renderVotes(snapshot.val() || {});
+      });
     </script>
   </body>
 </html>
