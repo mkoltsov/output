@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SKADIS PVC Drying Rack Concept</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172024;
+      --muted: #5d6b73;
+      --panel: rgba(255, 255, 255, 0.9);
+      --line: rgba(23, 32, 36, 0.12);
+      --accent: #d76a2f;
+      --pipe: #2d9caa;
+      --paper: #f5f7f2;
+      --board: #f2efe7;
+      --shadow: rgba(0, 0, 0, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #e8edf0;
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .title,
+    .controls,
+    .panel,
+    .assumptions {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .title {
+      max-width: 620px;
+      padding: 14px 16px 13px;
+      border-radius: 8px;
+      pointer-events: auto;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(20px, 2.2vw, 34px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 57ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      pointer-events: auto;
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 38px;
+      min-width: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      color: var(--ink);
+      background: #ffffff;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    button svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 2;
+      flex: 0 0 auto;
+    }
+
+    button[aria-pressed="true"] {
+      color: #ffffff;
+      background: #234349;
+      border-color: #234349;
+    }
+
+    .panel {
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      width: min(430px, calc(100vw - 32px));
+      border-radius: 8px;
+      padding: 14px 16px;
+      z-index: 3;
+    }
+
+    .panel h2,
+    .assumptions h2 {
+      margin: 0 0 9px;
+      font-size: 14px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 14px;
+      margin: 0 0 11px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .legend li {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 3px;
+    }
+
+    .notes {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .assumptions {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: min(390px, calc(100vw - 32px));
+      border-radius: 8px;
+      padding: 14px 16px;
+      z-index: 3;
+    }
+
+    .assumptions dl {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 7px 12px;
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .assumptions dt {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    .assumptions dd {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    a {
+      color: #195e68;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 850px) {
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        justify-self: start;
+        flex-wrap: wrap;
+      }
+
+      .panel,
+      .assumptions {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        width: auto;
+      }
+
+      .panel {
+        bottom: 12px;
+      }
+
+      .assumptions {
+        display: none;
+      }
+
+      .legend {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div class="topbar">
+    <section class="title" aria-label="Concept summary">
+      <h1>SKADIS PVC Drying Rack Concept</h1>
+      <p class="subtitle">Two printed SKADIS load pegs carry long PVC side rails. Repeated printed saddle mounts clamp to those rails and hold shorter PVC cross pipes as the clothes rack bars.</p>
+    </section>
+
+    <nav class="controls" aria-label="View controls">
+      <button type="button" data-view="overview" aria-pressed="true" title="Overview"><i data-lucide="rotate-3d"></i><span>Overview</span></button>
+      <button type="button" data-view="front" aria-pressed="false" title="Front"><i data-lucide="panel-top"></i><span>Front</span></button>
+      <button type="button" data-view="side" aria-pressed="false" title="Side"><i data-lucide="panel-left"></i><span>Side</span></button>
+      <button type="button" data-view="exploded" aria-pressed="false" title="Exploded"><i data-lucide="move-3d"></i><span>Exploded</span></button>
+    </nav>
+  </div>
+
+  <section class="panel" aria-label="Printed parts">
+    <h2>Printable Parts Shown</h2>
+    <ul class="legend">
+      <li><span class="swatch" style="background:#33383c"></span><span>2x SKADIS peg plates with pipe-insert spigots</span></li>
+      <li><span class="swatch" style="background:#d76a2f"></span><span>10x saddle T-mounts for 5 crossbars</span></li>
+      <li><span class="swatch" style="background:#2d9caa"></span><span>2x long PVC side rails, cut to depth</span></li>
+      <li><span class="swatch" style="background:#f5f2e8"></span><span>5x shorter PVC drying bars, cut to width</span></li>
+    </ul>
+    <p class="notes">
+      <span class="badge">1/2 in PVC assumption</span>
+      <span class="badge">240 mm rail spacing</span>
+      <span class="badge">430 mm rack depth</span>
+      <span class="badge">M2.5 T-nut style anchors</span>
+    </p>
+  </section>
+
+  <section class="assumptions" aria-label="Design assumptions">
+    <h2>Verified Inputs And Assumptions</h2>
+    <dl>
+      <dt>Verified</dt>
+      <dd>IKEA lists SKADIS as a wall/desk pegboard and warns it must be securely anchored.</dd>
+      <dt>Verified</dt>
+      <dd>Published SKADIS T-nut docs give a 40 x 40 mm pattern, second pattern offset 20 mm, and 5 x 15 mm slots.</dd>
+      <dt>Assumed</dt>
+      <dd>Nominal 1/2 in Schedule 40 PVC: about 21.3 mm OD, using the common 0.840 in OD reference. Measure your pipe ID before sizing the printed spigots.</dd>
+      <dt>Not rated</dt>
+      <dd>This is a visualization, not a tested load-bearing model. Wet clothes can overload a pegboard mount quickly.</dd>
+      <dt>Sources</dt>
+      <dd><a href="https://www.ikea.com/us/en/p/skadis-pegboard-black-80534372/">IKEA SKADIS page</a>, <a href="https://www.3dgo.app/models/printables/228663">SKADIS T-nut docs</a>, and <a href="https://www.usplastic.com/knowledgebase/article.aspx?contentkey=624">PVC pipe size reference</a>.</dd>
+    </dl>
+  </section>
+
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const canvas = document.querySelector('#scene');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xe8edf0);
+
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 80);
+    camera.position.set(4.5, 3.2, 6.1);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 0.45, 1.7);
+    controls.maxDistance = 12;
+    controls.minDistance = 2.4;
+
+    const hemi = new THREE.HemisphereLight(0xffffff, 0xb7bec3, 2.2);
+    scene.add(hemi);
+
+    const key = new THREE.DirectionalLight(0xffffff, 2.7);
+    key.position.set(3.5, 5.8, 4.4);
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    scene.add(key);
+
+    const fill = new THREE.DirectionalLight(0xc8f2ff, 0.85);
+    fill.position.set(-4.4, 2.5, -1.8);
+    scene.add(fill);
+
+    const S = 0.01;
+    const mm = value => value * S;
+
+    const materials = {
+      board: new THREE.MeshStandardMaterial({ color: 0xf2efe7, roughness: 0.72, metalness: 0.02 }),
+      hole: new THREE.MeshBasicMaterial({ color: 0x172024 }),
+      printed: new THREE.MeshStandardMaterial({ color: 0x33383c, roughness: 0.52, metalness: 0.05 }),
+      printedEdge: new THREE.MeshStandardMaterial({ color: 0x4a5055, roughness: 0.48, metalness: 0.08 }),
+      mount: new THREE.MeshStandardMaterial({ color: 0xd76a2f, roughness: 0.54, metalness: 0.03 }),
+      mountClear: new THREE.MeshStandardMaterial({ color: 0xd76a2f, roughness: 0.48, metalness: 0.02, transparent: true, opacity: 0.9 }),
+      pipeLong: new THREE.MeshPhysicalMaterial({ color: 0x2d9caa, roughness: 0.32, metalness: 0.0, transparent: true, opacity: 0.72 }),
+      pipeCross: new THREE.MeshStandardMaterial({ color: 0xf5f2e8, roughness: 0.46, metalness: 0.0 }),
+      screw: new THREE.MeshStandardMaterial({ color: 0x1e2528, roughness: 0.34, metalness: 0.38 }),
+      line: new THREE.LineBasicMaterial({ color: 0x23545d, transparent: true, opacity: 0.8 })
+    };
+
+    const root = new THREE.Group();
+    scene.add(root);
+
+    const pegGroup = new THREE.Group();
+    const longRailGroup = new THREE.Group();
+    const crossbarGroup = new THREE.Group();
+    const mountGroup = new THREE.Group();
+    root.add(pegGroup, longRailGroup, crossbarGroup, mountGroup);
+
+    function roundedRectShape(width, height, radius) {
+      const w = mm(width);
+      const h = mm(height);
+      const r = mm(radius);
+      const x = -w / 2;
+      const y = -h / 2;
+      const shape = new THREE.Shape();
+      shape.moveTo(x + r, y);
+      shape.lineTo(x + w - r, y);
+      shape.quadraticCurveTo(x + w, y, x + w, y + r);
+      shape.lineTo(x + w, y + h - r);
+      shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      shape.lineTo(x + r, y + h);
+      shape.quadraticCurveTo(x, y + h, x, y + h - r);
+      shape.lineTo(x, y + r);
+      shape.quadraticCurveTo(x, y, x + r, y);
+      return shape;
+    }
+
+    function box(width, height, depth, mat, x, y, z) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(mm(width), mm(height), mm(depth)), mat);
+      mesh.position.set(mm(x), mm(y), mm(z));
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function cylinder(axis, radius, length, mat, x, y, z, radialSegments = 48) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(mm(radius), mm(radius), mm(length), radialSegments), mat);
+      if (axis === 'x') mesh.rotation.z = Math.PI / 2;
+      if (axis === 'z') mesh.rotation.x = Math.PI / 2;
+      mesh.position.set(mm(x), mm(y), mm(z));
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function tubeBetween(start, end, radius, mat) {
+      const a = new THREE.Vector3(mm(start[0]), mm(start[1]), mm(start[2]));
+      const b = new THREE.Vector3(mm(end[0]), mm(end[1]), mm(end[2]));
+      const mid = a.clone().add(b).multiplyScalar(0.5);
+      const dir = b.clone().sub(a);
+      const length = dir.length();
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(mm(radius), mm(radius), length, 24), mat);
+      mesh.position.copy(mid);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function makeBoard() {
+      const group = new THREE.Group();
+      group.add(box(360, 560, 7, materials.board, 0, 0, -3.5));
+
+      const slotGeometry = new THREE.ShapeGeometry(roundedRectShape(5, 15, 2.5), 10);
+      const addSlot = (x, y) => {
+        const mesh = new THREE.Mesh(slotGeometry, materials.hole);
+        mesh.position.set(mm(x), mm(y), mm(0.25));
+        group.add(mesh);
+      };
+
+      for (let y = -240; y <= 240; y += 40) {
+        for (let x = -140; x <= 140; x += 40) addSlot(x, y);
+      }
+      for (let y = -220; y <= 220; y += 40) {
+        for (let x = -120; x <= 120; x += 40) addSlot(x, y);
+      }
+
+      const rail = box(340, 18, 12, materials.printedEdge, 0, 246, -13);
+      rail.castShadow = false;
+      group.add(rail);
+
+      return group;
+    }
+
+    root.add(makeBoard());
+
+    function makeSupportPeg(x) {
+      const group = new THREE.Group();
+      const y = 80;
+
+      group.add(box(64, 112, 14, materials.printed, x, y, 9));
+      group.add(box(46, 88, 5, materials.printedEdge, x, y, 20.5));
+
+      [-20, 20].forEach(offsetY => {
+        group.add(cylinder('z', 5.2, 7, materials.screw, x, y + offsetY, 25, 32));
+        const guide = new THREE.Mesh(new THREE.ShapeGeometry(roundedRectShape(4.7, 14.7, 2.35), 10), materials.mount);
+        guide.position.set(mm(x), mm(y + offsetY), mm(23.7));
+        group.add(guide);
+      });
+
+      group.add(cylinder('z', 7.5, 122, materials.printed, x, y, 66, 64));
+      group.add(cylinder('z', 10.4, 17, materials.printedEdge, x, y, 19, 64));
+
+      const leftBrace = tubeBetween([x - 17, y - 42, 18], [x - 5, y - 8, 95], 4.4, materials.printed);
+      const rightBrace = tubeBetween([x + 17, y - 42, 18], [x + 5, y - 8, 95], 4.4, materials.printed);
+      group.add(leftBrace, rightBrace);
+      return group;
+    }
+
+    [-120, 120].forEach(x => pegGroup.add(makeSupportPeg(x)));
+
+    const railY = 80;
+    const railXs = [-120, 120];
+    railXs.forEach(x => {
+      longRailGroup.add(cylinder('z', 10.65, 430, materials.pipeLong, x, railY, 245, 72));
+      longRailGroup.add(cylinder('z', 11.4, 8, materials.mount, x, railY, 462, 64));
+    });
+
+    const crossbarZs = [90, 160, 230, 300, 370];
+    crossbarZs.forEach((z, index) => {
+      crossbarGroup.add(cylinder('x', 10.65, 262, materials.pipeCross, 0, railY + (index % 2 ? 1 : 0), z, 72));
+    });
+
+    function makeSaddleMount(x, z) {
+      const group = new THREE.Group();
+      group.add(cylinder('z', 16.2, 34, materials.mountClear, x, railY, z, 64));
+      group.add(cylinder('x', 16.2, 40, materials.mountClear, x, railY, z, 64));
+      group.add(box(42, 16, 38, materials.mount, x, railY - 18, z));
+      group.add(box(12, 32, 8, materials.printedEdge, x + (x < 0 ? -18 : 18), railY, z));
+      group.add(cylinder('x', 3.6, 47, materials.screw, x, railY - 17.5, z, 24));
+      return group;
+    }
+
+    crossbarZs.forEach(z => railXs.forEach(x => mountGroup.add(makeSaddleMount(x, z))));
+
+    function makeDimensionLine(points) {
+      const geometry = new THREE.BufferGeometry().setFromPoints(points.map(p => new THREE.Vector3(mm(p[0]), mm(p[1]), mm(p[2]))));
+      return new THREE.Line(geometry, materials.line);
+    }
+
+    root.add(makeDimensionLine([[-120, 34, 470], [120, 34, 470]]));
+    root.add(makeDimensionLine([[-120, 42, 470], [-120, 26, 470]]));
+    root.add(makeDimensionLine([[120, 42, 470], [120, 26, 470]]));
+    root.add(makeDimensionLine([[150, 80, 30], [150, 80, 460]]));
+    root.add(makeDimensionLine([[142, 80, 30], [158, 80, 30]]));
+    root.add(makeDimensionLine([[142, 80, 460], [158, 80, 460]]));
+
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(8.4, 6.0),
+      new THREE.ShadowMaterial({ color: 0x000000, opacity: 0.12 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set(0, mm(-205), mm(240));
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    const state = {
+      exploded: false,
+      targetCamera: new THREE.Vector3(4.5, 3.2, 6.1),
+      targetLook: new THREE.Vector3(0, 0.45, 1.7)
+    };
+
+    const views = {
+      overview: { camera: [4.5, 3.2, 6.1], target: [0, 0.45, 1.7], exploded: false },
+      front: { camera: [0, 0.85, 7.2], target: [0, 0.55, 1.65], exploded: false },
+      side: { camera: [6.9, 1.7, 2.15], target: [0, 0.55, 2.0], exploded: false },
+      exploded: { camera: [5.5, 3.4, 6.4], target: [0, 0.72, 1.95], exploded: true }
+    };
+
+    function setView(name) {
+      const view = views[name];
+      state.targetCamera.set(...view.camera);
+      state.targetLook.set(...view.target);
+      state.exploded = view.exploded;
+      document.querySelectorAll('button[data-view]').forEach(button => {
+        button.setAttribute('aria-pressed', button.dataset.view === name ? 'true' : 'false');
+      });
+    }
+
+    document.querySelectorAll('button[data-view]').forEach(button => {
+      button.addEventListener('click', () => setView(button.dataset.view));
+    });
+
+    function lerpGroup(group, target, alpha) {
+      group.position.lerp(target, alpha);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      camera.position.lerp(state.targetCamera, 0.035);
+      controls.target.lerp(state.targetLook, 0.05);
+
+      const mountTarget = state.exploded ? new THREE.Vector3(0, mm(-16), mm(34)) : new THREE.Vector3();
+      const railTarget = state.exploded ? new THREE.Vector3(0, 0, mm(68)) : new THREE.Vector3();
+      const crossTarget = state.exploded ? new THREE.Vector3(0, mm(72), mm(22)) : new THREE.Vector3();
+      lerpGroup(mountGroup, mountTarget, 0.06);
+      lerpGroup(longRailGroup, railTarget, 0.06);
+      lerpGroup(crossbarGroup, crossTarget, 0.06);
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    if (window.lucide) window.lucide.createIcons();
+    animate();
+  </script>
+</body>
+</html>
