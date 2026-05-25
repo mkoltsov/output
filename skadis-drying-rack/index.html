@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fold-Down SKADIS PVC Clothesline Rack</title>
+  <title>Under-Braced SKADIS PVC Clothesline Rack</title>
   <style>
     :root {
       color-scheme: light;
@@ -13,6 +13,7 @@
       --line: rgba(23, 32, 36, 0.12);
       --printed: #30363a;
       --mount: #d06d2f;
+      --brace: #485159;
       --pipe: #f3f1e9;
       --cord: #256bd6;
       --board: #f2efe7;
@@ -260,8 +261,8 @@
 
   <div class="topbar">
     <section class="title" aria-label="Concept summary">
-      <h1>Fold-Down SKADIS PVC Clothesline Rack</h1>
-      <p class="subtitle">A printed SKADIS hinge pair carries a fold-out PVC perimeter frame. The drying surface is cord, not PVC crossbars, with printed comb caps and tie-off points to keep the lines evenly spaced.</p>
+      <h1>Under-Braced SKADIS PVC Clothesline Rack</h1>
+      <p class="subtitle">A simple PVC rectangle uses store-bought elbows and cord drying lines. The upper SKADIS pegs locate the rear hinge; the actual load path is two compression struts underneath the rack, landing on lower SKADIS peg mounts.</p>
     </section>
 
     <nav class="controls" aria-label="View controls">
@@ -275,16 +276,16 @@
   <section class="panel" aria-label="Printed parts">
     <h2>Printable Parts Shown</h2>
     <ul class="legend">
-      <li><span class="swatch" style="background:var(--printed)"></span><span>2x SKADIS hinge/peg blocks with internal PVC spigots</span></li>
-      <li><span class="swatch" style="background:var(--mount)"></span><span>4x frame corner caps with cord eyelets/tie-offs</span></li>
-      <li><span class="swatch" style="background:var(--pipe)"></span><span>PVC perimeter only: rear, front, and two side rails</span></li>
-      <li><span class="swatch" style="background:var(--cord)"></span><span>6x clothesline cord runs across the fold-out frame</span></li>
+      <li><span class="swatch" style="background:var(--printed)"></span><span>4x simple SKADIS peg hooks: two upper pivots and two lower brace seats</span></li>
+      <li><span class="swatch" style="background:var(--brace)"></span><span>2x under-rack compression struts carrying the wet-clothes load</span></li>
+      <li><span class="swatch" style="background:var(--pipe)"></span><span>PVC perimeter with ready-made elbows, not printed corners</span></li>
+      <li><span class="swatch" style="background:var(--cord)"></span><span>6x clothesline cord runs across the frame</span></li>
     </ul>
     <p class="notes">
       <span class="badge">Inspired by reference photo</span>
-      <span class="badge">Fold-up against board</span>
+      <span class="badge">Under-rack load support</span>
+      <span class="badge">Store-bought PVC elbows</span>
       <span class="badge">Cord drying surface</span>
-      <span class="badge">Measure pipe before CAD</span>
     </p>
   </section>
 
@@ -293,14 +294,16 @@
     <dl>
       <dt>Observed</dt>
       <dd>The provided reference photo shows a wall-hinged PVC rectangle with blue parallel cord lines for clothes.</dd>
+      <dt>Changed</dt>
+      <dd>The load-bearing members are now underneath the rack; the frame corners are assumed to be standard PVC elbows.</dd>
       <dt>Verified</dt>
       <dd>IKEA lists SKADIS as a wall/desk pegboard and warns it must be securely anchored.</dd>
       <dt>Verified</dt>
-      <dd>Published SKADIS T-nut docs give a 40 x 40 mm pattern, second pattern offset 20 mm, and 5 x 15 mm slots.</dd>
+      <dd>Published SKADIS mount docs give a 40 x 40 mm pattern, second pattern offset 20 mm, and 5 x 15 mm slots; this concept uses peg-style hooks instead of T-nuts.</dd>
       <dt>Assumed</dt>
       <dd>Nominal 1/2 in Schedule 40 PVC: about 21.3 mm OD, using the common 0.840 in OD reference.</dd>
       <dt>Not rated</dt>
-      <dd>This is a visualization, not tested load-bearing CAD. Wet laundry loads need wall anchoring and real hinge/cord testing.</dd>
+      <dd>This is a visualization, not tested load-bearing CAD. SKADIS and the wall attachment must be checked for wet laundry loads before printing.</dd>
       <dt>Sources</dt>
       <dd><a href="https://www.ikea.com/us/en/p/skadis-pegboard-black-80534372/">IKEA SKADIS page</a>, <a href="https://www.3dgo.app/models/printables/228663">SKADIS T-nut docs</a>, and <a href="https://www.usplastic.com/knowledgebase/article.aspx?contentkey=624">PVC pipe size reference</a>.</dd>
     </dl>
@@ -362,9 +365,10 @@
       printedEdge: new THREE.MeshStandardMaterial({ color: 0x4a5055, roughness: 0.48, metalness: 0.08 }),
       mount: new THREE.MeshStandardMaterial({ color: 0xd06d2f, roughness: 0.55, metalness: 0.03 }),
       pipe: new THREE.MeshStandardMaterial({ color: 0xf3f1e9, roughness: 0.48, metalness: 0.0 }),
+      fitting: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.42, metalness: 0.0 }),
       pipeGhost: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.55, transparent: true, opacity: 0.22 }),
       cord: new THREE.MeshStandardMaterial({ color: 0x256bd6, roughness: 0.38, metalness: 0.0 }),
-      stayCord: new THREE.MeshStandardMaterial({ color: 0x1e2528, roughness: 0.42, metalness: 0.0 }),
+      brace: new THREE.MeshStandardMaterial({ color: 0x485159, roughness: 0.46, metalness: 0.05 }),
       screw: new THREE.MeshStandardMaterial({ color: 0x1e2528, roughness: 0.34, metalness: 0.38 }),
       line: new THREE.LineBasicMaterial({ color: 0x23545d, transparent: true, opacity: 0.8 })
     };
@@ -373,11 +377,12 @@
     scene.add(root);
 
     const hingeGroup = new THREE.Group();
+    const supportGroup = new THREE.Group();
     const framePivot = new THREE.Group();
     const frameGroup = new THREE.Group();
     const ghostFoldedGroup = new THREE.Group();
     const explodedParts = new THREE.Group();
-    root.add(hingeGroup, framePivot, ghostFoldedGroup, explodedParts);
+    root.add(hingeGroup, supportGroup, framePivot, ghostFoldedGroup, explodedParts);
 
     const hingeY = 95;
     const hingeZ = 42;
@@ -473,38 +478,42 @@
 
     root.add(makeBoard());
 
-    function makeSkadisHinge(x) {
+    function makePegHookMount(x, y, mode = 'plain') {
       const group = new THREE.Group();
-      const y = hingeY;
+      group.add(box(54, 72, 12, materials.printed, x, y, 9));
+      group.add(box(42, 54, 5, materials.printedEdge, x, y, 20.5));
 
-      group.add(box(70, 124, 14, materials.printed, x, y, 9));
-      group.add(box(52, 96, 5, materials.printedEdge, x, y, 20.5));
-
-      [-30, 10, 50].forEach(offsetY => {
-        group.add(cylinder('z', 4.8, 7, materials.screw, x, y + offsetY, 25, 30));
-        const slot = new THREE.Mesh(new THREE.ShapeGeometry(roundedRectShape(4.7, 14.7, 2.35), 10), materials.mount);
-        slot.position.set(mm(x), mm(y + offsetY), mm(23.8));
-        group.add(slot);
+      [-18, 18].forEach(offsetY => {
+        group.add(cylinder('z', 4.6, 22, materials.mount, x, y + offsetY, 27, 32));
+        group.add(cylinder('z', 6.4, 6, materials.mount, x, y + offsetY, 41, 32));
       });
 
-      group.add(cylinder('x', 13.5, 52, materials.printed, x, y, hingeZ, 64));
-      group.add(cylinder('x', 7.4, 74, materials.screw, x, y, hingeZ, 48));
-      group.add(cylinder('z', 8.2, 64, materials.printed, x, y, hingeZ + 39, 48));
-      group.add(cylinder('z', 10.7, 13, materials.mount, x, y, hingeZ + 74, 56));
+      if (mode === 'hinge') {
+        group.add(cylinder('x', 12.8, 42, materials.printed, x, y, hingeZ, 64));
+        group.add(cylinder('x', 7.2, 70, materials.screw, x, y, hingeZ, 48));
+        group.add(cylinder('z', 8.2, 46, materials.printed, x, y, hingeZ + 34, 48));
+      }
 
-      const upperCordEye = cylinder('x', 4.8, 30, materials.mount, x, y + 122, 24, 30);
-      group.add(upperCordEye);
+      if (mode === 'brace') {
+        group.add(cylinder('x', 9.5, 38, materials.printedEdge, x, y, 36, 48));
+        group.add(cylinder('x', 5.4, 50, materials.screw, x, y, 36, 36));
+        group.add(box(32, 20, 24, materials.printed, x, y + 22, 33));
+      }
+
       return group;
     }
 
-    [-150, 150].forEach(x => hingeGroup.add(makeSkadisHinge(x)));
+    [-150, 150].forEach(x => hingeGroup.add(makePegHookMount(x, hingeY, 'hinge')));
 
-    function makeCornerCap(x, z, rear = false) {
+    function makeReadyElbow(x, z) {
       const group = new THREE.Group();
-      group.add(cylinder('x', 12.5, 34, materials.mount, x, 0, z, 48));
-      group.add(cylinder('z', 12.5, 34, materials.mount, x, 0, z, 48));
-      group.add(cylinder('y', 3.8, 28, materials.screw, x, -10, z + (rear ? -15 : 15), 20));
-      group.add(cylinder('x', 3.4, 28, materials.screw, x, 14, z, 20));
+      const ball = new THREE.Mesh(new THREE.SphereGeometry(mm(16.5), 36, 18), materials.fitting);
+      ball.position.set(mm(x), 0, mm(z));
+      ball.castShadow = true;
+      ball.receiveShadow = true;
+      group.add(ball);
+      group.add(cylinder('x', 12.8, 30, materials.fitting, x, 0, z, 48));
+      group.add(cylinder('z', 12.8, 30, materials.fitting, x, 0, z, 48));
       return group;
     }
 
@@ -520,32 +529,16 @@
       group.add(cylinder('x', pipeR, width, mat, 0, 0, frontZ, 72));
       [-sideX, sideX].forEach(x => group.add(cylinder('z', pipeR, frontZ, mat, x, 0, frontZ / 2, 72)));
 
-      const elbowPositions = [
-        [-sideX, rearZ, true],
-        [sideX, rearZ, true],
-        [-sideX, frontZ, false],
-        [sideX, frontZ, false]
-      ];
-      elbowPositions.forEach(([x, z, rear]) => {
-        const sphere = new THREE.Mesh(new THREE.SphereGeometry(mm(13.2), 32, 16), includeDetails ? materials.mount : mat);
-        sphere.position.set(mm(x), 0, mm(z));
-        sphere.castShadow = true;
-        sphere.receiveShadow = true;
-        group.add(sphere);
-        if (includeDetails) group.add(makeCornerCap(x, z, rear));
+      [[-sideX, rearZ], [sideX, rearZ], [-sideX, frontZ], [sideX, frontZ]].forEach(([x, z]) => {
+        group.add(includeDetails ? makeReadyElbow(x, z) : cylinder('y', 13.2, 1, mat, x, 0, z, 32));
       });
 
       if (includeDetails) {
         const cordXs = [-120, -72, -24, 24, 72, 120];
         cordXs.forEach(x => {
           group.add(sagCord([x, 5, 22], [x, 5, frontZ - 24], 9, 1.45, cordMat));
-          group.add(cylinder('z', 2.8, 16, materials.mount, x, 2, 15, 16));
-          group.add(cylinder('z', 2.8, 16, materials.mount, x, 2, frontZ - 15, 16));
-        });
-
-        [-sideX, sideX].forEach(x => {
-          group.add(sagCord([x, 118, -20], [x, 0, frontZ - 18], 10, 1.35, materials.stayCord));
-          group.add(cylinder('x', 4.2, 26, materials.mount, x, 0, frontZ - 18, 24));
+          group.add(cylinder('z', 2.6, 18, materials.cord, x, 3, 15, 16));
+          group.add(cylinder('z', 2.6, 18, materials.cord, x, 3, frontZ - 15, 16));
         });
       }
 
@@ -553,6 +546,31 @@
     }
 
     frameGroup.add(makeFrame());
+
+    function makeUnderBracePair() {
+      const group = new THREE.Group();
+      [-140, 140].forEach(x => {
+        group.add(makePegHookMount(x, -108, 'brace'));
+        group.add(tubeBetween([x, -108, 39], [x, 75, 430], 5.4, materials.brace, 24));
+
+        const lowerCup = new THREE.Mesh(new THREE.SphereGeometry(mm(9.6), 24, 14), materials.printedEdge);
+        lowerCup.position.set(mm(x), mm(-108), mm(39));
+        lowerCup.castShadow = true;
+        lowerCup.receiveShadow = true;
+        group.add(lowerCup);
+
+        const upperCup = new THREE.Mesh(new THREE.SphereGeometry(mm(10.5), 24, 14), materials.mount);
+        upperCup.position.set(mm(x), mm(75), mm(430));
+        upperCup.castShadow = true;
+        upperCup.receiveShadow = true;
+        group.add(upperCup);
+
+        group.add(box(34, 14, 30, materials.mount, x, 78, 430));
+      });
+      return group;
+    }
+
+    supportGroup.add(makeUnderBracePair());
 
     const ghostFrame = makeFrame(materials.pipeGhost, materials.pipeGhost, false);
     ghostFoldedGroup.position.set(0, mm(hingeY), mm(hingeZ));
@@ -562,13 +580,14 @@
     function makeExplodedPartSamples() {
       const group = new THREE.Group();
       group.visible = false;
-      const peg = makeSkadisHinge(-52);
+      const peg = makePegHookMount(-52, 0, 'hinge');
       peg.scale.setScalar(0.82);
       peg.position.set(mm(-320), mm(-40), mm(110));
-      const cap = makeCornerCap(0, 0, false);
-      cap.position.set(mm(0), mm(-55), mm(120));
+      const elbow = makeReadyElbow(0, 0);
+      elbow.position.set(mm(-10), mm(-55), mm(130));
+      const brace = tubeBetween([180, -70, 95], [180, 70, 275], 5.4, materials.brace, 24);
       const cordSample = sagCord([220, -40, 90], [220, -40, 300], 4, 1.7, materials.cord);
-      group.add(peg, cap, cordSample);
+      group.add(peg, elbow, brace, cordSample);
       return group;
     }
 
@@ -600,14 +619,15 @@
       targetLook: new THREE.Vector3(0, 0.7, 2.2),
       targetFold: 0,
       exploded: false,
-      showGhost: true
+      showGhost: true,
+      showSupports: true
     };
 
     const views = {
-      open: { camera: [4.6, 3.0, 6.0], target: [0, 0.7, 2.2], fold: 0, exploded: false, ghost: true },
-      folded: { camera: [4.3, 2.1, 4.0], target: [0, 1.55, 0.55], fold: -Math.PI / 2, exploded: false, ghost: false },
-      side: { camera: [6.9, 1.45, 2.05], target: [0, 0.8, 2.15], fold: 0, exploded: false, ghost: true },
-      exploded: { camera: [5.3, 3.2, 6.2], target: [0, 0.75, 2.1], fold: 0, exploded: true, ghost: true }
+      open: { camera: [4.6, 3.0, 6.0], target: [0, 0.7, 2.2], fold: 0, exploded: false, ghost: true, supports: true },
+      folded: { camera: [4.3, 2.1, 4.0], target: [0, 1.55, 0.55], fold: -Math.PI / 2, exploded: false, ghost: false, supports: false },
+      side: { camera: [6.9, 1.45, 2.05], target: [0, 0.8, 2.15], fold: 0, exploded: false, ghost: true, supports: true },
+      exploded: { camera: [5.3, 3.2, 6.2], target: [0, 0.75, 2.1], fold: 0, exploded: true, ghost: true, supports: true }
     };
 
     function setView(name) {
@@ -617,6 +637,7 @@
       state.targetFold = view.fold;
       state.exploded = view.exploded;
       state.showGhost = view.ghost;
+      state.showSupports = view.supports;
       document.querySelectorAll('button[data-view]').forEach(button => {
         button.setAttribute('aria-pressed', button.dataset.view === name ? 'true' : 'false');
       });
@@ -638,6 +659,11 @@
       );
       hingeGroup.position.lerp(
         state.exploded ? new THREE.Vector3(0, 0, mm(-18)) : new THREE.Vector3(),
+        0.06
+      );
+      supportGroup.visible = state.showSupports || state.exploded;
+      supportGroup.position.lerp(
+        state.exploded ? new THREE.Vector3(0, mm(-28), mm(-12)) : new THREE.Vector3(),
         0.06
       );
       ghostFoldedGroup.visible = state.showGhost;
