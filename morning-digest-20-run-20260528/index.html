@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morning Digest 20-Run Dry-Run Telemetry</title>
+<style>
+:root { color-scheme: light; --ink:#1f2937; --muted:#6b7280; --line:#d1d5db; --ok:#0f766e; --warn:#b45309; --bg:#f8fafc; --card:#ffffff; }
+body { margin:0; font-family: Arial, sans-serif; color:var(--ink); background:var(--bg); }
+main { max-width: 1180px; margin: 0 auto; padding: 28px 18px 42px; }
+h1 { font-size: 28px; margin: 0 0 8px; letter-spacing: 0; }
+p { color: var(--muted); line-height: 1.45; margin: 0 0 18px; }
+.summary { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:10px; margin: 18px 0 22px; }
+.stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; }
+.stat b { display:block; font-size:22px; margin-bottom:4px; }
+.stat span { color:var(--muted); font-size:13px; }
+.ok { color:var(--ok); }
+.warn { color:var(--warn); }
+table { width:100%; border-collapse: collapse; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+th, td { border-bottom:1px solid var(--line); padding:8px 9px; font-size:13px; text-align:left; white-space:nowrap; }
+th { background:#eef2f7; font-weight:700; }
+tr:last-child td { border-bottom:0; }
+.num { text-align:right; font-variant-numeric: tabular-nums; }
+.note { margin-top:14px; font-size:13px; color:var(--muted); }
+@media (max-width: 760px) { main { padding:18px 10px 32px; } .tablewrap { overflow:auto; } th, td { font-size:12px; padding:7px; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Morning Digest 20-Run Dry-Run Telemetry</h1>
+<p>Sanitized report. Raw logs were not published because they include private mailbox details. Command class: <code>morning_digest.py --email --no-send</code>.</p>
+<section class="summary">
+  <div class="stat"><b class="ok">20/20</b><span>successful runs</span></div>
+  <div class="stat"><b>261 s</b><span>median total duration</span></div>
+  <div class="stat"><b>270.6 s</b><span>mean total duration</span></div>
+  <div class="stat"><b class="warn">416 s</b><span>slowest run: 17</span></div>
+  <div class="stat"><b>291.6 s</b><span>95th percentile duration</span></div>
+  <div class="stat"><b>0</b><span>headless infrastructure skips</span></div>
+  <div class="stat"><b>20</b><span>dry-run completion confirmations</span></div>
+  <div class="stat"><b>0</b><span>send calls observed</span></div>
+</section>
+<div class="tablewrap">
+<table aria-label="Per-run stage timings">
+<thead><tr><th>Run</th><th>Start</th><th>End</th><th class="num">Total s</th><th class="num">Pre-triage s</th><th class="num">Triage/web s</th><th class="num">Headless s</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>01</td><td>2026-05-28T14:24:37-04:00</td><td>2026-05-28T14:28:57-04:00</td><td class="num">260</td><td class="num">15.313</td><td class="num">240.062</td><td class="num">3.457</td><td>OK</td></tr><tr><td>02</td><td>2026-05-28T14:28:57-04:00</td><td>2026-05-28T14:33:18-04:00</td><td class="num">261</td><td class="num">15.765</td><td class="num">240.051</td><td class="num">3.521</td><td>OK</td></tr><tr><td>03</td><td>2026-05-28T14:33:18-04:00</td><td>2026-05-28T14:37:53-04:00</td><td class="num">275</td><td class="num">15.607</td><td class="num">254.1</td><td class="num">3.448</td><td>OK</td></tr><tr><td>04</td><td>2026-05-28T14:37:53-04:00</td><td>2026-05-28T14:42:13-04:00</td><td class="num">260</td><td class="num">15.521</td><td class="num">240.028</td><td class="num">3.05</td><td>OK</td></tr><tr><td>05</td><td>2026-05-28T14:42:13-04:00</td><td>2026-05-28T14:46:34-04:00</td><td class="num">261</td><td class="num">15.016</td><td class="num">240.062</td><td class="num">3.389</td><td>OK</td></tr><tr><td>06</td><td>2026-05-28T14:46:34-04:00</td><td>2026-05-28T14:50:54-04:00</td><td class="num">260</td><td class="num">15.02</td><td class="num">240.096</td><td class="num">3.426</td><td>OK</td></tr><tr><td>07</td><td>2026-05-28T14:50:54-04:00</td><td>2026-05-28T14:55:14-04:00</td><td class="num">260</td><td class="num">15.329</td><td class="num">240.048</td><td class="num">3.052</td><td>OK</td></tr><tr><td>08</td><td>2026-05-28T14:55:14-04:00</td><td>2026-05-28T14:59:34-04:00</td><td class="num">260</td><td class="num">15.175</td><td class="num">240.05</td><td class="num">3.493</td><td>OK</td></tr><tr><td>09</td><td>2026-05-28T14:59:34-04:00</td><td>2026-05-28T15:03:55-04:00</td><td class="num">261</td><td class="num">15.126</td><td class="num">240.033</td><td class="num">3.458</td><td>OK</td></tr><tr><td>10</td><td>2026-05-28T15:03:55-04:00</td><td>2026-05-28T15:08:15-04:00</td><td class="num">260</td><td class="num">15.066</td><td class="num">240.022</td><td class="num">3.195</td><td>OK</td></tr><tr><td>11</td><td>2026-05-28T15:08:15-04:00</td><td>2026-05-28T15:12:40-04:00</td><td class="num">265</td><td class="num">15.206</td><td class="num">245.301</td><td class="num">3.189</td><td>OK</td></tr><tr><td>12</td><td>2026-05-28T15:12:40-04:00</td><td>2026-05-28T15:17:02-04:00</td><td class="num">262</td><td class="num">15.949</td><td class="num">240.05</td><td class="num">3.642</td><td>OK</td></tr><tr><td>13</td><td>2026-05-28T15:17:02-04:00</td><td>2026-05-28T15:21:23-04:00</td><td class="num">261</td><td class="num">16.249</td><td class="num">240.035</td><td class="num">3.407</td><td>OK</td></tr><tr><td>14</td><td>2026-05-28T15:21:23-04:00</td><td>2026-05-28T15:26:08-04:00</td><td class="num">285</td><td class="num">18.938</td><td class="num">260.351</td><td class="num">3.503</td><td>OK</td></tr><tr><td>15</td><td>2026-05-28T15:26:08-04:00</td><td>2026-05-28T15:30:29-04:00</td><td class="num">261</td><td class="num">15.796</td><td class="num">240.036</td><td class="num">3.678</td><td>OK</td></tr><tr><td>16</td><td>2026-05-28T15:30:29-04:00</td><td>2026-05-28T15:34:51-04:00</td><td class="num">262</td><td class="num">17.138</td><td class="num">240.046</td><td class="num">3.386</td><td>OK</td></tr><tr><td>17</td><td>2026-05-28T15:34:51-04:00</td><td>2026-05-28T15:41:47-04:00</td><td class="num">416</td><td class="num">15.39</td><td class="num">395.313</td><td class="num">3.425</td><td>OK</td></tr><tr><td>18</td><td>2026-05-28T15:41:47-04:00</td><td>2026-05-28T15:46:08-04:00</td><td class="num">261</td><td class="num">16.336</td><td class="num">240.049</td><td class="num">2.882</td><td>OK</td></tr><tr><td>19</td><td>2026-05-28T15:46:08-04:00</td><td>2026-05-28T15:50:28-04:00</td><td class="num">260</td><td class="num">15.267</td><td class="num">240.038</td><td class="num">3.375</td><td>OK</td></tr><tr><td>20</td><td>2026-05-28T15:50:28-04:00</td><td>2026-05-28T15:54:49-04:00</td><td class="num">261</td><td class="num">15.494</td><td class="num">240.034</td><td class="num">3.464</td><td>OK</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">Slowest run 17 spent most of its time in the combined triage/web stage. No warnings, tracebacks, stale-data markers, circuit-breaker failures, or headless infrastructure skips were present in the sanitized scan.</p>
+</main>
+</body>
+</html>
