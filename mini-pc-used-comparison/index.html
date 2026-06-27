@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mac-mini-size PCs — US &amp; EU used-price comparison</title>
+  <meta name="description" content="Comparison of compact Windows and Linux mini PCs, prioritising good used-market buys in the US and EU.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a2e;
+      --panel-2: #17223b;
+      --text: #eef3ff;
+      --muted: #aebbd6;
+      --line: #2b3a5d;
+      --accent: #7dd3fc;
+      --good: #86efac;
+      --warn: #fde68a;
+      --bad: #fca5a5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 15% 0%, #18284d 0, var(--bg) 38rem);
+      color: var(--text);
+      font: 15px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main { max-width: 1720px; margin: 0 auto; padding: 32px 22px 56px; }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 48px); line-height: 1.08; }
+    h2 { margin-top: 30px; font-size: 22px; }
+    p { max-width: 1050px; }
+    .lede { color: var(--muted); font-size: 17px; margin-top: 0; }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .card { background: rgba(18,26,46,.92); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+    .card strong { display: block; color: var(--accent); margin-bottom: 4px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: rgba(18,26,46,.94); }
+    table { width: 100%; min-width: 1450px; border-collapse: collapse; }
+    th, td { padding: 13px 12px; border-bottom: 1px solid var(--line); border-right: 1px solid rgba(43,58,93,.55); text-align: left; vertical-align: top; }
+    th { position: sticky; top: 0; z-index: 1; background: #1a2743; color: #dbeafe; font-size: 12px; letter-spacing: .045em; text-transform: uppercase; }
+    tbody tr:hover { background: rgba(125,211,252,.055); }
+    tbody tr:last-child td { border-bottom: 0; }
+    .model { font-weight: 750; font-size: 16px; }
+    .tag { display: inline-block; margin-top: 6px; padding: 2px 7px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+    .excellent { color: #052e16; background: var(--good); }
+    .good { color: #422006; background: var(--warn); }
+    .poor { color: #450a0a; background: var(--bad); }
+    .price { white-space: nowrap; font-weight: 750; }
+    .muted, small { color: var(--muted); }
+    .yes { color: var(--good); }
+    .no { color: var(--bad); }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    ul { padding-left: 21px; }
+    li { margin: 7px 0; }
+    .note { border-left: 4px solid var(--accent); padding: 12px 15px; background: rgba(23,34,59,.78); border-radius: 0 10px 10px 0; }
+    .sources { columns: 2 340px; }
+    .sources li { break-inside: avoid; }
+    footer { margin-top: 32px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 700px) { main { padding: 22px 12px 40px; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Mac-mini-size PC comparison</h1>
+  <p class="lede">Used-first recommendations for the US and EU · researched 27 June 2026 · prices exclude delivery unless stated</p>
+
+  <div class="summary">
+    <div class="card"><strong>Best cheap used PC</strong>HP EliteDesk 800 G6 Mini<br><span class="muted">Aim for $180–250 / €260–350</span></div>
+    <div class="card"><strong>Best used performance</strong>Beelink SER8 8745HS<br><span class="muted">Aim for $350–420 / €400–500</span></div>
+    <div class="card"><strong>Best used upgradeability</strong>Minisforum UM790 Pro<br><span class="muted">Aim for $400–500 / €450–550</span></div>
+    <div class="card"><strong>Best premium / eGPU</strong>Minisforum AI X1 Pro<br><span class="muted">Buy only at a substantial used discount</span></div>
+  </div>
+
+  <div class="table-wrap" role="region" aria-label="Scrollable mini PC comparison" tabindex="0">
+    <table>
+      <thead>
+        <tr>
+          <th>Model / used verdict</th>
+          <th>Typical useful configuration</th>
+          <th>CPU / graphics</th>
+          <th>Size / volume</th>
+          <th>Memory &amp; storage upgrades</th>
+          <th>Notable connections</th>
+          <th>US new / old stock</th>
+          <th>US used target</th>
+          <th>EU new / old stock</th>
+          <th>EU used target</th>
+          <th>Best for / limitations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="model">HP EliteDesk 800 G6 Mini</span><br><span class="tag excellent">Excellent used buy</span></td>
+          <td>Core i5-10500T<br>16 GB / 256–512 GB</td>
+          <td>6-core Intel<br>UHD 630</td>
+          <td>177 × 175 × 34 mm<br>≈1.05 L</td>
+          <td><span class="yes">2× SO-DIMM</span><br><span class="yes">2× M.2 + optional 2.5-inch</span></td>
+          <td>USB-C, DisplayPort; optional flexible I/O<br><span class="muted">No USB4; Wi-Fi may be absent</span></td>
+          <td class="price">Discontinued</td>
+          <td><span class="price">$180–250</span><br><small>Completed sales observed at $175–200 for common configurations; $295 with 500 GB also observed.</small></td>
+          <td class="price">Discontinued</td>
+          <td><span class="price">€260–350</span><br><small>€299 completed sale; current refurb offers around €264–350.</small></td>
+          <td>Office work, coding, home server and multiple monitors. Excellent parts availability and firmware support; weak gaming graphics.</td>
+        </tr>
+        <tr>
+          <td><span class="model">Lenovo ThinkCentre M90q Gen 2</span><br><span class="tag excellent">Excellent used buy</span></td>
+          <td>Core i5-11500<br>16 GB / 512 GB</td>
+          <td>6-core Intel<br>UHD 750</td>
+          <td>179 × 182.9 × 36.5 mm<br>1.19 L</td>
+          <td><span class="yes">2× SO-DIMM, up to 64 GB</span><br><span class="yes">2× M.2 + 2.5-inch</span></td>
+          <td>USB-C 10 Gbit/s, HDMI, DP, optional rear modules<br><span class="muted">No USB4</span></td>
+          <td class="price">Discontinued</td>
+          <td><span class="price">$300–350</span><br><small>Completed 16 GB / 512 GB sales observed at $340–350.</small></td>
+          <td class="price">Discontinued</td>
+          <td><span class="price">€330–450*</span><br><small>*Fair-buy estimate; exact CPU, Wi-Fi and rear options materially affect value.</small></td>
+          <td>The most robust used business option, with excellent serviceability and two NVMe slots. Better CPU than the HP; still unsuitable for serious gaming.</td>
+        </tr>
+        <tr>
+          <td><span class="model">Intel / ASUS NUC 12 Pro</span><br><span class="tag excellent">Excellent if complete</span></td>
+          <td>Core i5-1240P<br>16 GB / 512 GB</td>
+          <td>12-core hybrid Intel<br>Iris Xe</td>
+          <td>117 × 112 × 37–54 mm<br>0.49–0.71 L</td>
+          <td><span class="yes">2× SO-DIMM</span><br><span class="yes">M.2; tall model adds 2.5-inch</span></td>
+          <td>2× Thunderbolt 4, 2× HDMI, 2.5 Gb Ethernet</td>
+          <td><span class="price">$450–600*</span><br><small>*Old-stock estimate; usually poor value new.</small></td>
+          <td><span class="price">$300–400*</span><br><small>*Fair-buy estimate; verify that RAM, SSD and power adapter are included.</small></td>
+          <td><span class="price">€460–600*</span></td>
+          <td><span class="price">€300–420</span><br><small>EU search observed €299 auction / €419 buy-now for configured systems.</small></td>
+          <td>The closest physical match to a Mac mini, with excellent ports and broad OS compatibility. Check fan noise and avoid barebone pricing confusion.</td>
+        </tr>
+        <tr>
+          <td><span class="model">Beelink SER8 8745HS</span><br><span class="tag excellent">Best used performance/value</span></td>
+          <td>Ryzen 7 8745HS<br>32 GB / 1 TB</td>
+          <td>8-core Zen 4<br>Radeon 780M</td>
+          <td>≈135 × 135 × 45 mm<br>0.814 L</td>
+          <td><span class="yes">2× DDR5 SO-DIMM</span><br><span class="yes">2× M.2 2280</span></td>
+          <td>USB4, HDMI 2.1, DP 1.4, 2.5 Gb Ethernet</td>
+          <td><span class="price">$500–630</span><br><small>Official page has recently shown prices as high as $629; wait for discounts.</small></td>
+          <td><span class="price">$350–420</span><br><small>Completed/ended listings observed at $350 and $419.</small></td>
+          <td><span class="price">€550–650*</span></td>
+          <td><span class="price">€400–500*</span><br><small>*Fair-buy estimate; EU used supply is thin.</small></td>
+          <td>Best compact all-rounder for work, emulation and light 1080p gaming. Confirm the USB4 port and Wi-Fi work before the return window closes.</td>
+        </tr>
+        <tr>
+          <td><span class="model">Minisforum UM790 Pro</span><br><span class="tag excellent">Best enthusiast used buy</span></td>
+          <td>Ryzen 9 7940HS<br>32 GB / 1 TB</td>
+          <td>8-core Zen 4<br>Radeon 780M</td>
+          <td>130 × 126 × 52.3 mm<br>0.86 L</td>
+          <td><span class="yes">2× DDR5 SO-DIMM</span><br><span class="yes">2× M.2 2280</span></td>
+          <td>2× USB4, 2× HDMI 2.1, 2.5 Gb Ethernet</td>
+          <td><span class="price">$600–750*</span><br><small>*Old-stock / configured estimate.</small></td>
+          <td><span class="price">$400–500*</span></td>
+          <td><span class="price">€650–800*</span></td>
+          <td><span class="price">€450–550</span><br><small>32 GB / 1 TB completed sale observed at €499; used barebone at €300.</small></td>
+          <td>Similar performance to SER8, with two USB4 ports. Great if cheaper than SER8; test sleep/wake, Wi-Fi and sustained-load stability.</td>
+        </tr>
+        <tr>
+          <td><span class="model">Minisforum AI X1 Pro 370 / 470</span><br><span class="tag good">Good only at a discount</span></td>
+          <td>Ryzen AI 9 HX 370 or 470<br>32 GB / 1 TB</td>
+          <td>12-core Zen 5/5c<br>Radeon 890M</td>
+          <td>195 × 195 × 47.5 mm<br>1.81 L</td>
+          <td><span class="yes">2× DDR5 SO-DIMM</span><br><span class="yes">3× M.2</span></td>
+          <td>2× USB4, OCuLink, dual 2.5 Gb Ethernet, SD reader</td>
+          <td><span class="price">$1,129–1,250</span><br><small>370 MSRP/configured price; 470 barebone has been advertised from $759.</small></td>
+          <td><span class="price">$750–950*</span><br><small>*Fair-buy target; used supply remains scarce.</small></td>
+          <td><span class="price">€1,159–1,250</span><br><small>Current price-comparison results for 32 GB / 1 TB.</small></td>
+          <td><span class="price">€850–1,050*</span></td>
+          <td>Heavy productivity, VMs and external-GPU gaming. Best expansion here, but roughly twice Mac mini volume and currently overpriced relative to 780M systems.</td>
+        </tr>
+        <tr>
+          <td><span class="model">GEEKOM A9 Max 2026</span><br><span class="tag poor">Poor used value today</span></td>
+          <td>Ryzen AI 9 HX 370 / 470<br>32 GB / 1–2 TB</td>
+          <td>12-core AMD<br>Radeon 890M</td>
+          <td>135 × 132 × 46.9 mm<br>0.84 L</td>
+          <td><span class="yes">2× DDR5 SO-DIMM</span><br><span class="yes">M.2 2280 + M.2 2230</span></td>
+          <td>2× USB4, 2× HDMI 2.1, dual 2.5 Gb Ethernet</td>
+          <td><span class="price">$1,399–1,799</span></td>
+          <td><span class="price">$900–1,150*</span><br><small>*Fair-buy estimate; too new for dependable used-price history.</small></td>
+          <td><span class="price">€1,299–1,699*</span></td>
+          <td><span class="price">€900–1,150*</span></td>
+          <td>The strongest premium choice in an actual Mac-mini-like footprint. Excellent connectivity, but poor value unless heavily discounted.</td>
+        </tr>
+        <tr>
+          <td><span class="model">ASUS ROG NUC 2025</span><br><span class="tag good">Gaming specialist</span></td>
+          <td>Core Ultra 7/9<br>RTX 5060–5080 Laptop GPU</td>
+          <td>High-end mobile CPU<br>Dedicated Nvidia GPU</td>
+          <td>282.4 × 187.7 × 56.5 mm<br>≈3.0 L</td>
+          <td><span class="yes">Replaceable DDR5 and SSD</span><br><span class="no">GPU not upgradeable</span></td>
+          <td>Thunderbolt, HDMI, DP, 2.5 Gb Ethernet</td>
+          <td><span class="price">From $2,799</span></td>
+          <td><span class="price">$1,700–2,300*</span></td>
+          <td><span class="price">€2,600–3,200*</span></td>
+          <td><span class="price">€1,800–2,500*</span></td>
+          <td>The only entry here for serious AAA gaming without an eGPU. Much larger and noisier; a small-form-factor desktop is usually better value.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>How to use the prices</h2>
+  <p class="note"><strong>Bold used ranges are target purchase prices, not claims that stock is continuously available.</strong> Values without an asterisk are anchored by observed completed sales or live regional listings. Asterisks mark informed fair-buy estimates where comparable used supply was too sparse. EU prices normally include VAT when sold by a business; US prices normally exclude sales tax.</p>
+  <ul>
+    <li><strong>Below $300 / €350:</strong> buy an HP EliteDesk 800 G6 Mini. It is the value winner for non-gaming use.</li>
+    <li><strong>Around $350–500 / €400–550:</strong> prioritise a Beelink SER8 or Minisforum UM790 Pro for the much faster Radeon 780M.</li>
+    <li><strong>Above $750 / €850:</strong> an AI X1 Pro only makes sense when OCuLink, three SSD slots or very high CPU performance will actually be used.</li>
+    <li>For used systems, require clear photographs, the original correct-wattage power adapter, an unlocked BIOS, working Wi-Fi/Bluetooth and a return window. Check SSD health, memory errors, every USB-C/USB4 port, Ethernet and sleep/wake behaviour immediately.</li>
+    <li>Business minis often ship without Wi-Fi antennas or storage caddies. Consumer minis may have shorter firmware-support histories. Price those omissions before buying.</li>
+  </ul>
+
+  <h2>Evidence and specification sources</h2>
+  <ul class="sources">
+    <li><a href="https://www.ebay.com/itm/365881973735">HP G6 US completed sale — $175</a></li>
+    <li><a href="https://www.ebay.com/itm/257409925031">HP G6 US completed sale — $189, 16 GB / 512 GB</a></li>
+    <li><a href="https://www.ebay.de/itm/136465582583">HP G6 EU completed sale — €299, 16 GB / 512 GB</a></li>
+    <li><a href="https://www.ebay.de/shop/hp-elitedesk-800-g6-mini?_nkw=hp+elitedesk+800+g6+mini">HP G6 EU market search</a></li>
+    <li><a href="https://psref.lenovo.com/syspool/Sys/PDF/ThinkCentre/ThinkCentre_M90q_Gen_2/ThinkCentre_M90q_Gen_2_Spec.html">Lenovo M90q Gen 2 official specifications</a></li>
+    <li><a href="https://www.ebay.com/itm/198168720129">Lenovo M90q Gen 2 US completed sale — $340</a></li>
+    <li><a href="https://www.ebay.de/shop/nuc-12-pro?_nkw=nuc+12+pro">NUC 12 Pro EU market search</a></li>
+    <li><a href="https://www.bee-link.com/products/beelink-ser8-8745hs">Beelink SER8 official specifications and current listing</a></li>
+    <li><a href="https://www.ebay.com/itm/267372279311">Beelink SER8 US completed sale — $350</a></li>
+    <li><a href="https://www.ebay.com/itm/317472309735">Beelink SER8 US ended listing — $419</a></li>
+    <li><a href="https://www.ebay.de/itm/336406117434">Minisforum UM790 Pro EU completed sale — €499</a></li>
+    <li><a href="https://www.ebay.de/itm/317911358143">Minisforum UM790 Pro EU used barebone — €300 accepted offer</a></li>
+    <li><a href="https://www.minisforum.com/products/ai-x1-pro-470">Minisforum AI X1 Pro 470 official specifications</a></li>
+    <li><a href="https://www.idealo.de/preisvergleich/OffersOfProduct/206556475_-ai-x1-pro-ryzen-ai-9-hx370-32gb-1tb-minisforum.html">AI X1 Pro EU price comparison</a></li>
+    <li><a href="https://www.techradar.com/computing/minisforum-ai-x1-pro-470-mini-pc-review">AI X1 Pro 470 independent specifications and pricing</a></li>
+    <li><a href="https://www.geekompc.com/geekom-a9-max-mini-pc/">GEEKOM A9 Max official product page</a></li>
+    <li><a href="https://www.techradar.com/computing/geekom-a9-max-mini-pc-2026-review">GEEKOM A9 Max review and regional pricing</a></li>
+    <li><a href="https://rog.asus.com/us/desktops/mini-pc/rog-nuc-2025/">ASUS ROG NUC 2025 official specifications and US price</a></li>
+  </ul>
+
+  <footer>Prepared 27 June 2026. No affiliate links. Prices can move quickly; completed-sale evidence is historical, while live listings may expire.</footer>
+</main>
+</body>
+</html>
