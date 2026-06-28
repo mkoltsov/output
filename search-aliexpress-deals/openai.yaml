@@ -1,0 +1,4 @@
+interface:
+  display_name: "Search AliExpress Deals"
+  short_description: "Find verified AliExpress deals by destination"
+  default_prompt: "Use $search-aliexpress-deals to find well-reviewed AliExpress products that can actually be ordered and delivered to my location at a reasonable total cost."
