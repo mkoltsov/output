@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ready-Hook SKADIS PVC Clothesline Rack</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172024;
+      --muted: #5d6b73;
+      --panel: rgba(255, 255, 255, 0.91);
+      --line: rgba(23, 32, 36, 0.12);
+      --printed: #30363a;
+      --mount: #d06d2f;
+      --brace: #f3f1e9;
+      --pipe: #f3f1e9;
+      --cord: #256bd6;
+      --board: #f2efe7;
+      --shadow: rgba(0, 0, 0, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #e7ecef;
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .title,
+    .controls,
+    .panel,
+    .assumptions {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .title {
+      max-width: 650px;
+      padding: 14px 16px 13px;
+      border-radius: 8px;
+      pointer-events: auto;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(20px, 2.1vw, 33px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 60ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      pointer-events: auto;
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 38px;
+      min-width: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      color: var(--ink);
+      background: #ffffff;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    button svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 2;
+      flex: 0 0 auto;
+    }
+
+    button[aria-pressed="true"] {
+      color: #ffffff;
+      background: #234349;
+      border-color: #234349;
+    }
+
+    .panel {
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      width: min(460px, calc(100vw - 32px));
+      border-radius: 8px;
+      padding: 14px 16px;
+      z-index: 3;
+    }
+
+    .panel h2,
+    .assumptions h2 {
+      margin: 0 0 9px;
+      font-size: 14px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 14px;
+      margin: 0 0 11px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .legend li {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 3px;
+    }
+
+    .notes {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .assumptions {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: min(410px, calc(100vw - 32px));
+      border-radius: 8px;
+      padding: 14px 16px;
+      z-index: 3;
+    }
+
+    .assumptions dl {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 7px 12px;
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .assumptions dt {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    .assumptions dd {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    a {
+      color: #195e68;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 850px) {
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        justify-self: start;
+        flex-wrap: wrap;
+      }
+
+      .panel,
+      .assumptions {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        width: auto;
+      }
+
+      .panel {
+        bottom: 12px;
+      }
+
+      .assumptions {
+        display: none;
+      }
+
+      .legend {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div class="topbar">
+    <section class="title" aria-label="Concept summary">
+      <h1>Ready-Hook SKADIS PVC Clothesline Rack</h1>
+      <p class="subtitle">The rack uses ready-to-print SKADIS hookset parts from Thingiverse for every board connection. Everything structural is PVC: perimeter pipe, ready elbows, cord lines, and two white angled PVC supports under the rack.</p>
+    </section>
+
+    <nav class="controls" aria-label="View controls">
+      <button type="button" data-view="open" aria-pressed="true" title="Open"><i data-lucide="panel-top-open"></i><span>Open</span></button>
+      <button type="button" data-view="folded" aria-pressed="false" title="Folded"><i data-lucide="panel-top-close"></i><span>Folded</span></button>
+      <button type="button" data-view="side" aria-pressed="false" title="Side"><i data-lucide="panel-left"></i><span>Side</span></button>
+      <button type="button" data-view="exploded" aria-pressed="false" title="Exploded"><i data-lucide="move-3d"></i><span>Exploded</span></button>
+    </nav>
+  </div>
+
+  <section class="panel" aria-label="Printed parts">
+    <h2>Printable Parts Shown</h2>
+    <ul class="legend">
+      <li><span class="swatch" style="background:var(--printed)"></span><span>4x ready Thingiverse SKADIS hookset pegs, reused as all board mounts</span></li>
+      <li><span class="swatch" style="background:var(--brace)"></span><span>2x white PVC angled support pipes under the rack</span></li>
+      <li><span class="swatch" style="background:var(--pipe)"></span><span>PVC perimeter with ready elbows and simple angled fittings</span></li>
+      <li><span class="swatch" style="background:var(--cord)"></span><span>6x clothesline cord runs across the frame</span></li>
+    </ul>
+    <p class="notes">
+      <span class="badge">Inspired by reference photo</span>
+      <span class="badge">Thingiverse hookset 2849369</span>
+      <span class="badge">PVC angled supports</span>
+      <span class="badge">Simple angled PVC fittings</span>
+      <span class="badge">Cord drying surface</span>
+    </p>
+  </section>
+
+  <section class="assumptions" aria-label="Design assumptions">
+    <h2>Verified Inputs And Assumptions</h2>
+    <dl>
+      <dt>Observed</dt>
+      <dd>The provided reference photo shows a wall-hinged PVC rectangle with blue parallel cord lines for clothes.</dd>
+      <dt>Changed</dt>
+      <dd>The load-bearing members are now white PVC tubes underneath the rack, using simple angled PVC fittings.</dd>
+      <dt>Thingiverse</dt>
+      <dd>Primary mount: CSD_Salzburg's IKEA SKADIS Hookset, thing 2849369. Lower hooks can also be swapped for secure hook/plug thing 4604087 or round hook thing 7071556.</dd>
+      <dt>Verified</dt>
+      <dd>IKEA lists SKADIS as a wall/desk pegboard and warns it must be securely anchored.</dd>
+      <dt>Verified</dt>
+      <dd>Published SKADIS slot docs give a 40 x 40 mm pattern, second pattern offset 20 mm, and 5 x 15 mm slots; this concept uses ready hook pegs instead of T-nuts.</dd>
+      <dt>Assumed</dt>
+      <dd>Nominal 1/2 in Schedule 40 PVC: about 21.3 mm OD, using the common 0.840 in OD reference.</dd>
+      <dt>Not rated</dt>
+      <dd>This is a visualization, not tested load-bearing CAD. SKADIS and the wall attachment must be checked for wet laundry loads before printing.</dd>
+      <dt>Sources</dt>
+      <dd><a href="https://www.ikea.com/us/en/p/skadis-pegboard-black-80534372/">IKEA SKADIS page</a>, <a href="https://www.thingiverse.com/thing:2849369">Thingiverse SKADIS Hookset</a>, <a href="https://www.thingiverse.com/thing:4604087">Thingiverse secure hooks</a>, <a href="https://www.thingiverse.com/thing:7071556">Thingiverse round hook</a>, <a href="https://www.3dgo.app/models/printables/228663">SKADIS slot docs</a>, and <a href="https://www.usplastic.com/knowledgebase/article.aspx?contentkey=624">PVC pipe size reference</a>.</dd>
+    </dl>
+  </section>
+
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const canvas = document.querySelector('#scene');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xe7ecef);
+
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 80);
+    camera.position.set(4.6, 3.0, 6.0);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 0.7, 2.2);
+    controls.maxDistance = 12;
+    controls.minDistance = 2.4;
+
+    const hemi = new THREE.HemisphereLight(0xffffff, 0xb8c0c5, 2.15);
+    scene.add(hemi);
+
+    const key = new THREE.DirectionalLight(0xffffff, 2.8);
+    key.position.set(3.5, 5.8, 4.4);
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    scene.add(key);
+
+    const fill = new THREE.DirectionalLight(0xd0f3ff, 0.86);
+    fill.position.set(-4.5, 2.6, -1.8);
+    scene.add(fill);
+
+    const S = 0.01;
+    const mm = value => value * S;
+
+    const materials = {
+      board: new THREE.MeshStandardMaterial({ color: 0xf2efe7, roughness: 0.72, metalness: 0.02 }),
+      hole: new THREE.MeshBasicMaterial({ color: 0x172024 }),
+      printed: new THREE.MeshStandardMaterial({ color: 0x30363a, roughness: 0.52, metalness: 0.05 }),
+      printedEdge: new THREE.MeshStandardMaterial({ color: 0x4a5055, roughness: 0.48, metalness: 0.08 }),
+      mount: new THREE.MeshStandardMaterial({ color: 0xd06d2f, roughness: 0.55, metalness: 0.03 }),
+      pipe: new THREE.MeshStandardMaterial({ color: 0xf3f1e9, roughness: 0.48, metalness: 0.0 }),
+      fitting: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.42, metalness: 0.0 }),
+      pipeGhost: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.55, transparent: true, opacity: 0.22 }),
+      cord: new THREE.MeshStandardMaterial({ color: 0x256bd6, roughness: 0.38, metalness: 0.0 }),
+      brace: new THREE.MeshStandardMaterial({ color: 0xf3f1e9, roughness: 0.48, metalness: 0.0 }),
+      screw: new THREE.MeshStandardMaterial({ color: 0x1e2528, roughness: 0.34, metalness: 0.38 }),
+      line: new THREE.LineBasicMaterial({ color: 0x23545d, transparent: true, opacity: 0.8 })
+    };
+
+    const root = new THREE.Group();
+    scene.add(root);
+
+    const hingeGroup = new THREE.Group();
+    const supportGroup = new THREE.Group();
+    const framePivot = new THREE.Group();
+    const frameGroup = new THREE.Group();
+    const ghostFoldedGroup = new THREE.Group();
+    const explodedParts = new THREE.Group();
+    root.add(hingeGroup, supportGroup, framePivot, ghostFoldedGroup, explodedParts);
+
+    const hingeY = 95;
+    const hingeZ = 42;
+    framePivot.position.set(0, mm(hingeY), mm(hingeZ));
+    framePivot.add(frameGroup);
+
+    function roundedRectShape(width, height, radius) {
+      const w = mm(width);
+      const h = mm(height);
+      const r = mm(radius);
+      const x = -w / 2;
+      const y = -h / 2;
+      const shape = new THREE.Shape();
+      shape.moveTo(x + r, y);
+      shape.lineTo(x + w - r, y);
+      shape.quadraticCurveTo(x + w, y, x + w, y + r);
+      shape.lineTo(x + w, y + h - r);
+      shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      shape.lineTo(x + r, y + h);
+      shape.quadraticCurveTo(x, y + h, x, y + h - r);
+      shape.lineTo(x, y + r);
+      shape.quadraticCurveTo(x, y, x + r, y);
+      return shape;
+    }
+
+    function box(width, height, depth, mat, x, y, z) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(mm(width), mm(height), mm(depth)), mat);
+      mesh.position.set(mm(x), mm(y), mm(z));
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function cylinder(axis, radius, length, mat, x, y, z, radialSegments = 48) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(mm(radius), mm(radius), mm(length), radialSegments), mat);
+      if (axis === 'x') mesh.rotation.z = Math.PI / 2;
+      if (axis === 'z') mesh.rotation.x = Math.PI / 2;
+      mesh.position.set(mm(x), mm(y), mm(z));
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function tubeBetween(start, end, radius, mat, radialSegments = 18) {
+      const a = new THREE.Vector3(mm(start[0]), mm(start[1]), mm(start[2]));
+      const b = new THREE.Vector3(mm(end[0]), mm(end[1]), mm(end[2]));
+      const mid = a.clone().add(b).multiplyScalar(0.5);
+      const dir = b.clone().sub(a);
+      const length = dir.length();
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(mm(radius), mm(radius), length, radialSegments), mat);
+      mesh.position.copy(mid);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function sagCord(start, end, sag, radius, mat) {
+      const a = new THREE.Vector3(mm(start[0]), mm(start[1]), mm(start[2]));
+      const b = new THREE.Vector3(mm(end[0]), mm(end[1]), mm(end[2]));
+      const mid = a.clone().add(b).multiplyScalar(0.5);
+      mid.y -= mm(sag);
+      const curve = new THREE.CatmullRomCurve3([a, mid, b]);
+      const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 48, mm(radius), 8, false), mat);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function makeBoard() {
+      const group = new THREE.Group();
+      group.add(box(380, 590, 7, materials.board, 0, 0, -3.5));
+
+      const slotGeometry = new THREE.ShapeGeometry(roundedRectShape(5, 15, 2.5), 10);
+      const addSlot = (x, y) => {
+        const mesh = new THREE.Mesh(slotGeometry, materials.hole);
+        mesh.position.set(mm(x), mm(y), mm(0.25));
+        group.add(mesh);
+      };
+
+      for (let y = -260; y <= 260; y += 40) {
+        for (let x = -160; x <= 160; x += 40) addSlot(x, y);
+      }
+      for (let y = -240; y <= 240; y += 40) {
+        for (let x = -140; x <= 140; x += 40) addSlot(x, y);
+      }
+
+      const topRail = box(360, 18, 12, materials.printedEdge, 0, 266, -13);
+      topRail.castShadow = false;
+      group.add(topRail);
+      return group;
+    }
+
+    root.add(makeBoard());
+
+    function makeReadySkadisHookset(x, y, mode = 'upper') {
+      const group = new THREE.Group();
+
+      [-18, 18].forEach(offsetY => {
+        group.add(cylinder('z', 4.4, 30, materials.printed, x, y + offsetY, 24, 32));
+        group.add(cylinder('z', 6.2, 5, materials.printed, x, y + offsetY, 42, 32));
+      });
+
+      const stemZ = mode === 'upper' ? hingeZ - 5 : 62;
+      const stemY = mode === 'upper' ? y - 8 : y + 8;
+      group.add(cylinder('z', 5.4, 48, materials.printed, x, stemY, stemZ, 36));
+      group.add(cylinder('y', 5.4, 30, materials.printed, x, stemY + (mode === 'upper' ? -15 : 15), stemZ + 22, 36));
+
+      const hookCup = new THREE.Mesh(new THREE.TorusGeometry(mm(mode === 'upper' ? 13.2 : 10.6), mm(3.1), 12, 36, Math.PI * 1.65), materials.printed);
+      hookCup.position.set(mm(x), mm(mode === 'upper' ? y : y + 12), mm(mode === 'upper' ? hingeZ : 80));
+      hookCup.rotation.y = Math.PI / 2;
+      hookCup.rotation.z = mode === 'upper' ? Math.PI * 0.15 : -Math.PI * 0.35;
+      hookCup.castShadow = true;
+      hookCup.receiveShadow = true;
+      group.add(hookCup);
+
+      if (mode === 'upper') {
+        group.add(cylinder('x', 4.6, 28, materials.printedEdge, x, y, hingeZ + 4, 28));
+      }
+
+      return group;
+    }
+
+    [-150, 150].forEach(x => hingeGroup.add(makeReadySkadisHookset(x, hingeY, 'upper')));
+
+    function makeReadyElbow(x, z) {
+      const group = new THREE.Group();
+      const ball = new THREE.Mesh(new THREE.SphereGeometry(mm(16.5), 36, 18), materials.fitting);
+      ball.position.set(mm(x), 0, mm(z));
+      ball.castShadow = true;
+      ball.receiveShadow = true;
+      group.add(ball);
+      group.add(cylinder('x', 12.8, 30, materials.fitting, x, 0, z, 48));
+      group.add(cylinder('z', 12.8, 30, materials.fitting, x, 0, z, 48));
+      return group;
+    }
+
+    function makeAngledPvcJoint(x, y, z) {
+      const group = new THREE.Group();
+      const hub = new THREE.Mesh(new THREE.SphereGeometry(mm(14.8), 32, 16), materials.fitting);
+      hub.position.set(mm(x), mm(y), mm(z));
+      hub.castShadow = true;
+      hub.receiveShadow = true;
+      group.add(hub);
+      group.add(cylinder('z', 12.2, 32, materials.fitting, x, y, z + 5, 48));
+      return group;
+    }
+
+    function makeFrame(mat = materials.pipe, cordMat = materials.cord, includeDetails = true) {
+      const group = new THREE.Group();
+      const width = 320;
+      const sideX = 160;
+      const frontZ = 455;
+      const rearZ = 0;
+      const pipeR = 10.65;
+
+      group.add(cylinder('x', pipeR, width, mat, 0, 0, rearZ, 72));
+      group.add(cylinder('x', pipeR, width, mat, 0, 0, frontZ, 72));
+      [-sideX, sideX].forEach(x => group.add(cylinder('z', pipeR, frontZ, mat, x, 0, frontZ / 2, 72)));
+
+      [[-sideX, rearZ], [sideX, rearZ], [-sideX, frontZ], [sideX, frontZ]].forEach(([x, z]) => {
+        group.add(includeDetails ? makeReadyElbow(x, z) : cylinder('y', 13.2, 1, mat, x, 0, z, 32));
+      });
+
+      if (includeDetails) {
+        const cordXs = [-120, -72, -24, 24, 72, 120];
+        cordXs.forEach(x => {
+          group.add(sagCord([x, 5, 22], [x, 5, frontZ - 24], 9, 1.45, cordMat));
+          group.add(cylinder('z', 2.6, 18, materials.cord, x, 3, 15, 16));
+          group.add(cylinder('z', 2.6, 18, materials.cord, x, 3, frontZ - 15, 16));
+        });
+      }
+
+      return group;
+    }
+
+    frameGroup.add(makeFrame());
+
+    function makeUnderBracePair() {
+      const group = new THREE.Group();
+      [-140, 140].forEach(x => {
+        const lower = [x, -92, 86];
+        const upper = [x, 66, 414];
+        group.add(makeReadySkadisHookset(x, -108, 'lower'));
+        group.add(tubeBetween(lower, upper, 9.8, materials.brace, 48));
+        group.add(makeAngledPvcJoint(...lower));
+        group.add(makeAngledPvcJoint(...upper));
+      });
+      return group;
+    }
+
+    supportGroup.add(makeUnderBracePair());
+
+    const ghostFrame = makeFrame(materials.pipeGhost, materials.pipeGhost, false);
+    ghostFoldedGroup.position.set(0, mm(hingeY), mm(hingeZ));
+    ghostFoldedGroup.rotation.x = -Math.PI / 2;
+    ghostFoldedGroup.add(ghostFrame);
+
+    function makeExplodedPartSamples() {
+      const group = new THREE.Group();
+      group.visible = false;
+      const peg = makeReadySkadisHookset(-52, 0, 'upper');
+      peg.scale.setScalar(0.82);
+      peg.position.set(mm(-320), mm(-40), mm(110));
+      const elbow = makeReadyElbow(0, 0);
+      elbow.position.set(mm(-10), mm(-55), mm(130));
+      const brace = tubeBetween([180, -70, 95], [180, 70, 275], 9.8, materials.brace, 48);
+      const lowerFitting = makeAngledPvcJoint(180, -70, 95);
+      const upperFitting = makeAngledPvcJoint(180, 70, 275);
+      const cordSample = sagCord([220, -40, 90], [220, -40, 300], 4, 1.7, materials.cord);
+      group.add(peg, elbow, brace, lowerFitting, upperFitting, cordSample);
+      return group;
+    }
+
+    explodedParts.add(makeExplodedPartSamples());
+
+    function makeDimensionLine(points) {
+      const geometry = new THREE.BufferGeometry().setFromPoints(points.map(p => new THREE.Vector3(mm(p[0]), mm(p[1]), mm(p[2]))));
+      return new THREE.Line(geometry, materials.line);
+    }
+
+    root.add(makeDimensionLine([[-160, 44, 515], [160, 44, 515]]));
+    root.add(makeDimensionLine([[-160, 52, 515], [-160, 36, 515]]));
+    root.add(makeDimensionLine([[160, 52, 515], [160, 36, 515]]));
+    root.add(makeDimensionLine([[190, 95, 42], [190, 95, 497]]));
+    root.add(makeDimensionLine([[182, 95, 42], [198, 95, 42]]));
+    root.add(makeDimensionLine([[182, 95, 497], [198, 95, 497]]));
+
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(8.4, 6.0),
+      new THREE.ShadowMaterial({ color: 0x000000, opacity: 0.12 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.set(0, mm(-205), mm(245));
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    const state = {
+      targetCamera: new THREE.Vector3(4.6, 3.0, 6.0),
+      targetLook: new THREE.Vector3(0, 0.7, 2.2),
+      targetFold: 0,
+      exploded: false,
+      showGhost: true,
+      showSupports: true
+    };
+
+    const views = {
+      open: { camera: [4.6, 3.0, 6.0], target: [0, 0.7, 2.2], fold: 0, exploded: false, ghost: true, supports: true },
+      folded: { camera: [4.3, 2.1, 4.0], target: [0, 1.55, 0.55], fold: -Math.PI / 2, exploded: false, ghost: false, supports: false },
+      side: { camera: [6.9, 1.45, 2.05], target: [0, 0.8, 2.15], fold: 0, exploded: false, ghost: true, supports: true },
+      exploded: { camera: [5.3, 3.2, 6.2], target: [0, 0.75, 2.1], fold: 0, exploded: true, ghost: true, supports: true }
+    };
+
+    function setView(name) {
+      const view = views[name];
+      state.targetCamera.set(...view.camera);
+      state.targetLook.set(...view.target);
+      state.targetFold = view.fold;
+      state.exploded = view.exploded;
+      state.showGhost = view.ghost;
+      state.showSupports = view.supports;
+      document.querySelectorAll('button[data-view]').forEach(button => {
+        button.setAttribute('aria-pressed', button.dataset.view === name ? 'true' : 'false');
+      });
+    }
+
+    document.querySelectorAll('button[data-view]').forEach(button => {
+      button.addEventListener('click', () => setView(button.dataset.view));
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      camera.position.lerp(state.targetCamera, 0.035);
+      controls.target.lerp(state.targetLook, 0.05);
+
+      framePivot.rotation.x += (state.targetFold - framePivot.rotation.x) * 0.06;
+      frameGroup.position.lerp(
+        state.exploded ? new THREE.Vector3(0, mm(50), mm(44)) : new THREE.Vector3(),
+        0.06
+      );
+      hingeGroup.position.lerp(
+        state.exploded ? new THREE.Vector3(0, 0, mm(-18)) : new THREE.Vector3(),
+        0.06
+      );
+      supportGroup.visible = state.showSupports || state.exploded;
+      supportGroup.position.lerp(
+        state.exploded ? new THREE.Vector3(0, mm(-28), mm(-12)) : new THREE.Vector3(),
+        0.06
+      );
+      ghostFoldedGroup.visible = state.showGhost;
+      explodedParts.visible = state.exploded;
+      explodedParts.position.lerp(
+        state.exploded ? new THREE.Vector3(0, 0, 0) : new THREE.Vector3(0, mm(-20), 0),
+        0.06
+      );
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    if (window.lucide) window.lucide.createIcons();
+    animate();
+  </script>
+</body>
+</html>

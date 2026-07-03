@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raspberry Pi 400 Emulation Picks</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f3ed;
+      --ink: #161616;
+      --muted: #5f625f;
+      --panel: #ffffff;
+      --line: #d8d4ca;
+      --n64: #2f7d52;
+      --psp: #365f96;
+      --dc: #c75b2c;
+      --saturn: #5f5176;
+      --ok: #dff1e7;
+      --try: #fff0da;
+      --hard: #f0e7f8;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 0.09em;
+      text-underline-offset: 0.18em;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 42px 0 26px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(2.2rem, 6vw, 4.8rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .priority {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 26px 0 0;
+    }
+
+    .rank {
+      min-height: 104px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+    }
+
+    .rank strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .rank span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    main {
+      padding: 28px 0 46px;
+    }
+
+    .systems {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: clip;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: stretch;
+      min-height: 92px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mark {
+      display: grid;
+      width: 96px;
+      place-items: center;
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+
+    .n64 .mark { background: var(--n64); }
+    .psp .mark { background: var(--psp); }
+    .dreamcast .mark { background: var(--dc); }
+    .saturn .mark { background: var(--saturn); }
+
+    .title {
+      padding: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: 0;
+    }
+
+    .verdict {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .body {
+      padding: 18px;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0 0 22px;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fafafa;
+      font-size: 0.95rem;
+      line-height: 1.25;
+    }
+
+    .start li { background: var(--ok); border-color: #bedfcb; }
+    .try li { background: var(--try); border-color: #e9cfaa; }
+    .hard li { background: var(--hard); border-color: #d5c4e4; }
+
+    .note {
+      margin: 0;
+      padding: 14px 16px;
+      color: var(--muted);
+      background: #f7f6f2;
+      border-top: 1px solid var(--line);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      padding: 26px 0 40px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 860px) {
+      .priority,
+      .systems {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        min-height: 82px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        width: min(100% - 22px, 1120px);
+      }
+
+      header {
+        padding-top: 28px;
+      }
+
+      ul {
+        grid-template-columns: 1fr;
+      }
+
+      .mark {
+        width: 74px;
+        font-size: 1.05rem;
+      }
+
+      .title,
+      .body {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="kicker">Raspberry Pi 400 shortlist</p>
+      <h1>Games worth trying on this machine</h1>
+      <p class="intro">A practical pick list for Nintendo 64, PSP, Dreamcast, and Sega Saturn emulation on Raspberry Pi 400-class hardware. It favors games that are both worth playing and relatively sensible targets for this performance level.</p>
+
+      <div class="priority" aria-label="Recommended setup order">
+        <div class="rank"><strong>1. Nintendo 64</strong><span>Best fit among these platforms. Start here.</span></div>
+        <div class="rank"><strong>2. PSP</strong><span>Good for lighter games with PPSSPP-style emulation.</span></div>
+        <div class="rank"><strong>3. Dreamcast</strong><span>Worth trying, but tune per game.</span></div>
+        <div class="rank"><strong>4. Sega Saturn</strong><span>Most experimental. Prefer 2D and slower-paced games.</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="systems">
+      <section class="n64">
+        <div class="section-head">
+          <div class="mark">N64</div>
+          <div class="title">
+            <h2>Nintendo 64</h2>
+            <p class="verdict">Strongest recommendation for this hardware, though some games still need emulator/plugin tuning.</p>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Start first</h3>
+          <ul class="start">
+            <li>Super Mario 64</li>
+            <li>Mario Kart 64</li>
+            <li>Star Fox 64</li>
+            <li>F-Zero X</li>
+            <li>Wave Race 64</li>
+            <li>The Legend of Zelda: Ocarina of Time</li>
+            <li>Super Smash Bros.</li>
+            <li>Diddy Kong Racing</li>
+            <li>Kirby 64: The Crystal Shards</li>
+            <li>Sin and Punishment</li>
+            <li>Mario Tennis</li>
+            <li>Mario Golf</li>
+          </ul>
+          <h3>Try later</h3>
+          <ul class="try">
+            <li>Banjo-Kazooie</li>
+            <li>Donkey Kong 64</li>
+            <li>Paper Mario</li>
+            <li>GoldenEye 007</li>
+            <li>Perfect Dark</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="psp">
+        <div class="section-head">
+          <div class="mark">PSP</div>
+          <div class="title">
+            <h2>PlayStation Portable</h2>
+            <p class="verdict">A good second target. Start with 2D, tactics, rhythm, and racing games before heavier 3D titles.</p>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Good targets</h3>
+          <ul class="start">
+            <li>Lumines</li>
+            <li>Lumines II</li>
+            <li>LocoRoco</li>
+            <li>LocoRoco 2</li>
+            <li>Patapon</li>
+            <li>Patapon 2</li>
+            <li>Ridge Racer</li>
+            <li>Wipeout Pure</li>
+            <li>Wipeout Pulse</li>
+            <li>Persona 3 Portable</li>
+            <li>Tactics Ogre: Let Us Cling Together</li>
+            <li>Final Fantasy Tactics: The War of the Lions</li>
+            <li>Disgaea: Afternoon of Darkness</li>
+            <li>Castlevania: The Dracula X Chronicles</li>
+            <li>Mega Man Powered Up</li>
+            <li>Mega Man Maverick Hunter X</li>
+          </ul>
+          <h3>Avoid as first tests</h3>
+          <ul class="hard">
+            <li>God of War games</li>
+            <li>Gran Turismo</li>
+            <li>GTA games</li>
+            <li>Tekken 6</li>
+            <li>Metal Gear Solid: Peace Walker</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="dreamcast">
+        <div class="section-head">
+          <div class="mark">DC</div>
+          <div class="title">
+            <h2>Sega Dreamcast</h2>
+            <p class="verdict">Interesting but less predictable. Use native resolution first and expect per-game settings.</p>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Worth trying</h3>
+          <ul class="start">
+            <li>Crazy Taxi</li>
+            <li>Soulcalibur</li>
+            <li>Power Stone</li>
+            <li>Power Stone 2</li>
+            <li>Marvel vs. Capcom 2</li>
+            <li>Capcom vs. SNK 2</li>
+            <li>Ikaruga</li>
+            <li>Rez</li>
+            <li>Virtua Tennis</li>
+            <li>ChuChu Rocket!</li>
+            <li>Jet Set Radio</li>
+            <li>Cannon Spike</li>
+          </ul>
+          <h3>Try later</h3>
+          <ul class="try">
+            <li>Sonic Adventure</li>
+            <li>Sonic Adventure 2</li>
+            <li>Shenmue</li>
+            <li>Skies of Arcadia</li>
+            <li>Grandia II</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="saturn">
+        <div class="section-head">
+          <div class="mark">SAT</div>
+          <div class="title">
+            <h2>Sega Saturn</h2>
+            <p class="verdict">Lowest-confidence platform here. Treat this as an experiment, not a dependable library.</p>
+          </div>
+        </div>
+        <div class="body">
+          <h3>Start with these</h3>
+          <ul class="try">
+            <li>Saturn Bomberman</li>
+            <li>Guardian Heroes</li>
+            <li>Street Fighter Alpha 2</li>
+            <li>Street Fighter Alpha 3</li>
+            <li>X-Men vs. Street Fighter</li>
+            <li>Marvel Super Heroes vs. Street Fighter</li>
+            <li>Sega Rally Championship</li>
+            <li>Virtua Fighter 2</li>
+            <li>Panzer Dragoon</li>
+            <li>Panzer Dragoon II Zwei</li>
+            <li>NiGHTS into Dreams</li>
+            <li>Dragon Force</li>
+            <li>Shining Force III</li>
+            <li>Albert Odyssey</li>
+          </ul>
+        </div>
+        <p class="note">Saturn emulation is unusually demanding for the hardware. If a game stutters or glitches badly, that result is expected rather than a bad dump by default.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>Use dumps from games you own. Recommendations are based on Raspberry Pi 400-class limits and public emulator compatibility notes, not a guarantee that every title will run perfectly.</div>
+      <div class="sources">
+        <a href="https://mupen64plus.org/wiki/index.php?title=GameCompatibility">Mupen64Plus compatibility</a>
+        <a href="https://wiki.yabause.org/index.php5?title=Compatibility_list">Yabause compatibility</a>
+        <a href="https://www.sindenwiki.org/wiki/Flycast_%28Raspberry_Pi%29">Flycast on Raspberry Pi</a>
+        <a href="https://dev.ppsspp.org/docs/development/getting-started/">PPSSPP ARM/ARM64 notes</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

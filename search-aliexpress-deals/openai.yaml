@@ -1,0 +1,4 @@
+interface:
+  display_name: "Search AliExpress Deals"
+  short_description: "Verify real AliExpress checkout deals by location"
+  default_prompt: "Use $search-aliexpress-deals to find products whose exact variants, final payable prices, and tracked delivery are verified at checkout for my location."
