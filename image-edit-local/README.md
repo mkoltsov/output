@@ -3,7 +3,7 @@
 This archive contains the verified Python implementation for the existing
 `image-edit-local` installation:
 
-- `edit_photomaker_outfit.py`: waist-up outfit replacement
+- `edit_photomaker_outfit.py`: 384 × 576 waist-up outfit replacement
 - `edit_photomaker_pose.py`: full-body pose and outfit generation
 - `align_source_head.py`: landmark-aligned face and hairstyle restoration
 - `zimage_i2i_common.py`: face detection and source-hair mask helpers
@@ -21,4 +21,3 @@ Model weights and test photographs are intentionally not included.
 
 The scripts reject prompts requesting explicit nudification of an identifiable
 person. They are intended for ordinary outfit and pose changes.
-
