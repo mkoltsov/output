@@ -274,6 +274,7 @@ def main() -> None:
     steps = integer_env("QWEN_STEPS", 4, 1, 12)
     cfg = float_env("QWEN_CFG", 1.0, 1.0, 8.0)
     image_cfg = float_env("QWEN_IMG_CFG", 1.0, 0.5, 4.0)
+    threads = integer_env("QWEN_THREADS", 8, 1, 16)
     seed = integer_env("QWEN_SEED", 23002, 0, 2_147_483_647)
     max_vram = float_env("QWEN_MAX_VRAM", 2.0, 0.5, 6.0)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -311,6 +312,7 @@ def main() -> None:
             "--width", str(width),
             "--height", str(height),
             "--steps", str(steps),
+            "--threads", str(threads),
             "--cfg-scale", f"{cfg:g}",
             "--img-cfg-scale", f"{image_cfg:g}",
             "--sampling-method", "euler_a",
@@ -331,7 +333,8 @@ def main() -> None:
             f"Device: {device}\n"
             f"Input: {source}\nReference grid: {reference_width}x{reference_height}\n"
             f"Output: {output}\nSize: {width}x{height}\n"
-            f"Steps: {steps}\nCFG: {cfg:g}\nImage CFG: {image_cfg:g}\nSeed: {seed}",
+            f"Steps: {steps}\nThreads: {threads}\nCFG: {cfg:g}\n"
+            f"Image CFG: {image_cfg:g}\nSeed: {seed}",
             flush=True,
         )
         try:
