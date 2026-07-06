@@ -50,3 +50,17 @@ strength 0.85, then restores the source face and hair. The verified test
 completed in 211 seconds with about 5.4 GB peak resident memory. This is not
 Qwen-style semantic editing: high strength can change pose, shoes and details
 outside the restored head region.
+
+## Qwen Image Edit Rapid AIO NSFW v23 Q2_K
+
+`edit_qwen_rapid_v23.py` is the verified low-memory local runner for the full
+20B Qwen Image Edit 2511 architecture quantized to Q2_K:
+
+```bash
+python3 edit_qwen_rapid_v23.py INPUT_IMAGE "EDIT PROMPT" OUTPUT_FOLDER
+```
+
+The verified 336 × 640 edit completed in 513 seconds with approximately 9.6 GB
+peak resident memory. It preserved the source framing, pose, footwear, dress
+cut and background without pasted-head compositing. Facial identity was close
+but not pixel-identical. Model weights are not included in this repository.
