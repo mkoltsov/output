@@ -12,8 +12,9 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 
 ROOT = Path(__file__).resolve().parent
@@ -80,6 +81,24 @@ def target_dimensions(image_path: Path) -> tuple[int, int]:
     return width, height
 
 
+def prepare_reference(source: Path, destination: Path) -> tuple[int, int]:
+    """Normalize a reference to Qwen2.5-VL's 28-pixel vision patch grid."""
+    max_side = integer_env("QWEN_REF_MAX_SIDE", 672, 280, 1344)
+    try:
+        with Image.open(source) as opened:
+            image = ImageOps.exif_transpose(opened).convert("RGB")
+    except Exception as exc:
+        fail(f"cannot read input image {source}: {exc}")
+
+    scale = min(1.0, max_side / max(image.size))
+    width = max(28, round(image.width * scale / 28) * 28)
+    height = max(28, round(image.height * scale / 28) * 28)
+    if image.size != (width, height):
+        image = image.resize((width, height), Image.Resampling.LANCZOS)
+    image.save(destination, format="PNG", optimize=True)
+    return width, height
+
+
 def main() -> None:
     if len(sys.argv) != 4:
         fail(f'usage: {Path(sys.argv[0]).name} "IMAGE" "PROMPT" "OUTPUT_FOLDER"')
@@ -107,33 +126,6 @@ def main() -> None:
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
     output = output_dir / f"{source.stem}-qwen-rapid-v23-{stamp}.png"
 
-    command = [
-        str(BACKEND),
-        "--diffusion-model", str(DIFFUSION),
-        "--vae", str(VAE),
-        "--llm", str(TEXT_ENCODER),
-        "--llm_vision", str(VISION),
-        "--ref-image", str(source),
-        "--qwen-image-zero-cond-t",
-        "--prompt", prompt,
-        "--negative-prompt", "low quality, blurry, distorted anatomy, watermark, text",
-        "--output", str(output),
-        "--width", str(width),
-        "--height", str(height),
-        "--steps", str(steps),
-        "--cfg-scale", f"{cfg:g}",
-        "--sampling-method", "euler_a",
-        "--scheduler", "beta",
-        "--flow-shift", "3",
-        "--seed", str(seed),
-        "--backend", "diffusion=vulkan0,te=cpu,vae=cpu",
-        "--params-backend", "diffusion=disk,te=disk,vae=cpu",
-        "--max-vram", f"vulkan0={max_vram:g}",
-        "--mmap",
-        "--rng", "cpu",
-        "--vae-tiling",
-        "--diffusion-fa",
-    ]
     environment = os.environ.copy()
     old_library_path = environment.get("LD_LIBRARY_PATH", "")
     environment["LD_LIBRARY_PATH"] = (
@@ -141,16 +133,48 @@ def main() -> None:
         if not old_library_path
         else f"{BACKEND_DIR}:{old_library_path}"
     )
-    print(
-        f"Model: Qwen Image Edit Rapid AIO NSFW v23 Q2_K\n"
-        f"Input: {source}\nOutput: {output}\nSize: {width}x{height}\n"
-        f"Steps: {steps}\nCFG: {cfg:g}\nSeed: {seed}",
-        flush=True,
-    )
-    try:
-        subprocess.run(command, env=environment, check=True)
-    except subprocess.CalledProcessError as exc:
-        fail(f"inference failed with exit code {exc.returncode}")
+    with tempfile.TemporaryDirectory(prefix="qwen-v23-reference-") as temporary:
+        reference = Path(temporary) / "reference.png"
+        reference_width, reference_height = prepare_reference(source, reference)
+        command = [
+            str(BACKEND),
+            "--diffusion-model", str(DIFFUSION),
+            "--vae", str(VAE),
+            "--llm", str(TEXT_ENCODER),
+            "--llm_vision", str(VISION),
+            "--ref-image", str(reference),
+            "--qwen-image-zero-cond-t",
+            "--prompt", prompt,
+            "--negative-prompt",
+            "low quality, blurry, distorted anatomy, watermark, text",
+            "--output", str(output),
+            "--width", str(width),
+            "--height", str(height),
+            "--steps", str(steps),
+            "--cfg-scale", f"{cfg:g}",
+            "--sampling-method", "euler_a",
+            "--scheduler", "beta",
+            "--flow-shift", "3",
+            "--seed", str(seed),
+            "--backend", "diffusion=vulkan0,te=cpu,vae=cpu",
+            "--params-backend", "diffusion=disk,te=disk,vae=cpu",
+            "--max-vram", f"vulkan0={max_vram:g}",
+            "--mmap",
+            "--rng", "cpu",
+            "--vae-tiling",
+            "--diffusion-fa",
+        ]
+        print(
+            f"Model: Qwen Image Edit Rapid AIO NSFW v23 Q2_K\n"
+            f"Input: {source}\nReference grid: {reference_width}x{reference_height}\n"
+            f"Output: {output}\nSize: {width}x{height}\n"
+            f"Steps: {steps}\nCFG: {cfg:g}\nSeed: {seed}",
+            flush=True,
+        )
+        try:
+            subprocess.run(command, env=environment, check=True)
+        except subprocess.CalledProcessError as exc:
+            fail(f"inference failed with exit code {exc.returncode}")
     if not output.is_file() or output.stat().st_size == 0:
         fail("backend exited successfully but did not create an output image")
     print(output)
