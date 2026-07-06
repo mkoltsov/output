@@ -21,3 +21,18 @@ Model weights and test photographs are intentionally not included.
 
 The scripts reject prompts requesting explicit nudification of an identifiable
 person. They are intended for ordinary outfit and pose changes.
+
+## CyberIllustrious generator
+
+`generate_cyberillustrious.py` is the verified three-argument local generator.
+The default `fast` profile uses CyberIllustrious v7 DMD2 at 384 × 576, eight
+LCM/Exponential steps and CFG 1.5. On the tested ThinkPad it completed in 234
+seconds with about 3.5 GB peak resident memory.
+
+```bash
+python3 generate_cyberillustrious.py "PROMPT" OUTPUT_FOLDER SEED
+```
+
+Set `CYBERILLUSTRIOUS_PROFILE=quality` for the latest v12 checkpoint with 30
+DPM++ 2M Karras steps and CFG 5. Model weights and the inference backend are
+not included in this public repository.
