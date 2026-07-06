@@ -6,10 +6,13 @@ Usage: edit_qwen_rapid_v23.py IMAGE PROMPT OUTPUT_FOLDER
 
 from __future__ import annotations
 
+import atexit
 from datetime import datetime
 import os
 from pathlib import Path
 import re
+import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -76,6 +79,138 @@ def select_device() -> str:
     if device not in {"cpu", "vulkan"}:
         fail("QWEN_DEVICE must be cpu or vulkan")
     return device
+
+
+def boolean_env(name: str, default: bool) -> bool:
+    value = os.environ.get(name, "1" if default else "0").strip().lower()
+    if value in {"1", "true", "yes", "on"}:
+        return True
+    if value in {"0", "false", "no", "off"}:
+        return False
+    fail(f"{name} must be 1 or 0")
+
+
+class TemporaryPerformanceProfile:
+    """Temporarily select Tuned throughput-performance and restore safely."""
+
+    target = "throughput-performance"
+
+    def __init__(self) -> None:
+        self.enabled = boolean_env("QWEN_PERFORMANCE_MODE", True)
+        self.tuned_adm = shutil.which("tuned-adm")
+        self.original: str | None = None
+        self.original_platform: str | None = None
+        self.switched = False
+        self.previous_handlers: dict[int, object] = {}
+
+    def active_profile(self) -> str | None:
+        if not self.tuned_adm:
+            return None
+        result = subprocess.run(
+            [self.tuned_adm, "active"], capture_output=True, text=True, check=False
+        )
+        prefix = "Current active profile:"
+        for line in result.stdout.splitlines():
+            if line.startswith(prefix):
+                return line.removeprefix(prefix).strip()
+        return None
+
+    @staticmethod
+    def platform_profile() -> str | None:
+        path = Path("/sys/firmware/acpi/platform_profile")
+        try:
+            return path.read_text().strip()
+        except OSError:
+            return None
+
+    def switch(self, profile: str) -> bool:
+        if not self.tuned_adm:
+            return False
+        result = subprocess.run(
+            [self.tuned_adm, "profile", profile],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            detail = (result.stderr or result.stdout).strip()
+            print(f"warning: cannot select Tuned profile {profile}: {detail}", file=sys.stderr)
+            return False
+        return self.active_profile() == profile
+
+    def __enter__(self) -> "TemporaryPerformanceProfile":
+        if not self.enabled:
+            print("Performance profile switching: disabled", flush=True)
+            return self
+        if not self.tuned_adm:
+            print("warning: tuned-adm is unavailable; keeping the current profile", file=sys.stderr)
+            return self
+        self.original = self.active_profile()
+        self.original_platform = self.platform_profile()
+        if not self.original or self.original == self.target:
+            print(f"Performance profile: {self.original or 'unknown'} (unchanged)", flush=True)
+            return self
+        self.switched = True
+        atexit.register(self.restore)
+        for signum in (signal.SIGTERM, signal.SIGHUP):
+            self.previous_handlers[signum] = signal.getsignal(signum)
+            signal.signal(signum, self.handle_signal)
+        if not self.switch(self.target):
+            self.switched = False
+            atexit.unregister(self.restore)
+            for signum, handler in self.previous_handlers.items():
+                signal.signal(signum, handler)
+            self.previous_handlers.clear()
+            print("warning: performance profile switch was not applied", file=sys.stderr)
+            return self
+        print(
+            f"Performance profile: {self.original} -> {self.target} "
+            f"(platform {self.original_platform or 'unknown'} -> "
+            f"{self.platform_profile() or 'unknown'})",
+            flush=True,
+        )
+        return self
+
+    def restore(self) -> None:
+        if not self.switched or not self.original:
+            return
+        current = self.active_profile()
+        if current != self.target:
+            print(
+                f"Performance profile changed externally to {current or 'unknown'}; "
+                "leaving it unchanged",
+                file=sys.stderr,
+                flush=True,
+            )
+            self.switched = False
+            return
+        restored = self.switch(self.original)
+        if restored:
+            print(
+                f"Performance profile restored: {self.original} "
+                f"(platform {self.platform_profile() or 'unknown'})",
+                flush=True,
+            )
+            self.switched = False
+        else:
+            print(
+                f"error: failed to restore Tuned profile {self.original}",
+                file=sys.stderr,
+                flush=True,
+            )
+
+    def handle_signal(self, signum: int, _frame: object) -> None:
+        self.restore()
+        raise SystemExit(128 + signum)
+
+    def __exit__(self, _exc_type: object, _exc: object, _traceback: object) -> None:
+        self.restore()
+        try:
+            atexit.unregister(self.restore)
+        except Exception:
+            pass
+        for signum, handler in self.previous_handlers.items():
+            signal.signal(signum, handler)
 
 
 def target_dimensions(image_path: Path) -> tuple[int, int]:
@@ -146,6 +281,7 @@ def main() -> None:
     output = output_dir / f"{source.stem}-qwen-rapid-{version}-q4-{stamp}.png"
 
     environment = os.environ.copy()
+    environment.setdefault("OTEL_SERVICE_NAME", "image-edit-local-qwen")
     old_library_path = environment.get("LD_LIBRARY_PATH", "")
     environment["LD_LIBRARY_PATH"] = (
         str(BACKEND_DIR)
@@ -199,7 +335,8 @@ def main() -> None:
             flush=True,
         )
         try:
-            subprocess.run(command, env=environment, check=True)
+            with TemporaryPerformanceProfile():
+                subprocess.run(command, env=environment, check=True)
         except subprocess.CalledProcessError as exc:
             fail(f"inference failed with exit code {exc.returncode}")
     if not output.is_file() or output.stat().st_size == 0:
