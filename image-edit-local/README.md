@@ -36,3 +36,17 @@ python3 generate_cyberillustrious.py "PROMPT" OUTPUT_FOLDER SEED
 Set `CYBERILLUSTRIOUS_PROFILE=quality` for the latest v12 checkpoint with 30
 DPM++ 2M Karras steps and CFG 5. Model weights and the inference backend are
 not included in this public repository.
+
+### CyberIllustrious I2I
+
+`edit_cyberillustrious.py` is the verified conventional SDXL I2I wrapper:
+
+```bash
+python3 edit_cyberillustrious.py INPUT_IMAGE "TARGET IMAGE PROMPT" OUTPUT_FOLDER
+```
+
+The default v12 profile uses a maximum side of 576 pixels, 30 steps, CFG 5 and
+strength 0.85, then restores the source face and hair. The verified test
+completed in 211 seconds with about 5.4 GB peak resident memory. This is not
+Qwen-style semantic editing: high strength can change pose, shoes and details
+outside the restored head region.
