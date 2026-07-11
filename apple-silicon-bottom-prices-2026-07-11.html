@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Apple Silicon used-laptop bottom prices — Poland vs US</title>
+  <style>
+    :root { color-scheme: light dark; --line:#9aa0a633; --muted:#6f7782; --good:#16853b; --warn:#b46a00; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:15px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1500px; margin:0 auto; padding:28px 20px 48px; }
+    h1 { margin:0 0 8px; font-size:clamp(24px,3vw,38px); letter-spacing:-.03em; }
+    .summary { max-width:1050px; margin:0 0 20px; color:var(--muted); }
+    .legend { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px; }
+    .pill { border:1px solid var(--line); border-radius:999px; padding:6px 10px; font-size:13px; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:12px; }
+    table { width:100%; min-width:1250px; border-collapse:collapse; }
+    th,td { padding:11px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { position:sticky; top:0; background:Canvas; white-space:nowrap; font-size:13px; }
+    th button { all:unset; cursor:pointer; font-weight:700; }
+    th button:hover { text-decoration:underline; }
+    tbody tr:hover { background:color-mix(in srgb, CanvasText 4%, Canvas); }
+    tbody tr:last-child td { border-bottom:0; }
+    .num { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+    .winner { color:var(--good); font-weight:700; }
+    .risk { color:var(--warn); }
+    a { color:LinkText; text-underline-offset:2px; }
+    footer { margin-top:16px; color:var(--muted); font-size:13px; max-width:1100px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Apple Silicon bottom prices: Poland vs US</h1>
+  <p class="summary">Lowest directly verified purchasable laptop listings found on 11 July 2026, with at least 16 GB unified memory. “Pro” means the actual Pro chip. Conversions use the NBP 10 July 2026 mid-rate of 1 USD = 3.8025 PLN. Click a column heading to sort.</p>
+  <div class="legend">
+    <span class="pill">Poland delivery excluded</span>
+    <span class="pill">US sales tax and domestic shipping excluded</span>
+    <span class="pill">Green = lower converted listing price</span>
+  </div>
+  <div class="table-wrap">
+    <table id="prices">
+      <thead>
+        <tr>
+          <th><button data-type="text">Chip ↕</button></th>
+          <th><button data-type="text">Minimum configuration ↕</button></th>
+          <th>Poland listing</th>
+          <th class="num"><button data-type="number">Poland PLN ↕</button></th>
+          <th class="num"><button data-type="number">Poland USD ↕</button></th>
+          <th>US listing</th>
+          <th class="num"><button data-type="number">US USD ↕</button></th>
+          <th class="num"><button data-type="number">US PLN ↕</button></th>
+          <th><button data-type="text">Lower market ↕</button></th>
+          <th class="num"><button data-type="number">Difference PLN ↕</button></th>
+          <th>Important caveats</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>M1</td><td>16 GB / 256 GB</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/macbook-air-m1-16gb-ram-256gb-space-gray-stan-idealny-thermal-mod">MacBook Air M1</a></td>
+          <td class="num">1,899</td><td class="num">499</td>
+          <td><a href="https://www.ebay.com/itm/287182001461">MacBook Pro 13 M1</a></td>
+          <td class="num winner">469</td><td class="num winner">1,783</td>
+          <td class="winner">US</td><td class="num">116</td><td>PL: thermal mod, 81% battery. US: good refurbished.</td>
+        </tr>
+        <tr>
+          <td>M2</td><td>16 GB / 256 GB</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/macbook-air-m2-136-16gb-ram256gb-ssd-gwiezdna-szarosc">MacBook Air M2</a></td>
+          <td class="num winner">2,300</td><td class="num winner">605</td>
+          <td><a href="https://www.ebay.com/itm/278078801994">MacBook Air M2</a></td>
+          <td class="num">699.99</td><td class="num">2,662</td>
+          <td class="winner">Poland</td><td class="num">362</td><td>PL: 86% battery. US: light screen delamination disclosed.</td>
+        </tr>
+        <tr>
+          <td>M3</td><td>16 GB / 256 GB</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/macbook-air-m3-i-16-gb-ram-256-gb-i-100-bateria-10-cykli-na-gwarancji">MacBook Air M3</a></td>
+          <td class="num">3,400</td><td class="num">894</td>
+          <td><a href="https://www.ebay.com/itm/298175070863">MacBook Air M3</a></td>
+          <td class="num winner">799</td><td class="num winner">3,038</td>
+          <td class="winner">US</td><td class="num">362</td><td>PL: Arabic keyboard, 100% battery. US: 100% battery.</td>
+        </tr>
+        <tr>
+          <td>M4</td><td>16 GB / 256 GB</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/macbook-air-m4-256gb-16gb-100-kondycja-baterii-jak-nowy">MacBook Air M4</a></td>
+          <td class="num">3,500</td><td class="num">920</td>
+          <td><a href="https://www.ebay.com/itm/277197246273">MacBook Air M4</a></td>
+          <td class="num winner">749</td><td class="num winner">2,848</td>
+          <td class="winner">US</td><td class="num">652</td><td>PL: PL keyboard, 100% battery. US: good refurbished, four available when checked.</td>
+        </tr>
+        <tr>
+          <td>M1 Pro</td><td>16 GB / 512 GB</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/macbook-pro-14-2021-m1-pro-16-gb-ram-512-gb-ssd-93-bateria">MacBook Pro 14</a></td>
+          <td class="num">3,200</td><td class="num">842</td>
+          <td><a href="https://www.ebay.com/itm/376410092100">MacBook Pro 14</a></td>
+          <td class="num winner">654.50</td><td class="num winner">2,489</td>
+          <td class="winner">US</td><td class="num">711</td><td>PL: 93% battery. US: good refurbished with warranty.</td>
+        </tr>
+        <tr>
+          <td>M2 Pro</td><td>16 GB / 512 GB</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/macbook-pro-14-m2-pro-1219-16512gb-srebrny-oryginalny-laptop-apple-macos">MacBook Pro 14</a></td>
+          <td class="num">4,099</td><td class="num">1,078</td>
+          <td><a href="https://www.ebay.com/itm/306788350157">MacBook Pro 14</a></td>
+          <td class="num winner">804.95</td><td class="num winner">3,061</td>
+          <td class="winner">US</td><td class="num">1,038</td><td>PL: 162 cycles. US: fully functional with significant cosmetic wear.</td>
+        </tr>
+        <tr>
+          <td>M3 Pro</td><td>18 GB / 512 GB+</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/macbook-pro-14-with-apple-m3-pro-chip-1tb12cpu18gpu">MacBook Pro 14, 1 TB</a></td>
+          <td class="num">5,500</td><td class="num">1,446</td>
+          <td><a href="https://www.ebay.com/itm/127897910779">MacBook Pro 14, 512 GB</a></td>
+          <td class="num winner">1,100</td><td class="num winner">4,183</td>
+          <td class="winner">US</td><td class="num">1,317</td><td class="risk">Not storage-equivalent. US: 86% battery, seller had only two feedback ratings, no returns.</td>
+        </tr>
+        <tr>
+          <td>M4 Pro</td><td>24 GB / 512 GB</td>
+          <td><a href="https://allegrolokalnie.pl/oferta/laptop-apple-macbook-pro-14-m4-pro-24-gb-ram-512-gb-ssd-gwiezdna-czern-ctk">MacBook Pro 14</a></td>
+          <td class="num">6,499</td><td class="num">1,709</td>
+          <td><a href="https://www.ebay.com/itm/287297151614">MacBook Pro 14</a></td>
+          <td class="num winner">1,379.99</td><td class="num winner">5,247</td>
+          <td class="winner">US</td><td class="num">1,252</td><td>PL: UK keyboard. US: last unit when checked; review screen-condition disclosure.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer>
+    Prices are snapshots, not guaranteed market floors. Each linked individual listing showed an active purchase control during the verification session; marketplace inventory can disappear without notice. US checkout availability, domestic shipping and sales tax depend on the buyer’s ZIP code and were not verified. NBP rate source: <a href="https://api.nbp.pl/api/exchangerates/rates/a/usd/?format=json">official USD exchange-rate API</a>.
+  </footer>
+</main>
+<script>
+  const table = document.querySelector('#prices');
+  let direction = 1;
+  table.querySelectorAll('th button').forEach((button) => {
+    button.addEventListener('click', () => {
+      const index = button.closest('th').cellIndex;
+      const rows = [...table.tBodies[0].rows];
+      const type = button.dataset.type;
+      direction *= -1;
+      rows.sort((a, b) => {
+        const av = a.cells[index].textContent.trim().replaceAll(',', '');
+        const bv = b.cells[index].textContent.trim().replaceAll(',', '');
+        return direction * (type === 'number' ? Number(av) - Number(bv) : av.localeCompare(bv, undefined, {numeric:true}));
+      });
+      rows.forEach(row => table.tBodies[0].appendChild(row));
+    });
+  });
+</script>
+</body>
+</html>
