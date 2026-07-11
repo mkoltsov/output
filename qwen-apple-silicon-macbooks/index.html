@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Apple-silicon MacBooks for Qwen Image Edit</title>
+  <style>
+    :root {
+      --bg: #090b10;
+      --panel: #11151d;
+      --panel2: #171c26;
+      --text: #eef2f8;
+      --muted: #a7b0c0;
+      --line: #293142;
+      --green: #62d6a8;
+      --blue: #80b7ff;
+      --amber: #f4c66d;
+      --red: #ff8e8e;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 75% 0%, #17283a 0, transparent 31rem), var(--bg);
+      color: var(--text);
+      line-height: 1.52;
+    }
+    a { color: var(--blue); }
+    main { width: min(1500px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 72px; }
+    .eyebrow { color: var(--green); font-weight: 750; letter-spacing: .08em; text-transform: uppercase; font-size: .78rem; }
+    h1 { margin: .35rem 0 .8rem; max-width: 950px; font-size: clamp(2.2rem, 5vw, 4.8rem); line-height: .98; letter-spacing: -.055em; }
+    h2 { margin: 0 0 1rem; font-size: clamp(1.45rem, 2.2vw, 2.15rem); letter-spacing: -.025em; }
+    h3 { margin: 0 0 .6rem; }
+    .lede { color: var(--muted); font-size: 1.08rem; max-width: 900px; }
+    .stamp { color: var(--muted); font-size: .86rem; margin-top: 1.2rem; }
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin: 30px 0 42px; }
+    .card, section { background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line); border-radius: 18px; }
+    .card { padding: 18px; }
+    .card .label { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .07em; }
+    .card .value { font-size: 1.17rem; font-weight: 780; margin-top: .3rem; }
+    section { padding: clamp(18px, 3vw, 30px); margin-top: 18px; }
+    .verdicts { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+    .verdict { background: var(--panel2); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+    .verdict p { color: var(--muted); margin: .35rem 0 0; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+    button {
+      appearance: none; border: 1px solid var(--line); border-radius: 999px; padding: 8px 13px;
+      color: var(--text); background: var(--panel2); cursor: pointer; font: inherit; font-size: .88rem;
+    }
+    button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .table-wrap { overflow: auto; max-height: 72vh; border: 1px solid var(--line); border-radius: 13px; }
+    table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 1160px; font-size: .86rem; }
+    th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { position: sticky; top: 0; z-index: 2; background: #1b2230; color: #dce5f3; font-size: .75rem; text-transform: uppercase; letter-spacing: .055em; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover td { background: rgba(128,183,255,.045); }
+    td:nth-child(5), td:nth-child(6) { white-space: nowrap; font-weight: 750; }
+    .chip { font-weight: 780; font-size: .94rem; }
+    .muted, small { color: var(--muted); }
+    .tag { display: inline-block; padding: 3px 7px; border-radius: 999px; font-size: .71rem; font-weight: 750; margin-top: 4px; }
+    .great { background: rgba(98,214,168,.15); color: var(--green); }
+    .good { background: rgba(128,183,255,.15); color: var(--blue); }
+    .tight { background: rgba(244,198,109,.15); color: var(--amber); }
+    .bad { background: rgba(255,142,142,.15); color: var(--red); }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px; color: var(--muted); font-size: .82rem; margin: 12px 0 0; }
+    .legend span::before { content: ""; width: 8px; height: 8px; display: inline-block; border-radius: 50%; margin-right: 6px; background: currentColor; }
+    .note { border-left: 3px solid var(--amber); padding: 12px 15px; background: rgba(244,198,109,.07); border-radius: 0 10px 10px 0; }
+    .method { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    ul { padding-left: 1.25rem; }
+    li + li { margin-top: .45rem; }
+    .sources { columns: 2; column-gap: 40px; }
+    .sources li { break-inside: avoid; margin-bottom: .65rem; }
+    footer { color: var(--muted); margin-top: 26px; font-size: .82rem; }
+    @media (max-width: 900px) {
+      .cards, .verdicts, .method { grid-template-columns: 1fr 1fr; }
+      .sources { columns: 1; }
+    }
+    @media (max-width: 600px) {
+      main { width: min(100% - 20px, 1500px); padding-top: 28px; }
+      .cards, .verdicts, .method { grid-template-columns: 1fr; }
+      section { border-radius: 14px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Buying guide · July 2026</div>
+    <h1>Every Apple-silicon MacBook, ranked for Qwen Image Edit</h1>
+    <p class="lede">MacBook Air and MacBook Pro variants from M1 through M5, with realistic ranges for one local Qwen-Image-Edit-2511 workflow. Memory capacity decides whether the workflow fits; GPU tier, bandwidth and cooling decide how long you wait.</p>
+    <div class="stamp">Checked 11 July 2026 · Specifications are verified; generation times are modelled estimates unless explicitly marked as observed evidence.</div>
+  </header>
+
+  <div class="cards">
+    <div class="card"><div class="label">Minimum worth attempting</div><div class="value">24 GB unified memory</div></div>
+    <div class="card"><div class="label">Practical target</div><div class="value">32–48 GB</div></div>
+    <div class="card"><div class="label">Best used value</div><div class="value">M2 Max · 64 GB</div></div>
+    <div class="card"><div class="label">Fastest MacBook</div><div class="value">M5 Max · 40-core GPU</div></div>
+  </div>
+
+  <section>
+    <h2>Short answer</h2>
+    <div class="verdicts">
+      <div class="verdict"><h3>Best inexpensive choice</h3><p>A used M1 Max 64 GB or M2 Max 64 GB. Older Max bandwidth and ample memory matter more than a new base chip.</p></div>
+      <div class="verdict"><h3>Best balanced choice</h3><p>M4 Pro with 48 GB, or M5 Pro with 48 GB or 64 GB. Substantially quicker than base chips without Max pricing.</p></div>
+      <div class="verdict"><h3>Best portable Air</h3><p>M5 Air 32 GB. It is viable for occasional edits, but fanless cooling makes batches slower than the similarly configured 35.9 cm Pro.</p></div>
+    </div>
+  </section>
+
+  <section id="table">
+    <h2>Full comparison</h2>
+    <p class="muted">Times assume the bold/suggested memory configuration in the “Memory” column. The 4-step column uses a Lightning-style acceleration; the 20-step column is a conventional quality run. Both exclude initial download and cold model loading.</p>
+    <div class="controls" aria-label="Filter table">
+      <button data-filter="all" aria-pressed="true">All MacBooks</button>
+      <button data-filter="air" aria-pressed="false">Air only</button>
+      <button data-filter="base" aria-pressed="false">Base-chip Pro</button>
+      <button data-filter="pro" aria-pressed="false">Pro chips</button>
+      <button data-filter="max" aria-pressed="false">Max chips</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>MacBook variant</th><th>Chip / GPU</th><th>Memory options</th><th>Bandwidth</th><th>4-step edit</th><th>20-step edit</th><th>Assessment</th>
+        </tr></thead>
+        <tbody>
+          <tr data-kind="air"><td>Air M1 · 33.8 cm</td><td><span class="chip">M1 · 7/8 cores</span><br><small>fanless</small></td><td>8 / <strong>16 GB</strong></td><td>≈68 GB/s</td><td>18–35 min</td><td>75–150 min</td><td><span class="tag bad">Experimental</span><br><small>Q2/Q4 plus aggressive offload; 8 GB is a no-go.</small></td></tr>
+          <tr data-kind="air"><td>Air M2 · 34.5/38.9 cm</td><td><span class="chip">M2 · 8/10 cores</span><br><small>fanless</small></td><td>8 / 16 / <strong>24 GB</strong></td><td>100 GB/s</td><td>12–24 min</td><td>50–100 min</td><td><span class="tag tight">Tight</span><br><small>Use Q4 and one approximately 1 MP input.</small></td></tr>
+          <tr data-kind="air"><td>Air M3 · 34.5/38.9 cm</td><td><span class="chip">M3 · 8/10 cores</span><br><small>fanless</small></td><td>8 / 16 / <strong>24 GB</strong></td><td>100 GB/s</td><td>10–20 min</td><td>42–85 min</td><td><span class="tag tight">Tight</span><br><small>Newer GPU, but the same bandwidth and memory ceiling as M2.</small></td></tr>
+          <tr data-kind="air"><td>Air M4 · 34.5/38.9 cm</td><td><span class="chip">M4 · 8/10 cores</span><br><small>fanless</small></td><td>16 / 24 / <strong>32 GB</strong></td><td>120 GB/s</td><td>7–14 min</td><td>30–60 min</td><td><span class="tag good">Usable</span><br><small>Good occasional-edit machine; batches expose thermal limits.</small></td></tr>
+          <tr data-kind="air"><td>Air M5 · 34.5/38.9 cm</td><td><span class="chip">M5 · 8/10 cores</span><br><small>fanless</small></td><td>16 / 24 / <strong>32 GB</strong></td><td>153 GB/s</td><td>5–11 min</td><td>22–46 min</td><td><span class="tag good">Best Air</span><br><small>Fastest Air, still well behind Pro/Max tiers for sustained work.</small></td></tr>
+
+          <tr data-kind="base"><td>Pro M1 · 33.8 cm</td><td><span class="chip">M1 · 8 cores</span><br><small>active cooling</small></td><td>8 / <strong>16 GB</strong></td><td>≈68 GB/s</td><td>15–30 min</td><td>60–125 min</td><td><span class="tag bad">Experimental</span><br><small>Cooling helps, but memory remains the hard limit.</small></td></tr>
+          <tr data-kind="base"><td>Pro M2 · 33.8 cm</td><td><span class="chip">M2 · 10 cores</span><br><small>active cooling</small></td><td>8 / 16 / <strong>24 GB</strong></td><td>100 GB/s</td><td>10–20 min</td><td>42–85 min</td><td><span class="tag tight">Tight</span><br><small>Better sustained performance than the M2 Air.</small></td></tr>
+          <tr data-kind="base"><td>Pro M3 · 35.9 cm</td><td><span class="chip">M3 · 10 cores</span><br><small>active cooling</small></td><td>8 / 16 / <strong>24 GB</strong></td><td>100 GB/s</td><td>9–17 min</td><td>36–72 min</td><td><span class="tag tight">Tight</span><br><small>24 GB is workable but leaves little headroom.</small></td></tr>
+          <tr data-kind="base"><td>Pro M4 · 35.9 cm</td><td><span class="chip">M4 · 10 cores</span><br><small>active cooling</small></td><td>16 / 24 / <strong>32 GB</strong></td><td>120 GB/s</td><td>6–12 min</td><td>25–50 min</td><td><span class="tag good">Usable</span><br><small>Prefer 32 GB; a used Pro-chip model may be faster.</small></td></tr>
+          <tr data-kind="base"><td>Pro M5 · 35.9 cm</td><td><span class="chip">M5 · 10 cores</span><br><small>active cooling</small></td><td>16 / 24 / <strong>32 GB</strong></td><td>153 GB/s</td><td>4.5–9 min</td><td>19–38 min</td><td><span class="tag good">Good base chip</span><br><small>Still limited to 10 GPU cores and 32 GB.</small></td></tr>
+
+          <tr data-kind="pro"><td>Pro M1 Pro · 35.9/41.2 cm</td><td><span class="chip">M1 Pro · 14 GPU cores</span></td><td>16 / <strong>32 GB</strong></td><td>200 GB/s</td><td>8–15 min</td><td>34–65 min</td><td><span class="tag good">Usable used</span><br><small>32 GB configuration only; 16 GB is offload-bound.</small></td></tr>
+          <tr data-kind="pro"><td>Pro M1 Pro · 35.9/41.2 cm</td><td><span class="chip">M1 Pro · 16 GPU cores</span></td><td>16 / <strong>32 GB</strong></td><td>200 GB/s</td><td>7–13 min</td><td>30–56 min</td><td><span class="tag good">Good used</span><br><small>Strong bandwidth for its age.</small></td></tr>
+          <tr data-kind="max"><td>Pro M1 Max · 35.9/41.2 cm</td><td><span class="chip">M1 Max · 24 GPU cores</span></td><td>32 / <strong>64 GB</strong></td><td>400 GB/s</td><td>5–9 min</td><td>21–38 min</td><td><span class="tag great">Very good used</span><br><small>64 GB avoids most model-fit compromises.</small></td></tr>
+          <tr data-kind="max"><td>Pro M1 Max · 35.9/41.2 cm</td><td><span class="chip">M1 Max · 32 GPU cores</span></td><td>32 / <strong>64 GB</strong></td><td>400 GB/s</td><td>4–7 min</td><td>17–30 min</td><td><span class="tag great">Excellent used</span><br><small>A compelling value if battery condition and price are good.</small></td></tr>
+
+          <tr data-kind="pro"><td>Pro M2 Pro · 35.9/41.2 cm</td><td><span class="chip">M2 Pro · 16 GPU cores</span></td><td>16 / <strong>32 GB</strong></td><td>200 GB/s</td><td>6–11 min</td><td>25–46 min</td><td><span class="tag good">Good used</span></td></tr>
+          <tr data-kind="pro"><td>Pro M2 Pro · 35.9/41.2 cm</td><td><span class="chip">M2 Pro · 19 GPU cores</span></td><td>16 / <strong>32 GB</strong></td><td>200 GB/s</td><td>5–9 min</td><td>21–38 min</td><td><span class="tag good">Good used</span></td></tr>
+          <tr data-kind="max"><td>Pro M2 Max · 35.9/41.2 cm</td><td><span class="chip">M2 Max · 30 GPU cores</span></td><td>32 / <strong>64 GB</strong></td><td>400 GB/s</td><td>4–6.5 min</td><td>17–28 min</td><td><span class="tag great">Excellent used</span></td></tr>
+          <tr data-kind="max"><td>Pro M2 Max · 35.9/41.2 cm</td><td><span class="chip">M2 Max · 38 GPU cores</span></td><td>32 / <strong>64</strong> / 96 GB</td><td>400 GB/s</td><td>3.3–5.2 min</td><td>14–23 min</td><td><span class="tag great">Best used value</span><br><small>Range is consistent with one public 200–300 s user report.</small></td></tr>
+
+          <tr data-kind="pro"><td>Pro M3 Pro · 35.9/41.2 cm</td><td><span class="chip">M3 Pro · 14 GPU cores</span></td><td>18 / <strong>36 GB</strong></td><td>150 GB/s</td><td>5.5–10 min</td><td>23–42 min</td><td><span class="tag good">Good</span><br><small>36 GB is strongly preferred.</small></td></tr>
+          <tr data-kind="pro"><td>Pro M3 Pro · 35.9/41.2 cm</td><td><span class="chip">M3 Pro · 18 GPU cores</span></td><td>18 / <strong>36 GB</strong></td><td>150 GB/s</td><td>4.5–8 min</td><td>19–34 min</td><td><span class="tag good">Good</span><br><small>Poorly configured public runs have taken 15–20 min even at four steps.</small></td></tr>
+          <tr data-kind="max"><td>Pro M3 Max · 35.9/41.2 cm</td><td><span class="chip">M3 Max · 30 GPU cores</span></td><td>36 / <strong>96 GB</strong></td><td>300 GB/s</td><td>3–5.2 min</td><td>13–22 min</td><td><span class="tag great">Excellent</span></td></tr>
+          <tr data-kind="max"><td>Pro M3 Max · 35.9/41.2 cm</td><td><span class="chip">M3 Max · 40 GPU cores</span></td><td>48 / <strong>64</strong> / 128 GB</td><td>400 GB/s</td><td>2.2–4 min</td><td>9–17 min</td><td><span class="tag great">Excellent</span></td></tr>
+
+          <tr data-kind="pro"><td>Pro M4 Pro · 35.9/41.2 cm</td><td><span class="chip">M4 Pro · 16 GPU cores</span></td><td>24 / <strong>48 GB</strong></td><td>273 GB/s</td><td>3.5–6 min</td><td>15–25 min</td><td><span class="tag great">Excellent</span></td></tr>
+          <tr data-kind="pro"><td>Pro M4 Pro · 35.9/41.2 cm</td><td><span class="chip">M4 Pro · 20 GPU cores</span></td><td>24 / <strong>48 GB</strong></td><td>273 GB/s</td><td>2.8–5 min</td><td>12–21 min</td><td><span class="tag great">Best balance</span></td></tr>
+          <tr data-kind="max"><td>Pro M4 Max · 35.9/41.2 cm</td><td><span class="chip">M4 Max · 32 GPU cores</span></td><td><strong>36 GB</strong></td><td>410 GB/s</td><td>2–3.5 min</td><td>8–15 min</td><td><span class="tag great">Workstation class</span></td></tr>
+          <tr data-kind="max"><td>Pro M4 Max · 35.9/41.2 cm</td><td><span class="chip">M4 Max · 40 GPU cores</span></td><td>48 / <strong>64</strong> / 128 GB</td><td>546 GB/s</td><td>1.2–2.2 min</td><td>5–9.5 min</td><td><span class="tag great">Very fast</span></td></tr>
+
+          <tr data-kind="pro"><td>Pro M5 Pro · 35.9/41.2 cm</td><td><span class="chip">M5 Pro · 16 GPU cores</span></td><td>24 / <strong>48 GB</strong></td><td>307 GB/s</td><td>2.8–5 min</td><td>12–21 min</td><td><span class="tag great">Excellent</span></td></tr>
+          <tr data-kind="pro"><td>Pro M5 Pro · 35.9/41.2 cm</td><td><span class="chip">M5 Pro · 20 GPU cores</span></td><td>24 / <strong>48</strong> / 64 GB</td><td>307 GB/s</td><td>2.2–4 min</td><td>9–17 min</td><td><span class="tag great">Best new balance</span></td></tr>
+          <tr data-kind="max"><td>Pro M5 Max · 35.9/41.2 cm</td><td><span class="chip">M5 Max · 32 GPU cores</span></td><td><strong>36 GB</strong></td><td>460 GB/s</td><td>1.7–3 min</td><td>7–13 min</td><td><span class="tag great">Workstation class</span></td></tr>
+          <tr data-kind="max"><td>Pro M5 Max · 35.9/41.2 cm</td><td><span class="chip">M5 Max · 40 GPU cores</span></td><td>48 / <strong>64</strong> / 128 GB</td><td>614 GB/s</td><td>1–1.9 min</td><td>4.5–8 min</td><td><span class="tag great">Fastest MacBook</span><br><small>M5 neural accelerators are not credited in these estimates.</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend"><span style="color:var(--green)">comfortable</span><span style="color:var(--blue)">usable</span><span style="color:var(--amber)">memory-tight</span><span style="color:var(--red)">experimental</span></div>
+  </section>
+
+  <section>
+    <h2>What these times mean</h2>
+    <div class="method">
+      <div>
+        <h3>Standardised workload</h3>
+        <ul>
+          <li>Qwen-Image-Edit-2511, one source image, approximately 1 megapixel output.</li>
+          <li>Quantised Q4/Q5 diffusion model and a compatible quantised text/vision encoder in current ComfyUI on PyTorch MPS.</li>
+          <li>Warm generation: models already loaded, no download, no cold startup, no competing heavy applications.</li>
+          <li>Four denoising steps with an appropriate Lightning/distillation LoRA, or 20 conventional steps.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Uncertainty</h3>
+        <ul>
+          <li>These are planning ranges, not measurements of 30 machines. Expect approximately ±50% depending on quant, ComfyUI build, macOS, attention path and input count.</li>
+          <li>Cold loading can add roughly 1–10 minutes; swapping on 16–24 GB systems can add much more.</li>
+          <li>Doubling pixel count commonly increases sampling time by roughly 1.7–2.5×.</li>
+          <li>The 41.2 cm Pro can sustain Max-chip loads slightly better than the 35.9 cm chassis; this is already absorbed into each range.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note"><strong>FP8 warning:</strong> the official FP8 Qwen files are not a safe assumption on Apple MPS. Current ComfyUI reports still show unsupported Float8 conversion paths. Integer GGUF or a proven Mac-specific package is the safer planning basis.</p>
+  </section>
+
+  <section>
+    <h2>Why memory comes first</h2>
+    <p>The official ComfyUI diffusion file for Qwen-Image-Edit-2511 is about 20.5 GB in FP8, while its FP8 Qwen2.5-VL encoder is about 9.38 GB, before the VAE, image tensors and application overhead. ComfyUI may offload components, so these file sizes are not a simple “add them together” RAM requirement—but they explain why 16 GB systems swap heavily and why 32–48 GB changes the experience.</p>
+    <ul>
+      <li><strong>8 GB:</strong> exclude it for this workflow.</li>
+      <li><strong>16–18 GB:</strong> experimental Q2/Q4, reduced resolution and heavy offloading.</li>
+      <li><strong>24 GB:</strong> workable but tight at approximately 1 megapixel.</li>
+      <li><strong>32–36 GB:</strong> sensible minimum for repeated local use.</li>
+      <li><strong>48–64 GB:</strong> comfortable; lets Max/Pro chips deliver their speed without constant memory pressure.</li>
+      <li><strong>96–128 GB:</strong> useful for multiple inputs, larger graphs and keeping more models resident—not necessary for a basic single edit.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Evidence and sources</h2>
+    <p class="muted">Apple specifications below are treated as proven hardware facts. The two public timing reports are observations from individual users, not controlled benchmarks. The full timing table is an inference anchored to those observations, published ComfyUI performance data, GPU tier, memory fit, bandwidth and cooling.</p>
+    <ul class="sources">
+      <li><a href="https://support.apple.com/en-us/102869">Apple: identify every MacBook Air model</a></li>
+      <li><a href="https://support.apple.com/en-ie/111883">Apple: M1 MacBook Air specifications</a></li>
+      <li><a href="https://support.apple.com/en-ie/111867">Apple: M2 MacBook Air specifications</a></li>
+      <li><a href="https://support.apple.com/en-bh/118551">Apple: M3 MacBook Air specifications</a></li>
+      <li><a href="https://support.apple.com/en-us/122209">Apple: M4 MacBook Air specifications</a></li>
+      <li><a href="https://support.apple.com/en-ca/126320">Apple: M5 MacBook Air specifications</a></li>
+      <li><a href="https://support.apple.com/en-us/111893">Apple: M1 33.8 cm MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-ca/111869">Apple: M2 33.8 cm MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-asia/117735">Apple: base M3 MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-us/121552">Apple: base M4 MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-euro/125405">Apple: base M5 MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-us/111902">Apple: M1 Pro and M1 Max MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-us/111340">Apple: M2 Pro and M2 Max MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-euro/117736">Apple: M3 Pro and M3 Max MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-us/121553">Apple: M4 Pro and M4 Max MacBook Pro specifications</a></li>
+      <li><a href="https://support.apple.com/en-us/126318">Apple: M5 Pro and M5 Max MacBook Pro specifications</a></li>
+      <li><a href="https://docs.comfy.org/tutorials/image/qwen/qwen-image-edit">ComfyUI: native Qwen Image Edit workflow</a></li>
+      <li><a href="https://github.com/QwenLM/Qwen-Image">Qwen: official Qwen-Image repository</a></li>
+      <li><a href="https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI/tree/main/split_files/diffusion_models">Comfy-Org: Qwen diffusion file sizes</a></li>
+      <li><a href="https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/blob/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors">Comfy-Org: Qwen2.5-VL encoder size</a></li>
+      <li><a href="https://github.com/Comfy-Org/ComfyUI/issues/10292">ComfyUI: open MPS/FP8 compatibility report</a></li>
+      <li><a href="https://www.reddit.com/r/comfyui/comments/1s03uu6/any_wan_video_workflows_for_macos/">Observed report: M2 Max 64 GB, 200–300 seconds per Qwen edit</a></li>
+      <li><a href="https://www.reddit.com/r/LocalLLM/comments/1myt97l/qwen_image_edit_on_macbook_m3_pro_1520_min_per/">Observed report: poorly performing M3 Pro 36 GB run</a></li>
+      <li><a href="../image-edit-local/qwen-q4-performance-benchmark.md">Local measured CPU/Q4 reference at reduced resolution</a></li>
+    </ul>
+  </section>
+
+  <footer>Prepared as a hardware-planning guide, not a promise of exact runtime. “GB” follows manufacturers’ decimal notation. All dimensions shown in centimetres.</footer>
+</main>
+<script>
+  const buttons = document.querySelectorAll('[data-filter]');
+  const rows = document.querySelectorAll('tbody tr[data-kind]');
+  buttons.forEach(button => button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+    rows.forEach(row => row.hidden = filter !== 'all' && row.dataset.kind !== filter);
+  }));
+</script>
+</body>
+</html>
