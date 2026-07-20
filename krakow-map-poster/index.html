@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Krakow Map Poster — Print Masters</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --paper: #f2eee5;
+            --ink: #27241f;
+            --muted: #6c655a;
+            --accent: #7b3f2b;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font: 16px/1.55 ui-serif, Georgia, serif;
+        }
+        main {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 32px 0 56px;
+        }
+        h1 { margin: 0; font-size: clamp(32px, 5vw, 64px); line-height: 1; }
+        .lede { color: var(--muted); max-width: 760px; margin: 14px 0 22px; }
+        .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+        a.button {
+            display: inline-block;
+            padding: 11px 16px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: #fffdf8;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        a.button.primary { color: white; background: var(--accent); }
+        figure { margin: 0; padding: 12px; background: white; border: 1px solid #d6cec0; }
+        img { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; }
+        .notes { margin-top: 22px; padding: 18px; background: #fffdf8; border: 1px solid #d6cec0; }
+        .notes p { margin: 0 0 8px; }
+        .notes p:last-child { margin-bottom: 0; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Krakow map poster</h1>
+    <p class="lede">
+        Straightened, glare-free, high-resolution print masters prepared from the supplied scan while preserving the
+        original cartographic artwork and labels.
+    </p>
+    <div class="actions">
+        <a class="button primary" href="krakow-map-poster-print-10320x7440-final.jpg" download>Print JPEG · 11 MB</a>
+        <a class="button" href="krakow-map-poster-lossless-10320x7440-final.png" download>Lossless PNG · 47 MB</a>
+    </div>
+    <figure>
+        <img src="preview-final.jpg" alt="Restored illustrated map of Krakow">
+        <figcaption>Preview. Final masters are 10,320 × 7,440 pixels in the sRGB colour space.</figcaption>
+    </figure>
+    <div class="notes">
+        <p><strong>Suggested print size:</strong> up to approximately 175 × 126 cm at 150 dpi.</p>
+        <p><strong>For closer viewing:</strong> approximately 131 × 94 cm at 200 dpi.</p>
+        <p>The source scan limits true fine-detail recovery; no labels or streets were regenerated or invented.</p>
+    </div>
+</main>
+</body>
+</html>
