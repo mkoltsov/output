@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lustify Krea 2 Edit validation</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+    body { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; background: #111318; color: #f2f4f8; }
+    h1 { margin-bottom: 8px; }
+    .lede { color: #b9c0cc; margin-top: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 28px 0; }
+    figure { margin: 0; padding: 12px; border: 1px solid #303641; border-radius: 14px; background: #191d24; }
+    img { width: 100%; height: auto; display: block; border-radius: 8px; }
+    figcaption { margin-top: 10px; color: #c8ced8; }
+    .facts { padding: 18px 22px; border-radius: 14px; background: #191d24; }
+    a { color: #8ec5ff; }
+    code { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <h1>Lustify v10 Krea 2 Edit validation</h1>
+  <p class="lede">A locally executed ComfyUI image-edit test on an RTX 5060 Ti with 16 GB VRAM.</p>
+  <div class="grid">
+    <figure>
+      <img src="source.png" alt="Simple synthetic source drawing">
+      <figcaption>Safe synthetic source image</figcaption>
+    </figure>
+    <figure>
+      <img src="validation.png" alt="Polished 3D cartoon validation output">
+      <figcaption>Validated 1216 × 1216 output</figcaption>
+    </figure>
+  </div>
+  <div class="facts">
+    <p><strong>Prompt:</strong> Transform this simple drawing into a polished colorful 3D cartoon illustration, keeping the same character and composition.</p>
+    <p><strong>Settings:</strong> 1.4 megapixels, 8 steps, CFG 1, Euler sampler, beta scheduler, Krea 2 identity-edit LoRA strength 1.</p>
+    <p><strong>Runtime:</strong> 54.02 seconds. ComfyUI history status: success.</p>
+    <p><a href="lustify-krea2-edit-v10-int8-16gb.json" download>Download the editable ComfyUI workflow JSON</a></p>
+  </div>
+</body>
+</html>
