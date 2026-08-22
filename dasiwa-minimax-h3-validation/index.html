@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DaSiWa MiniMax H3 I2VA validation</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #0d1117; color: #e6edf3; }
+    body { max-width: 880px; margin: 0 auto; padding: 28px 18px 48px; }
+    video { display: block; width: min(100%, 768px); border-radius: 10px; background: #000; }
+    .frames { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 14px; margin-top: 20px; }
+    figure { margin: 0; } img { width: 100%; border-radius: 8px; } figcaption { margin-top: 6px; color: #9da7b3; }
+    code { color: #79c0ff; } .ok { color: #7ee787; }
+  </style>
+</head>
+<body>
+  <h1>DaSiWa MiniMax H3 I2VA validation</h1>
+  <p class="ok">Successful local image-to-video-with-audio execution.</p>
+  <video controls playsinline src="i2va-validation.mp4"></video>
+  <p><code>384 × 256</code> · <code>24 fps</code> · <code>H.264</code> video · stereo <code>AAC 32 kHz</code> audio · <code>1.625 s</code></p>
+  <div class="frames">
+    <figure><img src="first-frame.png" alt="First generated frame"><figcaption>First generated frame</figcaption></figure>
+    <figure><img src="last-frame.png" alt="Last generated frame"><figcaption>Last generated frame</figcaption></figure>
+  </div>
+</body>
+</html>
