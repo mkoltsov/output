@@ -218,9 +218,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LatentUpscaleModelLoader",
         "cnr_id": "comfy-core",
         "ver": "0.20.1",
-        "Node name for S&R": "LatentUpscaleModelLoader",
         "ue_properties": {
           "widget_ue_connectable": {
             "model_name": true
@@ -511,9 +511,16 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ComfyMathExpression",
         "cnr_id": "comfy-core",
         "ver": "0.20.1",
-        "Node name for S&R": "ComfyMathExpression"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "expression": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "a + 1"
@@ -656,10 +663,21 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVLatentUpsamplerTiled",
         "cnr_id": "10s-comfy-nodes",
         "ver": "47852934037fbf96ed6b6572dded3c1da37bf36d",
-        "Node name for S&R": "LTXVLatentUpsamplerTiled",
-        "aux_id": "TenStrip/10S-Comfy-nodes"
+        "aux_id": "TenStrip/10S-Comfy-nodes",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "tile_size": true,
+            "overlap": true,
+            "max_size_for_no_tile": true,
+            "rotate_for_landscape": true,
+            "debug": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         11,
@@ -836,9 +854,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "VAEDecode",
         "cnr_id": "comfy-core",
         "ver": "0.9.2",
-        "Node name for S&R": "VAEDecode",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
@@ -887,9 +905,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode",
         "cnr_id": "comfy-core",
         "ver": "0.7.0",
-        "Node name for S&R": "LTXVAudioVAEDecode",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.5.2",
@@ -1031,9 +1049,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVAudioVAEEncode",
         "cnr_id": "comfy-core",
         "ver": "0.9.2",
-        "Node name for S&R": "LTXVAudioVAEEncode",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.8",
@@ -1096,9 +1114,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "SolidMask",
         "cnr_id": "comfy-core",
         "ver": "0.20.1",
-        "Node name for S&R": "SolidMask",
         "ue_properties": {
           "widget_ue_connectable": {
             "value": true,
@@ -1152,9 +1170,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "SetLatentNoiseMask",
         "cnr_id": "comfy-core",
         "ver": "0.9.2",
-        "Node name for S&R": "SetLatentNoiseMask",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.8",
@@ -1204,9 +1222,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent",
         "cnr_id": "comfy-core",
         "ver": "0.5.1",
-        "Node name for S&R": "LTXVSeparateAVLatent",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1263,9 +1281,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent",
         "cnr_id": "comfy-core",
         "ver": "0.7.0",
-        "Node name for S&R": "LTXVConcatAVLatent",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1324,9 +1342,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode",
         "cnr_id": "comfy-core",
         "ver": "0.7.0",
-        "Node name for S&R": "LTXVAudioVAEDecode",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.5.2",
@@ -1385,9 +1403,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent",
         "cnr_id": "comfy-core",
         "ver": "0.5.1",
-        "Node name for S&R": "LTXVSeparateAVLatent",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1439,7 +1457,12 @@
       "properties": {
         "Node name for S&R": "SetNode",
         "aux_id": "kijai/ComfyUI-KJNodes",
-        "previousName": "noise"
+        "previousName": "noise",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "noise"
@@ -1544,9 +1567,18 @@
       ],
       "title": "First Pass",
       "properties": {
+        "Node name for S&R": "SamplerCustom",
         "cnr_id": "comfy-core",
         "ver": "0.25.0",
-        "Node name for S&R": "SamplerCustom"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "add_noise": true,
+            "noise_seed": true,
+            "cfg": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         true,
@@ -1586,7 +1618,12 @@
       "title": "Get_noise",
       "properties": {
         "Node name for S&R": "GetNode",
-        "aux_id": "kijai/ComfyUI-KJNodes"
+        "aux_id": "kijai/ComfyUI-KJNodes",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "noise"
@@ -1656,9 +1693,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ResizeImageMaskNode",
         "cnr_id": "comfy-core",
         "ver": "0.14.1",
-        "Node name for S&R": "ResizeImageMaskNode",
         "ue_properties": {
           "widget_ue_connectable": {
             "resize_type": true,
@@ -1751,9 +1788,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVImgToVideoInplaceKJ",
         "cnr_id": "comfyui-kjnodes",
         "ver": "a9ab19d2a7933e03f72bc00103863f06b9483300",
-        "Node name for S&R": "LTXVImgToVideoInplaceKJ",
         "ue_properties": {
           "widget_ue_connectable": {
             "num_images": true,
@@ -1905,9 +1942,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ImageResizeKJv2",
         "cnr_id": "comfyui-kjnodes",
         "ver": "4dfb85dcc52e4315c33170d97bb987baa46d128b",
-        "Node name for S&R": "ImageResizeKJv2",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.5.2",
@@ -1976,9 +2013,14 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "GetImageSize",
         "cnr_id": "comfy-core",
         "ver": "0.25.0",
-        "Node name for S&R": "GetImageSize"
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": []
     },
@@ -2162,9 +2204,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ImageResizeKJv2",
         "cnr_id": "comfyui-kjnodes",
         "ver": "4dfb85dcc52e4315c33170d97bb987baa46d128b",
-        "Node name for S&R": "ImageResizeKJv2",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.5.2",
@@ -2246,9 +2288,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ResizeImageMaskNode",
         "cnr_id": "comfy-core",
         "ver": "0.14.1",
-        "Node name for S&R": "ResizeImageMaskNode",
         "ue_properties": {
           "widget_ue_connectable": {
             "resize_type": true,
@@ -2391,9 +2433,18 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXReferenceConditioning",
         "cnr_id": "10s-comfy-nodes",
         "ver": "2dc56f5394567a65cfcabc46460044a0eebb4359",
-        "Node name for S&R": "LTXReferenceConditioning"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "strength": true,
+            "position_mode": true,
+            "verbose": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         1,
@@ -2442,9 +2493,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "VAEDecode",
         "cnr_id": "comfy-core",
         "ver": "0.9.2",
-        "Node name for S&R": "VAEDecode",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
@@ -2550,9 +2601,18 @@
       ],
       "title": "Upscale Pass",
       "properties": {
+        "Node name for S&R": "SamplerCustom",
         "cnr_id": "comfy-core",
         "ver": "0.25.0",
-        "Node name for S&R": "SamplerCustom"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "add_noise": true,
+            "noise_seed": true,
+            "cfg": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         true,
@@ -2641,9 +2701,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVImgToVideoInplaceKJ",
         "cnr_id": "comfyui-kjnodes",
         "ver": "a9ab19d2a7933e03f72bc00103863f06b9483300",
-        "Node name for S&R": "LTXVImgToVideoInplaceKJ",
         "ue_properties": {
           "widget_ue_connectable": {
             "num_images": true,
@@ -2725,9 +2785,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "EmptyLTXVLatentVideo",
         "cnr_id": "comfy-core",
         "ver": "0.3.60",
-        "Node name for S&R": "EmptyLTXVLatentVideo",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2787,7 +2847,7 @@
         {
           "localized_name": "frame_rate",
           "name": "frame_rate",
-          "type": "INT",
+          "type": "FLOAT,INT",
           "widget": {
             "name": "frame_rate"
           },
@@ -2814,9 +2874,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVEmptyLatentAudio",
         "cnr_id": "comfy-core",
         "ver": "0.3.68",
-        "Node name for S&R": "LTXVEmptyLatentAudio",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3021,9 +3081,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ImageResizeKJv2",
         "cnr_id": "comfyui-kjnodes",
         "ver": "4dfb85dcc52e4315c33170d97bb987baa46d128b",
-        "Node name for S&R": "ImageResizeKJv2",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.5.2",
@@ -3085,9 +3145,16 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVPreprocess",
         "cnr_id": "comfy-core",
         "ver": "0.26.0",
-        "Node name for S&R": "LTXVPreprocess"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "img_compression": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         35
@@ -3095,14 +3162,14 @@
     },
     {
       "id": 796,
-      "type": "mxSlider",
+      "type": "PrimitiveInt",
       "pos": [
         -1127.6105493618702,
         3893.654739265324
       ],
       "size": [
-        329.40625,
-        30
+        210,
+        58
       ],
       "flags": {
         "collapsed": false
@@ -3111,37 +3178,19 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "Xi",
-          "name": "Xi",
+          "localized_name": "value",
+          "name": "value",
           "type": "INT",
           "widget": {
-            "name": "Xi"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "Xf",
-          "name": "Xf",
-          "type": "FLOAT",
-          "widget": {
-            "name": "Xf"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "isfloatX",
-          "name": "isfloatX",
-          "type": "INT",
-          "widget": {
-            "name": "isfloatX"
+            "name": "value"
           },
           "link": null
         }
       ],
       "outputs": [
         {
-          "localized_name": "",
-          "name": "",
+          "localized_name": "INT",
+          "name": "INT",
           "type": "INT",
           "links": [
             2220
@@ -3150,26 +3199,12 @@
       ],
       "title": "Length (Frame Count X/24 = Seconds)",
       "properties": {
-        "cnr_id": "comfyui-mxtoolkit",
-        "ver": "0.9.92",
-        "Node name for S&R": "mxSlider",
-        "value": 96,
-        "min": 48,
-        "max": 960,
-        "step": 24,
-        "decimals": 0,
-        "snap": true,
-        "ue_properties": {
-          "version": "7.1",
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "aux_id": "Smirnov75/ComfyUI-mxToolkit"
+        "Node name for S&R": "PrimitiveInt",
+        "cnr_id": "comfy-core"
       },
       "widgets_values": [
         96,
-        96,
-        0
+        "fixed"
       ],
       "color": "#222",
       "bgcolor": "#000"
@@ -3317,9 +3352,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "VHS_VideoCombine",
         "cnr_id": "comfyui-videohelpersuite",
         "ver": "1.7.9",
-        "Node name for S&R": "VHS_VideoCombine",
         "ue_properties": {
           "widget_ue_connectable": {
             "frame_rate": true,
@@ -3347,7 +3382,8 @@
         "save_metadata": true,
         "trim_to_audio": false,
         "pingpong": false,
-        "save_output": false
+        "save_output": false,
+        "videopreview": ""
       },
       "color": "#222",
       "bgcolor": "#000"
@@ -3495,9 +3531,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "VHS_VideoCombine",
         "cnr_id": "comfyui-videohelpersuite",
         "ver": "1.7.9",
-        "Node name for S&R": "VHS_VideoCombine",
         "ue_properties": {
           "widget_ue_connectable": {
             "frame_rate": true,
@@ -3525,7 +3561,8 @@
         "save_metadata": true,
         "trim_to_audio": false,
         "pingpong": false,
-        "save_output": true
+        "save_output": true,
+        "videopreview": ""
       },
       "color": "#222",
       "bgcolor": "#000"
@@ -3566,9 +3603,16 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "KSamplerSelect",
         "cnr_id": "comfy-core",
         "ver": "0.26.0",
-        "Node name for S&R": "KSamplerSelect"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "sampler_name": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "euler_ancestral_cfg_pp"
@@ -3636,9 +3680,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVConditioning",
         "cnr_id": "comfy-core",
         "ver": "0.3.56",
-        "Node name for S&R": "LTXVConditioning",
         "ue_properties": {
           "widget_ue_connectable": {
             "frame_rate": true
@@ -3738,9 +3782,16 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "KSamplerSelect",
         "cnr_id": "comfy-core",
         "ver": "0.26.0",
-        "Node name for S&R": "KSamplerSelect"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "sampler_name": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "euler_ancestral"
@@ -3785,9 +3836,9 @@
       ],
       "title": "Sigmas Upscale",
       "properties": {
+        "Node name for S&R": "ManualSigmas",
         "cnr_id": "comfy-core",
         "ver": "0.5.1",
-        "Node name for S&R": "ManualSigmas",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3844,9 +3895,9 @@
       ],
       "title": "Sigmas First Pass",
       "properties": {
+        "Node name for S&R": "ManualSigmas",
         "cnr_id": "comfy-core",
         "ver": "0.5.1",
-        "Node name for S&R": "ManualSigmas",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3914,10 +3965,15 @@
         }
       ],
       "properties": {
+        "Show Strengths": "Single Strength",
+        "Match": "",
         "cnr_id": "rgthree-comfy",
         "ver": "738105af5fb14e96fbecaf406dc356e284797e8c",
-        "Show Strengths": "Single Strength",
-        "Match": ""
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         {},
@@ -3982,9 +4038,17 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LoadImage",
         "cnr_id": "comfy-core",
         "ver": "0.24.0",
-        "Node name for S&R": "LoadImage"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "image": true,
+            "upload": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "example.png",
@@ -4035,9 +4099,16 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVPreprocess",
         "cnr_id": "comfy-core",
         "ver": "0.26.0",
-        "Node name for S&R": "LTXVPreprocess"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "img_compression": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         35
@@ -4045,14 +4116,14 @@
     },
     {
       "id": 797,
-      "type": "mxSlider",
+      "type": "PrimitiveFloat",
       "pos": [
         -1388.8027938176335,
         4224.281741765347
       ],
       "size": [
-        239.21875,
-        30
+        210,
+        58
       ],
       "flags": {
         "collapsed": false
@@ -4061,37 +4132,19 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "Xi",
-          "name": "Xi",
-          "type": "INT",
-          "widget": {
-            "name": "Xi"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "Xf",
-          "name": "Xf",
+          "localized_name": "value",
+          "name": "value",
           "type": "FLOAT",
           "widget": {
-            "name": "Xf"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "isfloatX",
-          "name": "isfloatX",
-          "type": "INT",
-          "widget": {
-            "name": "isfloatX"
+            "name": "value"
           },
           "link": null
         }
       ],
       "outputs": [
         {
-          "localized_name": "",
-          "name": "",
+          "localized_name": "FLOAT",
+          "name": "FLOAT",
           "type": "FLOAT",
           "links": [
             2219
@@ -4100,25 +4153,10 @@
       ],
       "title": "Conditioning (Fidelity)",
       "properties": {
-        "cnr_id": "comfyui-mxtoolkit",
-        "ver": "0.9.92",
-        "Node name for S&R": "mxSlider",
-        "value": 1,
-        "min": 0.4,
-        "max": 1,
-        "step": 0.01,
-        "decimals": 2,
-        "snap": true,
-        "ue_properties": {
-          "version": "7.1",
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "aux_id": "Smirnov75/ComfyUI-mxToolkit"
+        "Node name for S&R": "PrimitiveFloat",
+        "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        1,
-        1,
         1
       ],
       "color": "#222",
@@ -4334,9 +4372,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXAVTextEncoderLoader",
         "cnr_id": "comfy-core",
         "ver": "0.20.1",
-        "Node name for S&R": "LTXAVTextEncoderLoader",
         "ue_properties": {
           "widget_ue_connectable": {
             "text_encoder": true,
@@ -4405,9 +4443,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "CheckpointLoaderSimple",
         "cnr_id": "comfy-core",
         "ver": "0.20.1",
-        "Node name for S&R": "CheckpointLoaderSimple",
         "ue_properties": {
           "widget_ue_connectable": {
             "ckpt_name": true
@@ -4458,9 +4496,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVAudioVAELoader",
         "cnr_id": "comfy-core",
         "ver": "0.20.1",
-        "Node name for S&R": "LTXVAudioVAELoader",
         "ue_properties": {
           "widget_ue_connectable": {
             "ckpt_name": true
@@ -4513,9 +4551,9 @@
       ],
       "title": "Base Frame Rate (24 Default)",
       "properties": {
+        "Node name for S&R": "PrimitiveFloat",
         "cnr_id": "comfy-core",
         "ver": "0.8.0",
-        "Node name for S&R": "PrimitiveFloat",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.5.2",
@@ -4530,14 +4568,14 @@
     },
     {
       "id": 791,
-      "type": "mxSlider",
+      "type": "PrimitiveInt",
       "pos": [
         -1405.0638249774001,
         4051.7233194619157
       ],
       "size": [
-        284.74634363365976,
-        30
+        210,
+        58
       ],
       "flags": {
         "collapsed": false
@@ -4546,37 +4584,19 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "Xi",
-          "name": "Xi",
+          "localized_name": "value",
+          "name": "value",
           "type": "INT",
           "widget": {
-            "name": "Xi"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "Xf",
-          "name": "Xf",
-          "type": "FLOAT",
-          "widget": {
-            "name": "Xf"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "isfloatX",
-          "name": "isfloatX",
-          "type": "INT",
-          "widget": {
-            "name": "isfloatX"
+            "name": "value"
           },
           "link": null
         }
       ],
       "outputs": [
         {
-          "localized_name": "",
-          "name": "",
+          "localized_name": "INT",
+          "name": "INT",
           "type": "INT",
           "links": [
             2523
@@ -4585,40 +4605,26 @@
       ],
       "title": "Video Width",
       "properties": {
-        "cnr_id": "comfyui-mxtoolkit",
-        "ver": "0.9.92",
-        "Node name for S&R": "mxSlider",
-        "value": 768,
-        "min": 480,
-        "max": 2400,
-        "step": 32,
-        "decimals": 0,
-        "snap": true,
-        "ue_properties": {
-          "version": "7.1",
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "aux_id": "Smirnov75/ComfyUI-mxToolkit"
+        "Node name for S&R": "PrimitiveInt",
+        "cnr_id": "comfy-core"
       },
       "widgets_values": [
         768,
-        768,
-        0
+        "fixed"
       ],
       "color": "#222",
       "bgcolor": "#000"
     },
     {
       "id": 792,
-      "type": "mxSlider",
+      "type": "PrimitiveInt",
       "pos": [
         -1390.86011384067,
         4131.518044765048
       ],
       "size": [
-        280.4375,
-        30
+        210,
+        58
       ],
       "flags": {
         "collapsed": false
@@ -4627,37 +4633,19 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "Xi",
-          "name": "Xi",
+          "localized_name": "value",
+          "name": "value",
           "type": "INT",
           "widget": {
-            "name": "Xi"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "Xf",
-          "name": "Xf",
-          "type": "FLOAT",
-          "widget": {
-            "name": "Xf"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "isfloatX",
-          "name": "isfloatX",
-          "type": "INT",
-          "widget": {
-            "name": "isfloatX"
+            "name": "value"
           },
           "link": null
         }
       ],
       "outputs": [
         {
-          "localized_name": "",
-          "name": "",
+          "localized_name": "INT",
+          "name": "INT",
           "type": "INT",
           "links": [
             2524
@@ -4666,40 +4654,26 @@
       ],
       "title": "Video Height",
       "properties": {
-        "cnr_id": "comfyui-mxtoolkit",
-        "ver": "0.9.92",
-        "Node name for S&R": "mxSlider",
-        "value": 1024,
-        "min": 480,
-        "max": 2400,
-        "step": 32,
-        "decimals": 0,
-        "snap": true,
-        "ue_properties": {
-          "version": "7.1",
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "aux_id": "Smirnov75/ComfyUI-mxToolkit"
+        "Node name for S&R": "PrimitiveInt",
+        "cnr_id": "comfy-core"
       },
       "widgets_values": [
         1024,
-        1024,
-        0
+        "fixed"
       ],
       "color": "#222",
       "bgcolor": "#000"
     },
     {
       "id": 915,
-      "type": "mxSlider",
+      "type": "PrimitiveFloat",
       "pos": [
         -1402.5151954647997,
         4317.101555703321
       ],
       "size": [
-        439.40531950968466,
-        30
+        210,
+        58
       ],
       "flags": {
         "collapsed": false
@@ -4708,37 +4682,19 @@
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "Xi",
-          "name": "Xi",
-          "type": "INT",
-          "widget": {
-            "name": "Xi"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "Xf",
-          "name": "Xf",
+          "localized_name": "value",
+          "name": "value",
           "type": "FLOAT",
           "widget": {
-            "name": "Xf"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "isfloatX",
-          "name": "isfloatX",
-          "type": "INT",
-          "widget": {
-            "name": "isfloatX"
+            "name": "value"
           },
           "link": null
         }
       ],
       "outputs": [
         {
-          "localized_name": "",
-          "name": "",
+          "localized_name": "FLOAT",
+          "name": "FLOAT",
           "type": "FLOAT",
           "links": [
             2619
@@ -4747,26 +4703,11 @@
       ],
       "title": "Preprocess (Motion Strength)",
       "properties": {
-        "cnr_id": "comfyui-mxtoolkit",
-        "ver": "0.9.92",
-        "Node name for S&R": "mxSlider",
-        "value": 35,
-        "min": 5,
-        "max": 48,
-        "step": 1,
-        "decimals": 2,
-        "snap": true,
-        "ue_properties": {
-          "version": "7.1",
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "aux_id": "Smirnov75/ComfyUI-mxToolkit"
+        "Node name for S&R": "PrimitiveFloat",
+        "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        35,
-        35,
-        1
+        35
       ],
       "color": "#222",
       "bgcolor": "#000"
@@ -4814,9 +4755,16 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVPreprocess",
         "cnr_id": "comfy-core",
         "ver": "0.26.0",
-        "Node name for S&R": "LTXVPreprocess"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "img_compression": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         30
@@ -4948,9 +4896,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "AudioAdjustVolume",
         "cnr_id": "comfy-core",
         "ver": "0.14.1",
-        "Node name for S&R": "AudioAdjustVolume",
         "ue_properties": {
           "widget_ue_connectable": {
             "volume": true
@@ -5049,9 +4997,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "AudioAdjustVolume",
         "cnr_id": "comfy-core",
         "ver": "0.14.1",
-        "Node name for S&R": "AudioAdjustVolume",
         "ue_properties": {
           "widget_ue_connectable": {
             "volume": true
@@ -5139,9 +5087,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "PreviewImage",
         "cnr_id": "comfy-core",
         "ver": "0.20.1",
-        "Node name for S&R": "PreviewImage",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.8",
@@ -5181,10 +5129,10 @@
         }
       ],
       "properties": {
-        "cnr_id": "rgthree-comfy",
-        "ver": "1.0.2511270846",
         "randomMax": 1125899906842624,
         "randomMin": 0,
+        "cnr_id": "rgthree-comfy",
+        "ver": "1.0.2511270846",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.8",
@@ -5251,9 +5199,17 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly",
         "cnr_id": "comfy-core",
         "ver": "0.26.0",
-        "Node name for S&R": "LoraLoaderModelOnly"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "lora_name": true,
+            "strength_model": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "ltx23/ltx23DMDFro99_v14.safetensors",
@@ -5315,9 +5271,17 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXReferenceEnable",
         "cnr_id": "10s-comfy-nodes",
         "ver": "2dc56f5394567a65cfcabc46460044a0eebb4359",
-        "Node name for S&R": "LTXReferenceEnable"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "zero_ref_timesteps": true,
+            "verbose": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         false,
@@ -5394,9 +5358,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent",
         "cnr_id": "comfy-core",
         "ver": "0.5.1",
-        "Node name for S&R": "LTXVConcatAVLatent",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5496,9 +5460,18 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "LTXReferenceConditioning",
         "cnr_id": "10s-comfy-nodes",
         "ver": "2dc56f5394567a65cfcabc46460044a0eebb4359",
-        "Node name for S&R": "LTXReferenceConditioning"
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "strength": true,
+            "position_mode": true,
+            "verbose": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         1,
@@ -5552,9 +5525,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "CLIPTextEncode",
         "cnr_id": "comfy-core",
         "ver": "0.3.56",
-        "Node name for S&R": "CLIPTextEncode",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5616,9 +5589,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "CLIPTextEncode",
         "cnr_id": "comfy-core",
         "ver": "0.3.56",
-        "Node name for S&R": "CLIPTextEncode",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6525,7 +6498,7 @@
         -3536.152339169947
       ]
     },
-    "codex_note": "Local 16 GB adaptation of TenStrip 10Eros_10SNodes_I2V_Basic_DMD_V5 for Civitai modelVersionId 3109610. Uses primary FP8-mixed checkpoint fileId 2989669 plus attached DMD Fro99 LoRA fileId 2989633 at strength 1. Benign fictional validation fixture, 97 frames, 768x1024 output. Upstream and older local workflows preserved."
+    "codex_note": "Local 16 GB adaptation; runtime-verified. Five mxSlider frontend-error nodes replaced with core PrimitiveInt/PrimitiveFloat controls on 2026-08-23; values and links preserved."
   },
   "version": 0.4
 }
