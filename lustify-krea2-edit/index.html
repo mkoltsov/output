@@ -16,6 +16,7 @@
     .facts { padding: 18px 22px; border-radius: 14px; background: #191d24; }
     a { color: #8ec5ff; }
     code { overflow-wrap: anywhere; }
+    pre { overflow-x: auto; padding: 14px; border-radius: 10px; background: #0d0f13; }
   </style>
 </head>
 <body>
@@ -36,6 +37,16 @@
     <p><strong>Settings:</strong> 1.4 megapixels, 8 steps, CFG 1, Euler sampler, beta scheduler, Krea 2 identity-edit LoRA strength 1.</p>
     <p><strong>Runtime:</strong> 54.02 seconds. ComfyUI history status: success.</p>
     <p><a href="lustify-krea2-edit-v10-int8-16gb.json" download>Download the editable ComfyUI workflow JSON</a></p>
+  </div>
+  <div class="facts" style="margin-top:20px">
+    <h2>Command-line runner</h2>
+    <p>The runner accepts one image per invocation, either as a file or from the Wayland clipboard.</p>
+    <pre><code>~/dev/lustify-krea2-edit photo.png --prompt "your edit instruction"
+~/dev/lustify-krea2-edit --clipboard --prompt "your edit instruction"</code></pre>
+    <p>
+      <a href="lustify-krea2-edit" download>Download the executable runner</a> ·
+      <a href="lustify-krea2-edit.workflow.json" download>Download its API workflow template</a>
+    </p>
   </div>
 </body>
 </html>

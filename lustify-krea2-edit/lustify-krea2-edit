@@ -1,0 +1,433 @@
+#!/usr/bin/env python3
+"""Run the local Lustify Krea 2 Edit ComfyUI workflow from a file or clipboard."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import mimetypes
+import os
+from pathlib import Path
+import secrets
+import subprocess
+import sys
+import time
+from typing import Any
+from urllib import error, parse, request
+import uuid
+
+
+DEFAULT_SERVER = "http://127.0.0.1:8188"
+DEFAULT_TEMPLATE = Path(__file__).with_suffix(".workflow.json")
+DEFAULT_COMFY_ROOT = Path.home() / "Documents/ComfyUI"
+UPLOAD_SUBFOLDER = "lustify-krea2-cli"
+
+
+class RunnerError(RuntimeError):
+    pass
+
+
+def log(message: str) -> None:
+    print(message, file=sys.stderr, flush=True)
+
+
+def http_bytes(
+    url: str,
+    *,
+    data: bytes | None = None,
+    headers: dict[str, str] | None = None,
+    timeout: float = 30,
+) -> bytes:
+    req = request.Request(url, data=data, headers=headers or {})
+    try:
+        with request.urlopen(req, timeout=timeout) as response:
+            return response.read()
+    except error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", "replace")
+        raise RunnerError(f"HTTP {exc.code} from {url}: {detail}") from exc
+    except error.URLError as exc:
+        raise RunnerError(f"Cannot reach {url}: {exc.reason}") from exc
+
+
+def get_json(server: str, endpoint: str, *, timeout: float = 30) -> Any:
+    raw = http_bytes(f"{server}{endpoint}", timeout=timeout)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RunnerError(f"Invalid JSON from {endpoint}") from exc
+
+
+def post_json(server: str, endpoint: str, payload: Any, *, timeout: float = 30) -> Any:
+    raw = json.dumps(payload, separators=(",", ":")).encode()
+    response = http_bytes(
+        f"{server}{endpoint}",
+        data=raw,
+        headers={"Content-Type": "application/json"},
+        timeout=timeout,
+    )
+    try:
+        return json.loads(response)
+    except json.JSONDecodeError as exc:
+        raise RunnerError(f"Invalid JSON from {endpoint}") from exc
+
+
+def detect_image_type(data: bytes, fallback_name: str = "") -> tuple[str, str]:
+    if data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "image/png", ".png"
+    if data.startswith(b"\xff\xd8\xff"):
+        return "image/jpeg", ".jpg"
+    if data[:4] in (b"GIF8",):
+        return "image/gif", ".gif"
+    if data.startswith(b"BM"):
+        return "image/bmp", ".bmp"
+    if len(data) >= 12 and data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "image/webp", ".webp"
+    mime, _ = mimetypes.guess_type(fallback_name)
+    if mime and mime.startswith("image/"):
+        return mime, Path(fallback_name).suffix or ".img"
+    raise RunnerError("Clipboard/file content is not a recognized image")
+
+
+def read_image_file(path_value: str) -> tuple[bytes, str, str]:
+    path = Path(path_value).expanduser().resolve()
+    if not path.is_file():
+        raise RunnerError(f"Image file does not exist: {path}")
+    data = path.read_bytes()
+    if not data:
+        raise RunnerError(f"Image file is empty: {path}")
+    mime, extension = detect_image_type(data, path.name)
+    return data, path.name if path.suffix else f"{path.name}{extension}", mime
+
+
+def clipboard_types() -> list[str]:
+    try:
+        result = subprocess.run(
+            ["wl-paste", "--list-types"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+    except FileNotFoundError as exc:
+        raise RunnerError("wl-paste is required for --clipboard") from exc
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        raise RunnerError("Could not inspect the Wayland clipboard") from exc
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+
+def paste_clipboard_type(mime: str) -> bytes:
+    try:
+        return subprocess.run(
+            ["wl-paste", "--type", mime],
+            check=True,
+            capture_output=True,
+            timeout=20,
+        ).stdout
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        raise RunnerError(f"Could not read clipboard type {mime}") from exc
+
+
+def clipboard_file_uri(types: list[str]) -> Path | None:
+    for mime in ("x-special/gnome-copied-files", "text/uri-list"):
+        if mime not in types:
+            continue
+        text = paste_clipboard_type(mime).decode("utf-8", "replace")
+        for line in text.splitlines():
+            line = line.strip()
+            if not line or line in ("copy", "cut") or line.startswith("#"):
+                continue
+            parsed = parse.urlparse(line)
+            if parsed.scheme == "file":
+                return Path(parse.unquote(parsed.path))
+    return None
+
+
+def read_clipboard_image() -> tuple[bytes, str, str]:
+    types = clipboard_types()
+    preferred = (
+        "image/png",
+        "image/jpeg",
+        "image/webp",
+        "image/tiff",
+        "image/bmp",
+        "image/gif",
+    )
+    for mime in preferred:
+        if mime not in types:
+            continue
+        data = paste_clipboard_type(mime)
+        detected_mime, extension = detect_image_type(data, f"clipboard{mimetypes.guess_extension(mime) or ''}")
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        return data, f"clipboard-{timestamp}{extension}", detected_mime
+
+    uri_path = clipboard_file_uri(types)
+    if uri_path is not None:
+        return read_image_file(str(uri_path))
+
+    raise RunnerError(
+        "Clipboard contains no supported image. Available types: "
+        + (", ".join(types) if types else "none")
+    )
+
+
+def multipart_upload(
+    server: str,
+    data: bytes,
+    filename: str,
+    mime: str,
+) -> dict[str, Any]:
+    boundary = f"----lustify-krea2-{uuid.uuid4().hex}"
+    safe_stem = "".join(c if c.isalnum() or c in "-_." else "_" for c in Path(filename).stem)
+    extension = Path(filename).suffix or detect_image_type(data, filename)[1]
+    upload_name = f"{safe_stem[:80]}-{uuid.uuid4().hex[:10]}{extension.lower()}"
+    chunks: list[bytes] = []
+
+    def add_field(name: str, value: str) -> None:
+        chunks.extend(
+            [
+                f"--{boundary}\r\n".encode(),
+                f'Content-Disposition: form-data; name="{name}"\r\n\r\n'.encode(),
+                value.encode(),
+                b"\r\n",
+            ]
+        )
+
+    add_field("type", "input")
+    add_field("subfolder", UPLOAD_SUBFOLDER)
+    add_field("overwrite", "true")
+    chunks.extend(
+        [
+            f"--{boundary}\r\n".encode(),
+            f'Content-Disposition: form-data; name="image"; filename="{upload_name}"\r\n'.encode(),
+            f"Content-Type: {mime}\r\n\r\n".encode(),
+            data,
+            b"\r\n",
+            f"--{boundary}--\r\n".encode(),
+        ]
+    )
+    raw = http_bytes(
+        f"{server}/upload/image",
+        data=b"".join(chunks),
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
+        timeout=120,
+    )
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RunnerError("Invalid response from /upload/image") from exc
+
+
+def load_template(path: Path) -> dict[str, Any]:
+    try:
+        graph = json.loads(path.read_text())
+    except FileNotFoundError as exc:
+        raise RunnerError(f"Workflow template not found: {path}") from exc
+    except json.JSONDecodeError as exc:
+        raise RunnerError(f"Workflow template is invalid JSON: {path}") from exc
+
+    expected = {
+        "72": "LoadImage",
+        "241": "Seed (rgthree)",
+        "247:248": "PrimitiveStringMultiline",
+        "266:261": "Input Parameters (Image Saver)",
+        "272": "Image Saver Simple",
+        "309:304": "ImageScaleToTotalPixels",
+        "309:307": "Krea2EditModelPatch",
+    }
+    for node_id, class_type in expected.items():
+        if graph.get(node_id, {}).get("class_type") != class_type:
+            raise RunnerError(f"Template is missing expected node {node_id} ({class_type})")
+    return graph
+
+
+def configure_graph(graph: dict[str, Any], upload: dict[str, Any], args: argparse.Namespace) -> int:
+    uploaded_name = upload["name"]
+    uploaded_subfolder = upload.get("subfolder", "")
+    graph["72"]["inputs"]["image"] = (
+        f"{uploaded_subfolder}/{uploaded_name}" if uploaded_subfolder else uploaded_name
+    )
+    graph["247:248"]["inputs"]["value"] = args.prompt
+    seed = args.seed if args.seed is not None else secrets.randbelow(2**63 - 1)
+    graph["241"]["inputs"]["seed"] = seed
+
+    if args.steps is not None:
+        graph["266:261"]["inputs"]["steps"] = args.steps
+    if args.grounding_px is not None:
+        graph["247:86"]["inputs"]["grounding_px"] = args.grounding_px
+    if args.megapixels is not None:
+        graph["309:304"]["inputs"]["megapixels"] = args.megapixels
+    if args.ref_boost is not None:
+        graph["309:307"]["inputs"]["ref_boost"] = args.ref_boost
+    return seed
+
+
+def collect_images(history_item: dict[str, Any]) -> list[dict[str, str]]:
+    images: list[dict[str, str]] = []
+    for node_id, output in history_item.get("outputs", {}).items():
+        for image in output.get("images", []):
+            item = dict(image)
+            item["node_id"] = node_id
+            images.append(item)
+    output_images = [item for item in images if item.get("type") == "output"]
+    return output_images or images
+
+
+def wait_for_history(server: str, prompt_id: str, timeout_seconds: int) -> dict[str, Any]:
+    deadline = time.monotonic() + timeout_seconds
+    next_progress = 0.0
+    while time.monotonic() < deadline:
+        history = get_json(server, f"/history/{parse.quote(prompt_id)}")
+        item = history.get(prompt_id)
+        if item:
+            status = item.get("status", {})
+            status_name = status.get("status_str", "")
+            if status_name in ("error", "failed"):
+                messages = status.get("messages", [])
+                raise RunnerError(f"ComfyUI execution failed: {json.dumps(messages, ensure_ascii=False)}")
+            if status_name == "success":
+                return item
+
+        now = time.monotonic()
+        if now >= next_progress:
+            queue = get_json(server, "/queue")
+            running = any(item[1] == prompt_id for item in queue.get("queue_running", []))
+            pending = [item[1] for item in queue.get("queue_pending", [])]
+            if running:
+                log(f"Running {prompt_id} …")
+            elif prompt_id in pending:
+                log(f"Queued at position {pending.index(prompt_id) + 1} …")
+            else:
+                log(f"Waiting for history {prompt_id} …")
+            next_progress = now + 10
+        time.sleep(1)
+    raise RunnerError(f"Timed out after {timeout_seconds} seconds waiting for {prompt_id}")
+
+
+def resolve_output_paths(
+    server: str,
+    images: list[dict[str, str]],
+    comfy_root: Path,
+    download_dir: Path | None,
+) -> list[str]:
+    resolved: list[str] = []
+    local_server = parse.urlparse(server).hostname in ("127.0.0.1", "localhost", "::1")
+    for image in images:
+        filename = image["filename"]
+        subfolder = image.get("subfolder", "")
+        image_type = image.get("type", "output")
+        if download_dir is not None:
+            download_dir.mkdir(parents=True, exist_ok=True)
+            destination = download_dir / filename
+            if destination.exists():
+                destination = download_dir / f"{destination.stem}-{uuid.uuid4().hex[:8]}{destination.suffix}"
+            query = parse.urlencode(
+                {"filename": filename, "subfolder": subfolder, "type": image_type}
+            )
+            destination.write_bytes(http_bytes(f"{server}/view?{query}", timeout=120))
+            resolved.append(str(destination.resolve()))
+        elif local_server:
+            base = comfy_root / ("output" if image_type == "output" else image_type)
+            resolved.append(str((base / subfolder / filename).resolve()))
+        else:
+            query = parse.urlencode(
+                {"filename": filename, "subfolder": subfolder, "type": image_type}
+            )
+            resolved.append(f"{server}/view?{query}")
+    return resolved
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Run the local Lustify Krea 2 Edit ComfyUI workflow.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("image", nargs="?", help="source image file; omit when using --clipboard")
+    parser.add_argument("-c", "--clipboard", action="store_true", help="read the source image from the Wayland clipboard")
+    parser.add_argument("-p", "--prompt", required=True, help="edit instruction")
+    parser.add_argument("--seed", type=int, help="generation seed; random when omitted")
+    parser.add_argument("--steps", type=int, choices=range(1, 101), metavar="1..100")
+    parser.add_argument("--grounding-px", type=int, choices=range(512, 1537), metavar="512..1536")
+    parser.add_argument("--megapixels", type=float, help="reference/target megapixels")
+    parser.add_argument("--ref-boost", type=float, help="reference fidelity strength")
+    parser.add_argument("--server", default=DEFAULT_SERVER, help="ComfyUI base URL")
+    parser.add_argument("--template", type=Path, default=DEFAULT_TEMPLATE, help="API workflow template")
+    parser.add_argument("--comfy-root", type=Path, default=DEFAULT_COMFY_ROOT, help="local ComfyUI directory")
+    parser.add_argument("--download-dir", type=Path, help="download results to this directory")
+    parser.add_argument("--timeout", type=int, default=1800, help="maximum wait in seconds")
+    parser.add_argument("--no-wait", action="store_true", help="queue the job and return its prompt ID immediately")
+    parser.add_argument("--json", action="store_true", help="print machine-readable result JSON")
+    return parser
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    if args.clipboard and args.image:
+        raise RunnerError("Use either an image file or --clipboard, not both")
+    if not args.clipboard and not args.image:
+        raise RunnerError("Provide an image file or use --clipboard")
+    if args.megapixels is not None and args.megapixels <= 0:
+        raise RunnerError("--megapixels must be greater than zero")
+    if args.ref_boost is not None and args.ref_boost < 0:
+        raise RunnerError("--ref-boost cannot be negative")
+
+    server = args.server.rstrip("/")
+    get_json(server, "/system_stats")
+    graph = load_template(args.template.expanduser().resolve())
+    image_data, filename, mime = (
+        read_clipboard_image() if args.clipboard else read_image_file(args.image)
+    )
+    log(f"Uploading {filename} ({len(image_data) / 1_000_000:.2f} MB) …")
+    upload = multipart_upload(server, image_data, filename, mime)
+    seed = configure_graph(graph, upload, args)
+
+    response = post_json(
+        server,
+        "/prompt",
+        {"prompt": graph, "client_id": str(uuid.uuid4())},
+        timeout=120,
+    )
+    prompt_id = response.get("prompt_id")
+    if not prompt_id:
+        raise RunnerError(f"ComfyUI rejected the prompt: {json.dumps(response, ensure_ascii=False)}")
+    node_errors = response.get("node_errors", {})
+    if node_errors:
+        raise RunnerError(f"ComfyUI node validation errors: {json.dumps(node_errors, ensure_ascii=False)}")
+    log(f"Queued {prompt_id} with seed {seed}")
+
+    if args.no_wait:
+        result = {"prompt_id": prompt_id, "seed": seed, "status": "queued"}
+    else:
+        history_item = wait_for_history(server, prompt_id, args.timeout)
+        images = collect_images(history_item)
+        if not images:
+            raise RunnerError(f"Job {prompt_id} succeeded but returned no images")
+        paths = resolve_output_paths(
+            server,
+            images,
+            args.comfy_root.expanduser().resolve(),
+            args.download_dir.expanduser().resolve() if args.download_dir else None,
+        )
+        result = {
+            "prompt_id": prompt_id,
+            "seed": seed,
+            "status": "success",
+            "outputs": paths,
+        }
+
+    if args.json:
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    else:
+        print(f"Prompt ID: {result['prompt_id']}")
+        print(f"Seed: {result['seed']}")
+        print(f"Status: {result['status']}")
+        for output in result.get("outputs", []):
+            print(f"Output: {output}")
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except RunnerError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        raise SystemExit(2)

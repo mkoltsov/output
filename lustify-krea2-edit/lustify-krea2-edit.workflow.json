@@ -1,0 +1,410 @@
+{
+  "54": {
+    "inputs": {
+      "samples": [
+        "266:265",
+        0
+      ],
+      "vae": [
+        "116",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "72": {
+    "inputs": {
+      "image": "example.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "90": {
+    "inputs": {
+      "images": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "97": {
+    "inputs": {
+      "shift": 4.0,
+      "model": [
+        "309:307",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingAuraFlow",
+    "_meta": {
+      "title": "ModelSamplingAuraFlow"
+    }
+  },
+  "101": {
+    "inputs": {
+      "conditioning": [
+        "247:86",
+        0
+      ]
+    },
+    "class_type": "ConditioningZeroOut",
+    "_meta": {
+      "title": "Conditioning Zero Out"
+    }
+  },
+  "105": {
+    "inputs": {
+      "PowerLoraLoaderHeaderWidget": {
+        "type": "PowerLoraLoaderHeaderWidget"
+      },
+      "lora_1": {
+        "on": true,
+        "lora": "krea/krea2_identity_edit_v1_2.safetensors",
+        "strength": 1
+      },
+      "lora_2": {
+        "on": false,
+        "lora": "krea/snofs_krea_v1_3D.safetensors",
+        "strength": 1
+      },
+      "lora_3": {
+        "on": true,
+        "lora": "krea/KREA2turboNSFW.safetensors",
+        "strength": 1
+      },
+      "➕ Add Lora": "",
+      "model": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "Power Lora Loader (rgthree)",
+    "_meta": {
+      "title": "Power Lora Loader (rgthree)"
+    }
+  },
+  "115": {
+    "inputs": {
+      "clip_name": "qwen3vl_4b_fp8_scaled.safetensors",
+      "type": "krea2",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "116": {
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "117": {
+    "inputs": {
+      "unet_name": "lustify-v10-krea-turbo-int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "241": {
+    "inputs": {
+      "seed": 42
+    },
+    "class_type": "Seed (rgthree)",
+    "_meta": {
+      "title": "Seed (rgthree)"
+    }
+  },
+  "246": {
+    "inputs": {
+      "modelname": "",
+      "positive": [
+        "247:248",
+        0
+      ],
+      "negative": "",
+      "width": [
+        "266:264",
+        0
+      ],
+      "height": [
+        "266:264",
+        1
+      ],
+      "seed_value": [
+        "241",
+        0
+      ],
+      "steps": [
+        "266:261",
+        1
+      ],
+      "cfg": [
+        "266:261",
+        2
+      ],
+      "sampler_name": [
+        "266:262",
+        0
+      ],
+      "scheduler_name": "normal",
+      "denoise": 1.0,
+      "clip_skip": 0,
+      "additional_hashes": "",
+      "download_civitai_data": true,
+      "easy_remix": true,
+      "custom": ""
+    },
+    "class_type": "Image Saver Metadata",
+    "_meta": {
+      "title": "Image Saver Metadata"
+    }
+  },
+  "272": {
+    "inputs": {
+      "filename": "%time_%basemodelname_%seed",
+      "path": "lustify-krea2-cli",
+      "extension": "png",
+      "lossless_webp": true,
+      "quality_jpeg_or_webp": 100,
+      "optimize_png": false,
+      "embed_workflow": true,
+      "save_workflow_as_json": false,
+      "counter": 0,
+      "time_format": "%Y-%m-%d-%H%M%S",
+      "show_preview": true,
+      "images": [
+        "90",
+        0
+      ],
+      "metadata": [
+        "246",
+        0
+      ]
+    },
+    "class_type": "Image Saver Simple",
+    "_meta": {
+      "title": "Image Saver Simple"
+    }
+  },
+  "247:248": {
+    "inputs": {
+      "value": "Apply the requested benign edit while preserving the main subject and composition."
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "Text (Multiline)"
+    }
+  },
+  "247:86": {
+    "inputs": {
+      "prompt": [
+        "247:248",
+        0
+      ],
+      "grounding_px": 768,
+      "system_prompt": "",
+      "clip": [
+        "115",
+        0
+      ],
+      "image": [
+        "309:304",
+        0
+      ]
+    },
+    "class_type": "Krea2EditGroundedEncode",
+    "_meta": {
+      "title": "Edit Prompt"
+    }
+  },
+  "266:264": {
+    "inputs": {
+      "image": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "GetImageSize",
+    "_meta": {
+      "title": "Get Image Size"
+    }
+  },
+  "266:262": {
+    "inputs": {
+      "value": [
+        "266:261",
+        3
+      ]
+    },
+    "class_type": "Any to String (Image Saver)",
+    "_meta": {
+      "title": "Any to String (Image Saver)"
+    }
+  },
+  "266:265": {
+    "inputs": {
+      "seed": [
+        "241",
+        0
+      ],
+      "steps": [
+        "266:261",
+        1
+      ],
+      "cfg": [
+        "266:261",
+        2
+      ],
+      "sampler_name": [
+        "266:261",
+        3
+      ],
+      "scheduler": "beta",
+      "denoise": [
+        "266:261",
+        5
+      ],
+      "model": [
+        "97",
+        0
+      ],
+      "positive": [
+        "247:86",
+        0
+      ],
+      "negative": [
+        "101",
+        0
+      ],
+      "latent_image": [
+        "309:303",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "266:261": {
+    "inputs": {
+      "seed": [
+        "241",
+        0
+      ],
+      "steps": 8,
+      "cfg": 1.0,
+      "sampler": "euler",
+      "scheduler": "beta",
+      "denoise": 1.0
+    },
+    "class_type": "Input Parameters (Image Saver)",
+    "_meta": {
+      "title": "Input Parameters (Image Saver)"
+    }
+  },
+  "309:301": {
+    "inputs": {
+      "pixels": [
+        "309:304",
+        0
+      ],
+      "vae": [
+        "116",
+        0
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "309:302": {
+    "inputs": {
+      "image": [
+        "309:304",
+        0
+      ]
+    },
+    "class_type": "GetImageSize",
+    "_meta": {
+      "title": "Get Image Size"
+    }
+  },
+  "309:303": {
+    "inputs": {
+      "width": [
+        "309:302",
+        0
+      ],
+      "height": [
+        "309:302",
+        1
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptySD3LatentImage",
+    "_meta": {
+      "title": "EmptySD3LatentImage"
+    }
+  },
+  "309:304": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "megapixels": 1.4,
+      "resolution_steps": 64,
+      "image": [
+        "72",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "Scale Image to Total Pixels"
+    }
+  },
+  "309:307": {
+    "inputs": {
+      "ref_boost": 1.0,
+      "ref_boost_a": 1.0,
+      "fit_mode": "fit",
+      "model": [
+        "105",
+        0
+      ],
+      "source_latent": [
+        "309:301",
+        0
+      ],
+      "source_image": [
+        "309:304",
+        0
+      ],
+      "target_latent": [
+        "309:303",
+        0
+      ]
+    },
+    "class_type": "Krea2EditModelPatch",
+    "_meta": {
+      "title": "Krea2 Edit (source patch)"
+    }
+  }
+}
