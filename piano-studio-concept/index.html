@@ -51,7 +51,7 @@
     .songbar h2 { margin:0 0 2px; font-size:21px; letter-spacing:-.03em; }
     .songbar p { margin:0; color:var(--muted); font-size:12px; }
     .status { color:var(--gold); background:#3c3223; border:1px solid #6b5332; border-radius:999px; padding:5px 10px; font-size:11px; white-space:nowrap; }
-    .tabs { display:flex; padding:0 20px; gap:23px; border-bottom:1px solid var(--line); }
+    .tabs { display:flex; padding:0 20px; gap:23px; border-bottom:1px solid var(--line); overflow-x:auto; }
     .tabs button { color:var(--muted); background:none; border:0; padding:14px 0 12px; border-bottom:2px solid transparent; font-weight:700; font-size:13px; }
     .tabs button.active { color:var(--mint); border-color:var(--mint); }
     .toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:14px 20px; }
@@ -61,12 +61,43 @@
     .toolbar .spacer { flex:1; }
     .speed { color:var(--text); background:#1d2a3e; border:1px solid #405069; border-radius:9px; padding:7px; font-size:12px; }
     .preview { margin:0 20px 18px; border:1px solid #3c4a61; background:#0c1624; border-radius:12px; overflow:hidden; }
+    .practice-stage { position:relative; height:350px; overflow:hidden; background:#f1f3f5; }
+    .practice-staff { position:absolute; inset:13px 0 82px; background:linear-gradient(#e7ebf0,#f6f7f9); }
+    .staff-lines { position:absolute; left:0; right:0; height:88px; background:repeating-linear-gradient(to bottom,transparent 0,transparent 15px,#333b48 16px,#333b48 17px,transparent 18px); }
+    .staff-lines.treble { top:22px; }
+    .staff-lines.bass { top:146px; }
+    .clef { position:absolute; left:13px; z-index:2; color:#26334b; font:62px/1 Georgia,serif; }
+    .clef.treble { top:22px; }
+    .clef.bass { top:144px; font-size:52px; }
+    .measure { position:absolute; top:22px; bottom:21px; width:2px; background:#344052; opacity:.72; }
+    .note-pill { position:absolute; z-index:3; height:27px; display:flex; align-items:center; padding:0 9px; border-radius:13px; color:#fff; font-weight:850; font-size:15px; letter-spacing:.01em; box-shadow:0 2px 3px #0002; white-space:nowrap; }
+    .note-pill small { position:absolute; bottom:-18px; left:2px; color:#3b4b5f; font-size:10px; font-weight:750; }
+    .finger-1 { background:#2aa977; }
+    .finger-2 { background:#e5aa21; }
+    .finger-3 { background:#8054df; }
+    .finger-4 { background:#3683dc; }
+    .finger-5 { background:#e66375; }
+    .staff-nowline { position:absolute; z-index:4; top:8px; bottom:82px; left:20%; width:2px; background:#60ad72; box-shadow:0 0 10px #73c683; }
+    .staff-nowline:before { content:"●"; position:absolute; top:2px; left:-5px; color:#60ad72; font-size:14px; }
+    .practice-keyboard { position:absolute; left:0; right:0; bottom:20px; height:63px; display:flex; background:#f8f9fa; border-top:3px solid #30384a; }
+    .practice-keyboard .key { border-color:#9da8b6; }
+    .practice-keyboard .key:nth-child(9) { background:#c6e7db; }
+    .practice-keyboard .key:nth-child(12) { background:#f5dbad; }
+    .practice-keyboard .key:nth-child(14) { background:#d8c6f8; }
+    .mini-timeline { position:absolute; bottom:0; left:0; right:0; height:20px; background:#182535; display:flex; gap:5px; align-items:center; padding:0 10px; }
+    .mini-timeline i { display:block; height:5px; border-radius:3px; opacity:.85; }
+    .mini-timeline i:nth-child(5n+1) { background:#2aa977; }
+    .mini-timeline i:nth-child(5n+2) { background:#e5aa21; }
+    .mini-timeline i:nth-child(5n+3) { background:#8054df; }
+    .mini-timeline i:nth-child(5n+4) { background:#3683dc; }
+    .mini-timeline i:nth-child(5n) { background:#e66375; }
     .roll { position:relative; height:350px; overflow:hidden; }
     .roll-grid { position:absolute; inset:0 0 66px; background-image:linear-gradient(to bottom,#ffffff14 1px,transparent 1px),linear-gradient(to right,#ffffff0e 1px,transparent 1px); background-size:100% 58px,6.25% 100%; }
     .roll-grid:after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,#13203580 0,transparent 15%,transparent 85%,#13203580 100%); }
-    .bar { position:absolute; border-radius:5px; box-shadow:inset 0 0 0 1px #ffffff65,0 2px 10px #0004; opacity:.95; }
-    .bar.right { background:linear-gradient(180deg,#9bc1ff,#6b9bf2); }
-    .bar.left { background:linear-gradient(180deg,#91f2cd,#52c79f); }
+    .bar { position:absolute; border-radius:6px; box-shadow:inset 0 0 0 1px #ffffff65,0 2px 10px #0004; opacity:.95; color:#fff; text-align:center; font-size:12px; line-height:22px; font-weight:800; }
+    .bar.right { background:linear-gradient(180deg,#b18aff,#885de6); }
+    .bar.left { background:linear-gradient(180deg,#76adff,#4681e8); }
+    .bar small { position:absolute; top:-17px; right:1px; color:#d7ddff; line-height:15px; font-size:10px; }
     .nowline { position:absolute; top:0; bottom:66px; left:20%; width:2px; background:var(--gold); box-shadow:0 0 12px #f6c879aa; transform:translateX(0); }
     .nowline:before { content:"NOW"; position:absolute; top:8px; left:7px; color:var(--gold); font-size:10px; font-weight:800; }
     .keyboard { position:absolute; bottom:0; width:100%; height:66px; display:flex; background:#e5ebf4; border-top:3px solid var(--gold); }
@@ -76,6 +107,7 @@
     .legend { display:flex; flex-wrap:wrap; gap:16px; align-items:center; color:var(--muted); font-size:11px; margin:0 20px 18px; }
     .dot { display:inline-block; width:9px; height:9px; border-radius:3px; margin-right:5px; }
     .score { min-height:350px; display:grid; place-items:center; padding:16px; background:#e9edf2; color:#172334; }
+    .score svg ellipse { fill:#171b23; stroke:#171b23; }
     .score svg { width:min(100%,730px); height:auto; }
     .empty { display:none; }
     .review { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 20px 20px; }
@@ -95,7 +127,7 @@
     .callout { border-left:3px solid var(--gold); background:#282721; padding:10px 12px; border-radius:0 8px 8px 0; }
     .footer { color:#8191a8; font-size:11px; margin-top:18px; }
     @media (max-width:980px) { .workspace,.brief { grid-template-columns:1fr; } .sidebar { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; } .sidebar .full { grid-column:1/-1; } .sidebar hr { grid-column:1/-1; } }
-    @media (max-width:650px) { .topright span:last-child { display:none; } .sidebar { display:block; } .review { grid-template-columns:1fr; } .toolbar .spacer { display:none; } .songbar { flex-direction:column; } .roll { height:290px; } .roll-grid,.nowline { bottom:56px; } .keyboard { height:56px; } .brief .panel { padding:20px; } }
+    @media (max-width:650px) { .topright span:last-child { display:none; } .sidebar { display:block; } .review { grid-template-columns:1fr; } .toolbar .spacer { display:none; } .songbar { flex-direction:column; } .roll,.practice-stage { height:290px; } .roll-grid,.nowline { bottom:56px; } .keyboard { height:56px; } .practice-staff { bottom:70px; } .staff-lines.bass,.clef.bass { top:125px; } .practice-keyboard { height:51px; } .staff-nowline { bottom:70px; } .brief .panel { padding:20px; } }
   </style>
 </head>
 <body>
@@ -113,20 +145,21 @@
       </aside>
       <main class="panel main">
         <div class="songbar"><div><h2>Sample étude</h2><p>Invented notes · 22 s · piano cover preview</p></div><span class="status">Concept data</span></div>
-        <div class="tabs" role="tablist" aria-label="Preview views"><button id="rollTab" type="button" role="tab" class="active" aria-selected="true">Falling notes</button><button id="scoreTab" type="button" role="tab" aria-selected="false">Sheet music</button></div>
+        <div class="tabs" role="tablist" aria-label="Notation views"><button type="button" role="tab" class="active" aria-selected="true" data-view="enhanced">Enhanced sheet</button><button type="button" role="tab" aria-selected="false" data-view="falling">Falling notes</button><button type="button" role="tab" aria-selected="false" data-view="colored">Colored sheet</button><button type="button" role="tab" aria-selected="false" data-view="standard">Standard sheet</button></div>
         <div class="toolbar"><button id="play" class="tool" type="button">▶ Play preview</button><button id="leftHand" class="tool active" type="button" aria-pressed="true">Left hand</button><button id="rightHand" class="tool active" type="button" aria-pressed="true">Right hand</button><span class="spacer"></span><label for="speed" class="helper">Speed</label><select id="speed" class="speed" aria-label="Preview speed"><option value="0.5">50%</option><option value="0.75">75%</option><option value="1" selected>100%</option></select><button id="loop" class="tool" type="button" aria-pressed="false">Loop section</button></div>
-        <div id="rollView" class="preview"><div class="roll" aria-label="Concept piano roll with colored notes"><div class="roll-grid"></div><div id="bars"></div><div id="nowline" class="nowline"></div><div id="keyboard" class="keyboard"></div></div></div>
+        <div id="enhancedView" class="preview"><div class="practice-stage" aria-label="Concept enhanced sheet with note names, finger colors, and piano keys"><div class="practice-staff"><div class="staff-lines treble"></div><div class="staff-lines bass"></div><span class="clef treble" aria-hidden="true">𝄞</span><span class="clef bass" aria-hidden="true">𝄢</span><i class="measure" style="left:38%"></i><i class="measure" style="left:69%"></i><span class="note-pill finger-1" data-hand="right" style="left:9%;top:57px;width:13%">C4</span><span class="note-pill finger-2" data-hand="right" style="left:22%;top:41px;width:15%">D4</span><span class="note-pill finger-3" data-hand="right" style="left:39%;top:26px;width:13%">E4</span><span class="note-pill finger-4" data-hand="right" style="left:53%;top:41px;width:15%">G4</span><span class="note-pill finger-5" data-hand="right" style="left:70%;top:57px;width:21%">A4</span><span class="note-pill finger-5" data-hand="left" style="left:9%;top:184px;width:18%">C3</span><span class="note-pill finger-3" data-hand="left" style="left:39%;top:169px;width:25%">E3</span><span class="note-pill finger-1" data-hand="left" style="left:70%;top:184px;width:21%">G3</span></div><div id="staffNowline" class="staff-nowline"></div><div id="practiceKeyboard" class="practice-keyboard"></div><div class="mini-timeline" aria-label="Song progress preview"><i style="width:10%"></i><i style="width:8%"></i><i style="width:13%"></i><i style="width:7%"></i><i style="width:10%"></i><i style="width:13%"></i><i style="width:8%"></i><i style="width:12%"></i><i style="width:9%"></i></div></div></div>
+        <div id="rollView" class="preview empty"><div class="roll" aria-label="Concept falling notes with hand colors, note names, and finger numbers"><div class="roll-grid"></div><div id="bars"></div><div id="nowline" class="nowline"></div><div id="keyboard" class="keyboard"></div></div></div>
         <div id="scoreView" class="preview empty"><div class="score"><svg viewBox="0 0 740 305" role="img" aria-label="Concept piano sheet music"><rect x="0" y="0" width="740" height="305" rx="9" fill="#fff"/><text x="30" y="37" font-family="serif" font-size="21" font-weight="bold">Sample étude</text><text x="30" y="55" font-family="sans-serif" font-size="10" fill="#667">Concept score · invented notes</text><g stroke="#26344a" stroke-width="1.2"><path d="M30 85H710 M30 99H710 M30 113H710 M30 127H710 M30 141H710 M30 186H710 M30 200H710 M30 214H710 M30 228H710 M30 242H710"/><path d="M30 85V242 M365 85V242 M710 85V242" stroke-width="2"/></g><text x="36" y="133" font-family="serif" font-size="45">𝄞</text><text x="35" y="231" font-family="serif" font-size="45">𝄢</text><g fill="#213b60" stroke="#213b60" stroke-width="2"><ellipse cx="120" cy="127" rx="9" ry="6" transform="rotate(-20 120 127)"/><path d="M129 126V80"/><ellipse cx="184" cy="113" rx="9" ry="6" transform="rotate(-20 184 113)"/><path d="M193 112V70"/><ellipse cx="250" cy="106" rx="9" ry="6" transform="rotate(-20 250 106)"/><path d="M259 105V65"/><ellipse cx="316" cy="113" rx="9" ry="6" transform="rotate(-20 316 113)"/><path d="M325 112V70"/><ellipse cx="417" cy="99" rx="9" ry="6" transform="rotate(-20 417 99)"/><path d="M426 98V61"/><ellipse cx="481" cy="106" rx="9" ry="6" transform="rotate(-20 481 106)"/><path d="M490 105V65"/><ellipse cx="548" cy="120" rx="9" ry="6" transform="rotate(-20 548 120)"/><path d="M557 119V76"/><ellipse cx="616" cy="127" rx="9" ry="6" transform="rotate(-20 616 127)"/><path d="M625 126V80"/></g><g fill="#267963" stroke="#267963" stroke-width="2"><ellipse cx="120" cy="228" rx="9" ry="6" transform="rotate(-20 120 228)"/><path d="M129 227V185"/><ellipse cx="250" cy="214" rx="9" ry="6" transform="rotate(-20 250 214)"/><path d="M259 213V170"/><ellipse cx="417" cy="221" rx="9" ry="6" transform="rotate(-20 417 221)"/><path d="M426 220V178"/><ellipse cx="548" cy="207" rx="9" ry="6" transform="rotate(-20 548 207)"/><path d="M557 206V165"/></g><text x="30" y="279" font-family="sans-serif" font-size="11" fill="#687890">Final score would be generated from reviewed MIDI / MusicXML.</text></svg></div></div>
-        <div class="legend"><span><i class="dot" style="background:var(--blue)"></i>Right hand</span><span><i class="dot" style="background:var(--mint)"></i>Left hand</span><span>Gold line = play position</span><span>Click a view tab to compare layouts</span></div>
+        <div class="legend" id="legendText"><span>Enhanced sheet: labeled note bars show pitch and duration on a staff.</span><span>Bar colors suggest fingers.</span></div>
         <div class="review"><div class="reviewbox"><h3>Review notes</h3><p>Proposed editor: move, delete, add, and reassign notes before practice or export.</p></div><div class="reviewbox"><h3>Practice with a keyboard</h3><p>Proposed next step: MIDI input, key feedback, loops, and wait mode after the core pipeline works.</p></div></div>
         <div class="exports"><span>Exports after transcription and review</span><button disabled>Download MIDI</button><button disabled>Download MusicXML</button><button disabled>Download PDF</button></div>
       </main>
     </div>
     <section class="brief" aria-label="Proposed build plan">
-      <div class="panel"><h2>Build plan after approval</h2><ol><li><strong>Input and jobs.</strong> Local browser UI, audio upload, format conversion, progress, cancellation, and saved local projects.</li><li><strong>Transcription.</strong> Start with a clean-piano model; add mixed-song separation and an experimental melody-plus-harmony piano-cover path.</li><li><strong>Review and practice.</strong> Editable notes, left/right hand assignment, falling-note playback, speed and looping; add MIDI keyboard feedback after the base viewer.</li><li><strong>Exports and validation.</strong> MIDI, MusicXML, printable PDF, plus song-level checks against real authorized recordings.</li></ol></div>
+      <div class="panel"><h2>Build plan after approval</h2><ol><li><strong>Input and jobs.</strong> Local browser UI, audio upload, format conversion, progress, cancellation, and saved local projects.</li><li><strong>Transcription.</strong> Start with a clean-piano model; add mixed-song separation and an experimental melody-plus-harmony piano-cover path.</li><li><strong>Review and practice.</strong> Editable notes, left/right hand assignment, suggested fingering, four notation views, speed and looping; add MIDI keyboard feedback after the base viewer.</li><li><strong>Exports and validation.</strong> MIDI, MusicXML, printable PDF, plus song-level checks against real authorized recordings.</li></ol></div>
       <div class="panel"><h2>Design decisions to approve</h2><p><strong>First release:</strong> a local app on this Fedora machine, with no account and no cloud upload of recordings.</p><p><strong>Song modes:</strong> distinguish faithful piano extraction from a generated piano cover. Show uncertainty and let you correct notes.</p><p class="callout"><strong>Video links:</strong> the field is designed for content you may process. The implementation plan needs a permitted way to obtain its audio; a link alone cannot guarantee access.</p><p><strong>Quality bar:</strong> clean solo piano first. Mixed commercial songs need separation and manual correction, so “any song, exact notes” is not a promise.</p></div>
     </section>
-    <p class="footer">Design concept for review · 27 September 2026 · Controls only preview layout and invented notes. No media is uploaded or transcribed on this page.</p>
+    <p class="footer">Design concept for review · 28 September 2026 · Controls only preview layout and invented notes. No media is uploaded or transcribed on this page.</p>
   </div>
   <script>
     const notes = [
@@ -135,22 +168,31 @@
       [27,17,43,31,'left'],[51,20,30,28,'right'],[70,15,49,27,'left'],[85,16,44,35,'right']
     ];
     const bars = document.getElementById('bars');
-    notes.forEach(([x,y,w,h,hand]) => { const bar=document.createElement('div'); bar.className='bar '+hand; bar.style.cssText=`left:${x}%;top:${y}%;width:${Math.max(2.6,w/10)}%;height:${h}px`; bars.appendChild(bar); });
-    const keyboard=document.getElementById('keyboard');
-    ['C','D','E','F','G','A','B','C','D','E','F','G','A','B','C','D'].forEach((name,i)=>{const key=document.createElement('div');key.className='key'+([0,1,3,4,5,7,8,10,11,12,14].includes(i)?' black':'');key.textContent=i%7===0?name+'4':'';keyboard.appendChild(key);});
+    notes.forEach(([x,y,w,h,hand],i) => { const bar=document.createElement('div'); bar.className='bar '+hand; bar.style.cssText=`left:${x}%;top:${y}%;width:${Math.max(4.3,w/10)}%;height:${h}px`; bar.innerHTML='CDEGAB'[i%6]+(hand==='left'?'3':'4')+'<small>'+((i%5)+1)+'</small>'; bars.appendChild(bar); });
+    ['keyboard','practiceKeyboard'].forEach(id=>{const keyboard=document.getElementById(id);['C','D','E','F','G','A','B','C','D','E','F','G','A','B','C','D'].forEach((name,i)=>{const key=document.createElement('div');key.className='key'+([0,1,3,4,5,7,8,10,11,12,14].includes(i)?' black':'');key.textContent=i%7===0?name+'4':'';keyboard.appendChild(key);});});
     const sourceButtons=[document.getElementById('audioSource'),document.getElementById('urlSource')];
     sourceButtons.forEach((button,index)=>button.addEventListener('click',()=>{sourceButtons.forEach((b,i)=>b.classList.toggle('active',i===index));document.getElementById('audioInput').hidden=index===1;document.getElementById('urlInput').hidden=index===0;}));
     document.getElementById('audioFile').addEventListener('change',e=>{document.getElementById('fileName').textContent=e.target.files[0]?.name||'Files stay on your device in the proposed local version.';});
     document.querySelectorAll('.mode').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b===button));}));
     document.getElementById('difficulty').addEventListener('input',e=>{document.getElementById('levelText').textContent='Level '+e.target.value;});
-    const rollTab=document.getElementById('rollTab'),scoreTab=document.getElementById('scoreTab');
-    function showTab(score){rollTab.classList.toggle('active',!score);scoreTab.classList.toggle('active',score);rollTab.setAttribute('aria-selected',String(!score));scoreTab.setAttribute('aria-selected',String(score));document.getElementById('rollView').classList.toggle('empty',score);document.getElementById('scoreView').classList.toggle('empty',!score);}
-    rollTab.addEventListener('click',()=>showTab(false));scoreTab.addEventListener('click',()=>showTab(true));
-    ['leftHand','rightHand'].forEach(id=>document.getElementById(id).addEventListener('click',e=>{const active=e.currentTarget.classList.toggle('active');e.currentTarget.setAttribute('aria-pressed',String(active));document.querySelectorAll('.bar.'+(id==='leftHand'?'left':'right')).forEach(bar=>bar.style.display=active?'':'none');}));
+    const notationTabs=[...document.querySelectorAll('.tabs [data-view]')];
+    const fingerColors=['#2aa977','#e5aa21','#8054df','#3683dc','#e66375'];
+    function showTab(view){
+      notationTabs.forEach(tab=>{const selected=tab.dataset.view===view;tab.classList.toggle('active',selected);tab.setAttribute('aria-selected',String(selected));});
+      document.getElementById('enhancedView').classList.toggle('empty',view!=='enhanced');
+      document.getElementById('rollView').classList.toggle('empty',view!=='falling');
+      document.getElementById('scoreView').classList.toggle('empty',view!=='colored'&&view!=='standard');
+      document.querySelectorAll('#scoreView svg ellipse').forEach((note,i)=>{const color=view==='colored'?fingerColors[i%5]:'#171b23';note.style.fill=color;note.style.stroke=color;});
+      document.querySelectorAll('#scoreView svg g').forEach(group=>{if(group.querySelector('ellipse'))group.style.stroke='#171b23';});
+      const explanations={enhanced:'Enhanced sheet: labeled note bars show the pitch and duration on a staff. Bar colors suggest fingers.',falling:'Falling notes: blue is left hand and purple is right hand. Each bar shows a pitch and suggested finger number.',colored:'Colored sheet: standard note shapes with colors for suggested fingers.',standard:'Standard sheet: familiar black notation on treble and bass staves.'};
+      document.getElementById('legendText').textContent=explanations[view]+' Finger choices remain editable suggestions.';
+    }
+    notationTabs.forEach(tab=>tab.addEventListener('click',()=>showTab(tab.dataset.view)));
+    ['leftHand','rightHand'].forEach(id=>document.getElementById(id).addEventListener('click',e=>{const active=e.currentTarget.classList.toggle('active');e.currentTarget.setAttribute('aria-pressed',String(active));const hand=id==='leftHand'?'left':'right';document.querySelectorAll('.bar.'+hand+',.note-pill[data-hand="'+hand+'"]').forEach(note=>note.style.display=active?'':'none');}));
     document.getElementById('loop').addEventListener('click',e=>{const active=e.currentTarget.classList.toggle('active');e.currentTarget.setAttribute('aria-pressed',String(active));});
     let playing=false,position=20,last=0,frame=0;
-    const playButton=document.getElementById('play'),nowline=document.getElementById('nowline');
-    function tick(time){if(!playing)return;if(last){position+=(time-last)*0.012*Number(document.getElementById('speed').value);if(position>95){position=document.getElementById('loop').classList.contains('active')?20:95;if(position===95){playing=false;playButton.textContent='▶ Play preview';}}nowline.style.left=position+'%';}last=time;if(playing)frame=requestAnimationFrame(tick);}
+    const playButton=document.getElementById('play'),nowline=document.getElementById('nowline'),staffNowline=document.getElementById('staffNowline');
+    function tick(time){if(!playing)return;if(last){position+=(time-last)*0.012*Number(document.getElementById('speed').value);if(position>95){position=document.getElementById('loop').classList.contains('active')?20:95;if(position===95){playing=false;playButton.textContent='▶ Play preview';}}nowline.style.left=position+'%';staffNowline.style.left=position+'%';}last=time;if(playing)frame=requestAnimationFrame(tick);}
     playButton.addEventListener('click',()=>{playing=!playing;playButton.textContent=playing?'Ⅱ Pause preview':'▶ Play preview';if(playing){if(position>=95)position=20;last=0;frame=requestAnimationFrame(tick);}else cancelAnimationFrame(frame);});
   </script>
 </body>
