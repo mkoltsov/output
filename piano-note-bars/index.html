@@ -76,6 +76,7 @@ function drawKeyboard(w,top,bottom,active){
     ctx.fillStyle=active.has(p)?BAR_COLORS[step(p)%5]:'#f8fafc';
     ctx.fillRect(x,top,whiteW,keyH);
     ctx.strokeStyle='#9aa6b5';ctx.lineWidth=1;ctx.strokeRect(x,top,whiteW,keyH);
+    if(active.has(p)){ctx.fillStyle='#fff';ctx.font='800 12px system-ui';ctx.fillText(bareName(p),x+whiteW*.35,top+keyH*.57)}
     if(pc===0){ctx.fillStyle=active.has(p)?'#fff':'#637184';ctx.font='11px system-ui';ctx.fillText(name(p),x+4,bottom-5)}
   }
   for(let p=first;p<=last;p++){
@@ -83,6 +84,7 @@ function drawKeyboard(w,top,bottom,active){
     const index=(Math.floor(p/12)-3)*7+blackLeft[pc],x=(index+1)*whiteW-whiteW*.33;
     ctx.fillStyle=active.has(p)?BAR_COLORS[step(p)%5]:'#1e2836';
     ctx.beginPath();ctx.roundRect(x,top,whiteW*.66,keyH*.60,[0,0,4,4]);ctx.fill();
+    if(active.has(p)){ctx.fillStyle='#fff';ctx.font='800 10px system-ui';ctx.fillText(bareName(p),x+3,top+keyH*.48)}
   }
   line(0,top,w,top,'#283444',3);
 }
