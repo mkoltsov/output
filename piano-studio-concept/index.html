@@ -70,8 +70,8 @@
     .clef.treble { top:22px; }
     .clef.bass { top:144px; font-size:52px; }
     .measure { position:absolute; top:22px; bottom:21px; width:2px; background:#344052; opacity:.72; }
-    .note-pill { position:absolute; z-index:3; height:27px; display:flex; align-items:center; padding:0 9px; border-radius:13px; color:#fff; font-weight:850; font-size:15px; letter-spacing:.01em; box-shadow:0 2px 3px #0002; white-space:nowrap; }
-    .note-pill small { position:absolute; bottom:-18px; left:2px; color:#3b4b5f; font-size:10px; font-weight:750; }
+    .note-pill { position:absolute; z-index:3; height:17px; display:flex; align-items:center; padding:0 7px; border-radius:9px; color:#fff; font-weight:850; font-size:12px; letter-spacing:.01em; box-shadow:0 1px 2px #0003; white-space:nowrap; }
+    .chord-label { position:absolute; top:-4px; color:#27364b; font-weight:800; font-size:16px; }
     .finger-1 { background:#2aa977; }
     .finger-2 { background:#e5aa21; }
     .finger-3 { background:#8054df; }
@@ -147,10 +147,32 @@
         <div class="songbar"><div><h2>Sample étude</h2><p>Invented notes · 22 s · piano cover preview</p></div><span class="status">Concept data</span></div>
         <div class="tabs" role="tablist" aria-label="Notation views"><button type="button" role="tab" class="active" aria-selected="true" data-view="enhanced">Enhanced sheet</button><button type="button" role="tab" aria-selected="false" data-view="falling">Falling notes</button><button type="button" role="tab" aria-selected="false" data-view="colored">Colored sheet</button><button type="button" role="tab" aria-selected="false" data-view="standard">Standard sheet</button></div>
         <div class="toolbar"><button id="play" class="tool" type="button">▶ Play preview</button><button id="leftHand" class="tool active" type="button" aria-pressed="true">Left hand</button><button id="rightHand" class="tool active" type="button" aria-pressed="true">Right hand</button><span class="spacer"></span><label for="speed" class="helper">Speed</label><select id="speed" class="speed" aria-label="Preview speed"><option value="0.5">50%</option><option value="0.75">75%</option><option value="1" selected>100%</option></select><button id="loop" class="tool" type="button" aria-pressed="false">Loop section</button></div>
-        <div id="enhancedView" class="preview"><div class="practice-stage" aria-label="Concept enhanced sheet with note names, finger colors, and piano keys"><div class="practice-staff"><div class="staff-lines treble"></div><div class="staff-lines bass"></div><span class="clef treble" aria-hidden="true">𝄞</span><span class="clef bass" aria-hidden="true">𝄢</span><i class="measure" style="left:38%"></i><i class="measure" style="left:69%"></i><span class="note-pill finger-1" data-hand="right" style="left:9%;top:57px;width:13%">C4</span><span class="note-pill finger-2" data-hand="right" style="left:22%;top:41px;width:15%">D4</span><span class="note-pill finger-3" data-hand="right" style="left:39%;top:26px;width:13%">E4</span><span class="note-pill finger-4" data-hand="right" style="left:53%;top:41px;width:15%">G4</span><span class="note-pill finger-5" data-hand="right" style="left:70%;top:57px;width:21%">A4</span><span class="note-pill finger-5" data-hand="left" style="left:9%;top:184px;width:18%">C3</span><span class="note-pill finger-3" data-hand="left" style="left:39%;top:169px;width:25%">E3</span><span class="note-pill finger-1" data-hand="left" style="left:70%;top:184px;width:21%">G3</span></div><div id="staffNowline" class="staff-nowline"></div><div id="practiceKeyboard" class="practice-keyboard"></div><div class="mini-timeline" aria-label="Song progress preview"><i style="width:10%"></i><i style="width:8%"></i><i style="width:13%"></i><i style="width:7%"></i><i style="width:10%"></i><i style="width:13%"></i><i style="width:8%"></i><i style="width:12%"></i><i style="width:9%"></i></div></div></div>
+        <div id="enhancedView" class="preview">
+          <div class="practice-stage" aria-label="Concept enhanced sheet with simultaneous, individually labeled chord notes">
+            <div class="practice-staff">
+              <div class="staff-lines treble"></div><div class="staff-lines bass"></div>
+              <span class="clef treble" aria-hidden="true">𝄞</span><span class="clef bass" aria-hidden="true">𝄢</span>
+              <i class="measure" style="left:38%"></i><i class="measure" style="left:69%"></i>
+              <span class="chord-label" style="left:11%">Dm</span><span class="chord-label" style="left:40%">Em</span><span class="chord-label" style="left:70%">C</span>
+              <span class="note-pill finger-3" data-hand="right" title="F4" style="left:11%;top:50px;width:25%">F</span>
+              <span class="note-pill finger-1" data-hand="right" title="D4" style="left:11%;top:68px;width:25%">D</span>
+              <span class="note-pill finger-5" data-hand="left" title="D3" style="left:11%;top:178px;width:25%">D</span>
+              <span class="note-pill finger-3" data-hand="right" title="G4" style="left:40%;top:41px;width:26%">G</span>
+              <span class="note-pill finger-1" data-hand="right" title="E4" style="left:40%;top:59px;width:26%">E</span>
+              <span class="note-pill finger-5" data-hand="left" title="E3" style="left:40%;top:169px;width:26%">E</span>
+              <span class="note-pill finger-5" data-hand="right" title="G4" style="left:70%;top:41px;width:23%">G</span>
+              <span class="note-pill finger-3" data-hand="right" title="E4" style="left:70%;top:59px;width:23%">E</span>
+              <span class="note-pill finger-1" data-hand="right" title="C4" style="left:70%;top:77px;width:23%">C</span>
+              <span class="note-pill finger-5" data-hand="left" title="C3" style="left:70%;top:187px;width:23%">C</span>
+            </div>
+            <div id="staffNowline" class="staff-nowline"></div>
+            <div id="practiceKeyboard" class="practice-keyboard"></div>
+            <div class="mini-timeline" aria-label="Song progress preview"><i style="width:10%"></i><i style="width:8%"></i><i style="width:13%"></i><i style="width:7%"></i><i style="width:10%"></i><i style="width:13%"></i><i style="width:8%"></i><i style="width:12%"></i><i style="width:9%"></i></div>
+          </div>
+        </div>
         <div id="rollView" class="preview empty"><div class="roll" aria-label="Concept falling notes with hand colors, note names, and finger numbers"><div class="roll-grid"></div><div id="bars"></div><div id="nowline" class="nowline"></div><div id="keyboard" class="keyboard"></div></div></div>
         <div id="scoreView" class="preview empty"><div class="score"><svg viewBox="0 0 740 305" role="img" aria-label="Concept piano sheet music"><rect x="0" y="0" width="740" height="305" rx="9" fill="#fff"/><text x="30" y="37" font-family="serif" font-size="21" font-weight="bold">Sample étude</text><text x="30" y="55" font-family="sans-serif" font-size="10" fill="#667">Concept score · invented notes</text><g stroke="#26344a" stroke-width="1.2"><path d="M30 85H710 M30 99H710 M30 113H710 M30 127H710 M30 141H710 M30 186H710 M30 200H710 M30 214H710 M30 228H710 M30 242H710"/><path d="M30 85V242 M365 85V242 M710 85V242" stroke-width="2"/></g><text x="36" y="133" font-family="serif" font-size="45">𝄞</text><text x="35" y="231" font-family="serif" font-size="45">𝄢</text><g fill="#213b60" stroke="#213b60" stroke-width="2"><ellipse cx="120" cy="127" rx="9" ry="6" transform="rotate(-20 120 127)"/><path d="M129 126V80"/><ellipse cx="184" cy="113" rx="9" ry="6" transform="rotate(-20 184 113)"/><path d="M193 112V70"/><ellipse cx="250" cy="106" rx="9" ry="6" transform="rotate(-20 250 106)"/><path d="M259 105V65"/><ellipse cx="316" cy="113" rx="9" ry="6" transform="rotate(-20 316 113)"/><path d="M325 112V70"/><ellipse cx="417" cy="99" rx="9" ry="6" transform="rotate(-20 417 99)"/><path d="M426 98V61"/><ellipse cx="481" cy="106" rx="9" ry="6" transform="rotate(-20 481 106)"/><path d="M490 105V65"/><ellipse cx="548" cy="120" rx="9" ry="6" transform="rotate(-20 548 120)"/><path d="M557 119V76"/><ellipse cx="616" cy="127" rx="9" ry="6" transform="rotate(-20 616 127)"/><path d="M625 126V80"/></g><g fill="#267963" stroke="#267963" stroke-width="2"><ellipse cx="120" cy="228" rx="9" ry="6" transform="rotate(-20 120 228)"/><path d="M129 227V185"/><ellipse cx="250" cy="214" rx="9" ry="6" transform="rotate(-20 250 214)"/><path d="M259 213V170"/><ellipse cx="417" cy="221" rx="9" ry="6" transform="rotate(-20 417 221)"/><path d="M426 220V178"/><ellipse cx="548" cy="207" rx="9" ry="6" transform="rotate(-20 548 207)"/><path d="M557 206V165"/></g><text x="30" y="279" font-family="sans-serif" font-size="11" fill="#687890">Final score would be generated from reviewed MIDI / MusicXML.</text></svg></div></div>
-        <div class="legend" id="legendText"><span>Enhanced sheet: labeled note bars show pitch and duration on a staff.</span><span>Bar colors suggest fingers.</span></div>
+        <div class="legend" id="legendText"><span>Each colored bar names one note. Bars that begin together form a chord.</span><span>Length shows how long to hold each key.</span></div>
         <div class="review"><div class="reviewbox"><h3>Review notes</h3><p>Proposed editor: move, delete, add, and reassign notes before practice or export.</p></div><div class="reviewbox"><h3>Practice with a keyboard</h3><p>Proposed next step: MIDI input, key feedback, loops, and wait mode after the core pipeline works.</p></div></div>
         <div class="exports"><span>Exports after transcription and review</span><button disabled>Download MIDI</button><button disabled>Download MusicXML</button><button disabled>Download PDF</button></div>
       </main>
@@ -163,12 +185,12 @@
   </div>
   <script>
     const notes = [
-      [13,56,47,41,'left'],[22,62,72,29,'right'],[34,46,28,42,'left'],[37,75,65,28,'right'],[45,49,50,30,'right'],[54,65,58,35,'left'],
-      [61,37,48,32,'right'],[68,76,66,33,'left'],[75,43,63,42,'right'],[82,58,41,31,'right'],[89,28,64,33,'left'],[8,80,60,29,'right'],
-      [27,17,43,31,'left'],[51,20,30,28,'right'],[70,15,49,27,'left'],[85,16,44,35,'right']
+      [18,65,'D',55,'left',5],[39,65,'D',55,'right',1],[48,65,'F',55,'right',3],
+      [22,38,'E',55,'left',5],[44,38,'E',55,'right',1],[52,38,'G',55,'right',3],
+      [17,11,'C',50,'left',5],[35,11,'C',50,'right',1],[44,11,'E',50,'right',3],[52,11,'G',50,'right',5]
     ];
     const bars = document.getElementById('bars');
-    notes.forEach(([x,y,w,h,hand],i) => { const bar=document.createElement('div'); bar.className='bar '+hand; bar.style.cssText=`left:${x}%;top:${y}%;width:${Math.max(4.3,w/10)}%;height:${h}px`; bar.innerHTML='CDEGAB'[i%6]+(hand==='left'?'3':'4')+'<small>'+((i%5)+1)+'</small>'; bars.appendChild(bar); });
+    notes.forEach(([x,y,label,height,hand,finger]) => { const bar=document.createElement('div'); bar.className='bar '+hand; bar.style.cssText=`left:${x}%;top:${y}%;width:5%;height:${height}px`; bar.innerHTML=label+'<small>'+finger+'</small>'; bars.appendChild(bar); });
     ['keyboard','practiceKeyboard'].forEach(id=>{const keyboard=document.getElementById(id);['C','D','E','F','G','A','B','C','D','E','F','G','A','B','C','D'].forEach((name,i)=>{const key=document.createElement('div');key.className='key'+([0,1,3,4,5,7,8,10,11,12,14].includes(i)?' black':'');key.textContent=i%7===0?name+'4':'';keyboard.appendChild(key);});});
     const sourceButtons=[document.getElementById('audioSource'),document.getElementById('urlSource')];
     sourceButtons.forEach((button,index)=>button.addEventListener('click',()=>{sourceButtons.forEach((b,i)=>b.classList.toggle('active',i===index));document.getElementById('audioInput').hidden=index===1;document.getElementById('urlInput').hidden=index===0;}));
@@ -184,7 +206,7 @@
       document.getElementById('scoreView').classList.toggle('empty',view!=='colored'&&view!=='standard');
       document.querySelectorAll('#scoreView svg ellipse').forEach((note,i)=>{const color=view==='colored'?fingerColors[i%5]:'#171b23';note.style.fill=color;note.style.stroke=color;});
       document.querySelectorAll('#scoreView svg g').forEach(group=>{if(group.querySelector('ellipse'))group.style.stroke='#171b23';});
-      const explanations={enhanced:'Enhanced sheet: labeled note bars show the pitch and duration on a staff. Bar colors suggest fingers.',falling:'Falling notes: blue is left hand and purple is right hand. Each bar shows a pitch and suggested finger number.',colored:'Colored sheet: standard note shapes with colors for suggested fingers.',standard:'Standard sheet: familiar black notation on treble and bass staves.'};
+      const explanations={enhanced:'Enhanced sheet: each simultaneous note has its own labeled bar. Aligned bars form a chord; their lengths show when to release the keys.',falling:'Falling notes: notes that start together line up horizontally. Blue is left hand and purple is right hand.',colored:'Colored sheet: standard note shapes with colors for suggested fingers.',standard:'Standard sheet: familiar black notation on treble and bass staves.'};
       document.getElementById('legendText').textContent=explanations[view]+' Finger choices remain editable suggestions.';
     }
     notationTabs.forEach(tab=>tab.addEventListener('click',()=>showTab(tab.dataset.view)));
