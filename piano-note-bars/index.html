@@ -115,7 +115,7 @@ function draw(){
   const active=new Set(),text=[];
   if(song){
     for(const n of song.notes){
-      if(n.s<=position&&n.e>position)active.add(n.p);
+      if(enabled[n.h]&&n.s<=position&&n.e>position)active.add(n.p);
       if(!enabled[n.h])continue;
       const originalX=anchor+(n.s-position)*pxPerSec,endX=anchor+(n.e-position)*pxPerSec;
       if(endX<=scoreLeft||originalX>=scoreRight)continue;
@@ -131,13 +131,15 @@ function draw(){
     ctx.fillStyle='#fff';ctx.font='800 13px system-ui';ctx.shadowColor='#17233788';ctx.shadowBlur=2;
     for(const t of text)if(t.x<scoreRight-3)ctx.fillText(t.label,t.x,t.y);
     ctx.shadowBlur=0;
-    ctx.fillStyle='#26364b';ctx.font='800 16px system-ui';
-    const currentChord=[...song.chords].reverse().find(chord=>chord.s<=visibleStart);
-    if(currentChord)ctx.fillText(currentChord.label,scoreLeft+4,31);
-    for(const chord of song.chords){
-      if(chord.s<visibleStart||chord.s>visibleEnd)continue;
-      const x=anchor+(chord.s-position)*pxPerSec;
-      if(x>=scoreLeft&&x<scoreRight-45)ctx.fillText(chord.label,x+2,31);
+    if(enabled.left){
+      ctx.fillStyle='#26364b';ctx.font='800 16px system-ui';
+      const currentChord=[...song.chords].reverse().find(chord=>chord.s<=visibleStart);
+      if(currentChord)ctx.fillText(currentChord.label,scoreLeft+4,31);
+      for(const chord of song.chords){
+        if(chord.s<visibleStart||chord.s>visibleEnd)continue;
+        const x=anchor+(chord.s-position)*pxPerSec;
+        if(x>=scoreLeft&&x<scoreRight-45)ctx.fillText(chord.label,x+2,31);
+      }
     }
   }else{
     ctx.fillStyle='#516073';ctx.font='700 18px system-ui';ctx.textAlign='center';
