@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scalper automation reliability audit</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101214;
+      --panel: #181b1f;
+      --text: #eef1f4;
+      --muted: #a8b0ba;
+      --line: #30363d;
+      --accent: #7cc7ff;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      line-height: 1.4;
+    }
+    main {
+      padding: 28px;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 0 0 16px;
+      font-size: 24px;
+      font-weight: 650;
+    }
+    .meta {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 1100px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 9px 11px;
+      vertical-align: top;
+      text-align: left;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #20252b;
+      color: var(--accent);
+      font-weight: 650;
+    }
+    tr:nth-child(even) td {
+      background: rgba(255,255,255,0.025);
+    }
+  </style>
+<style>.intro,.roadmap{max-width:1120px}.intro p{line-height:1.65}.roadmap{background:#181b1f;border:1px solid #30363d;border-radius:12px;padding:20px;margin:25px 0}.roadmap h2{margin-top:0}.roadmap li{margin:12px 0}.controls{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:24px 0}.controls label{display:flex;gap:10px;align-items:center}input,select{background:#20252b;color:#eef1f4;border:1px solid #45505d;border-radius:6px;padding:10px}input{width:min(420px,60vw)}th:first-child,td:first-child{white-space:nowrap}td:nth-child(2){font-weight:650;min-width:210px}td:nth-child(3){min-width:160px}td:nth-child(n+5){min-width:260px}tr[hidden]{display:none}tbody tr:hover td{background:#233044}@media(max-width:700px){main{padding:16px}.controls label{width:100%;justify-content:space-between}input{width:65vw}}</style></head>
+<body>
+  <main>
+    <h1>Scalper automation reliability audit</h1>
+    <p class="meta">25 findings: 10 P1, 12 P2, 3 P3. Priorities describe repair urgency, not proven production incidents.</p><section class="intro"><p>Review of the general software pipeline: search responses, evidence validation, state, notifications, publishing, scheduling and downstream reporting.</p><p><strong>Evidence boundary:</strong> Observed means recorded operational state. Reproduced means a controlled offline diagnostic confirmed the behavior. Inspected means the code permits the failure but no production occurrence was demonstrated. The two prior live checks returned zero raw candidates; the validator defects are not proven causes of those empty results. No new live inventory searches were run for this audit.</p><p><strong>Validation:</strong> 29 existing generic filter/browser tests and 2 automation-health tests passed. Additional mocked diagnostics reproduced gaps those tests miss. Existing source changes were preserved. This is a review and repair proposal, not an implementation.</p><p>This public report contains generalized technical findings only. Personal target details, exact private destinations, raw configuration, logs, credentials and private source data were excluded.</p></section><section class="roadmap"><h2>Suggested repair order</h2><ol><li><strong>Make outcomes truthful:</strong> validate output/configuration, record every target and configuration revision, isolate diagnostic output, expose search and publication failures.</li><li><strong>Make delivery and publication durable:</strong> checkpoint acknowledgements, retain retryable pending work, use isolated Git publication and acknowledge remote success separately.</li><li><strong>Make verification reliable:</strong> repair browser transport/navigation, require selected-listing evidence and enforce public-network and pricing boundaries for ordinary products.</li><li><strong>Measure and simplify:</strong> export coverage/stage metrics, bound job effort, improve meaningful scenario tests and align consumers.</li></ol><p>Do not weaken availability checks or price requirements to increase the result count. A genuine completed empty scan is a valid outcome.</p></section><section class="controls"><label>Filter findings <input id="audit-search" type="search" placeholder="Search findings, repairs or references"></label><label>Priority <select id="audit-priority"><option value="">All</option><option>P1</option><option>P2</option><option>P3</option></select></label><p id="audit-count" aria-live="polite"></p></section>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Priority</th>
+<th>Finding</th>
+<th>Evidence boundary</th>
+<th>Source reference</th>
+<th>Impact and evidence</th>
+<th>Suggested improvement</th>
+<th>Acceptance check</th></tr></thead>
+        <tbody><tr><td>P1</td>
+<td>Search output can silently become a successful empty scan</td>
+<td>Reproduced</td>
+<td>scalper.py:585, 2460</td>
+<td>An empty object is accepted. The prose fallback can select a nested deal object instead of the enclosing result. Null or wrongly typed deals can abort later processing.</td>
+<td>Validate a versioned result schema, expected target ID, timestamps, list types and every candidate. Record failed, blocked, incomplete and completed-empty outcomes separately.</td>
+<td>Malformed output reports an error; nested JSON is never mistaken for the top-level result; a bad candidate does not prevent the next target.</td></tr>
+<tr><td>P1</td>
+<td>Reported target coverage is not tied to the completed scan</td>
+<td>Observed + inspected</td>
+<td>scalper.py:2448; digest_section_pages.py:429</td>
+<td>The current configuration has 3 targets while the latest published scan contains 1. Failed targets disappear. Current configuration is displayed beside an older scan without a pending status.</td>
+<td>Record configuration hash/revision, configured IDs, attempted IDs and a result for every selected target. Newly added targets remain pending until a completed attempt.</td>
+<td>Change configuration after a scan: new targets display pending. A timed-out target remains visible as failed rather than disappearing.</td></tr>
+<tr><td>P1</td>
+<td>One notification failure stops remaining searches</td>
+<td>Reproduced</td>
+<td>scalper.py:2536, 2567</td>
+<td>Delivery exceptions escape the target loop. Successful earlier acknowledgements exist only in memory until the entire run completes; restart can resend them.</td>
+<td>Separate discovery from delivery; use a durable outbox; checkpoint confirmed acknowledgements; isolate each delivery error and finalize run status.</td>
+<td>First delivery succeeds and second fails: later targets are still checked; acknowledged items do not resend; failed delivery remains pending.</td></tr>
+<tr><td>P1</td>
+<td>Disabled notifications are recorded as delivered</td>
+<td>Reproduced</td>
+<td>scalper.py:2534</td>
+<td>A run without a notification destination writes notified records despite making zero delivery requests. Enabling delivery afterward suppresses those offers.</td>
+<td>Track seen, eligible, queued and acknowledged states separately. Mark delivered only after a successful acknowledgement.</td>
+<td>Scan with delivery disabled, enable delivery, repeat the same ordinary consumer item: exactly one notification is sent.</td></tr>
+<tr><td>P1</td>
+<td>Publication can commit unrelated work and mutate a development checkout</td>
+<td>Inspected</td>
+<td>scalper.py:2353</td>
+<td>The publisher rebases/autostashes the shared checkout, stages output, commits the entire index and pushes current HEAD to main. Existing staged changes or another branch can be included.</td>
+<td>Use an isolated publication checkout or worktree with an explicit branch and output-only commit. Keep the developer checkout untouched.</td>
+<td>Staged and unstaged source changes plus a non-main branch remain byte-identical and uncommitted by publication.</td></tr>
+<tr><td>P1</td>
+<td>Failed publication is not durably retried</td>
+<td>Inspected + reproduced signature</td>
+<td>scalper.py:2380, 2551, 2562</td>
+<td>Local output and success state are updated before pushing. A failed push leaves the next identical result looking unchanged; retry may wait up to the 12-hour heartbeat. State can say success while the job wrapper says failure.</td>
+<td>Store scan, notification and publication outcomes independently. Compare with the last acknowledged remote publication, retain a pending retry and verify both branches and served content.</td>
+<td>Inject a branch push failure. An identical next scan retries publication immediately and reports the failed publication separately from the successful scan.</td></tr>
+<tr><td>P1</td>
+<td>Browser transport can hang or corrupt valid messages</td>
+<td>Reproduced</td>
+<td>scalper.py:1109, 1140</td>
+<td>The custom WebSocket assumes complete header reads, discards frames coalesced with the handshake, mishandles fragmented messages and repeatedly reads immediate EOF in a truncated payload.</td>
+<td>Use a maintained transport already supported by the environment, or implement buffered exact reads, fragmentation, EOF handling, frame limits and absolute deadlines.</td>
+<td>Split all header boundaries, coalesce handshake plus frame, fragment text, send ping and truncate payload: deterministic result or bounded failure with cleanup.</td></tr>
+<tr><td>P1</td>
+<td>Generic listing checks can accept non-buyable or wrong pages</td>
+<td>Reproduced</td>
+<td>scalper.py:1030, 1278</td>
+<td>Generic checks can accept a non-HTML response, a home-page redirect, archived documentation with one matching title word, or a bare Sold status. Positive purchase/contact, price and stock evidence is not required.</td>
+<td>Use a common verification contract for ordinary products: final URL/listing identity, selected variant, current price, explicit availability and enabled purchase/contact action. Preserve uncertainty.</td>
+<td>Documentation, homepage/search redirect, disabled cart, sold listing and wrong variant all fail; a genuine exact listing passes with retained evidence.</td></tr>
+<tr><td>P1</td>
+<td>Untrusted URLs can reach local or non-web destinations</td>
+<td>Normalization reproduced; access risk inspected</td>
+<td>scalper.py:1702, 1007, 1228</td>
+<td>Local-file and loopback URLs normalize successfully. The fetch/navigation path lacks a public-network boundary, including redirects and DNS resolution. No local resource was fetched during this audit.</td>
+<td>Allow explicit web schemes; reject URL credentials and local/private/link-local/reserved addresses across IPv4/IPv6. Recheck DNS and every redirect; enforce controlled egress.</td>
+<td>Non-web schemes, private DNS answers, encoded loopback, IPv6 local addresses and redirects into internal networks are rejected before access.</td></tr>
+<tr><td>P1</td>
+<td>Ordinary pricing accepts contradictory or missing amounts</td>
+<td>Reproduced</td>
+<td>scalper.py:1740, 1753</td>
+<td>An item costing 150 plus delivery 20 can pass a ceiling of 100 when the supplied total is 50. Negative totals, missing item price, unknown shipping as zero and missing availability promoted to available also pass.</td>
+<td>Use one bounded nonnegative decimal/cents contract; recompute totals; reject contradictions; keep unknown shipping and availability explicit until verified.</td>
+<td>Contradictory totals, negatives and missing prices fail; unknown delivery is not free; exact ceiling and verified zero-cost delivery behave as specified.</td></tr>
+<tr><td>P2</td>
+<td>Whole-page and commentary matching creates false rejection and false acceptance</td>
+<td>Reproduced</td>
+<td>scalper.py:630, 984, 1037, 1263</td>
+<td>Unrelated recommendations or hidden out-of-stock text reject a good item. A normal reCAPTCHA footer looks blocked. Commentary saying not damaged is rejected; the desired model mentioned only in a comparison can qualify the wrong item.</td>
+<td>Scope identity and condition to selected-item facts; parse status fields individually; use visible product DOM and actual challenge indicators; treat commentary separately.</td>
+<td>Unrelated sold recommendations, hidden text and a normal contact footer do not invalidate a verified item; real sold/challenge status and wrong identity still fail.</td></tr>
+<tr><td>P2</td>
+<td>Browser navigation can verify stale DOM</td>
+<td>Reproduced</td>
+<td>scalper.py:1228</td>
+<td>Navigation errorText is ignored. Readiness only requires a nonempty interactive/complete document; the routine can return an older page or a partially hydrated page after timeout.</td>
+<td>Check navigation errors; bind the result to the navigated frame/loader and final URL; wait for product evidence under one deadline and fail when it expires.</td>
+<td>DNS failure with old DOM, redirected page, slow hydration and never-ready document cannot be mistaken for a completed exact-listing verification.</td></tr>
+<tr><td>P2</td>
+<td>Early HTTP failures prevent useful browser verification</td>
+<td>Inspected</td>
+<td>scalper.py:1015, 2470</td>
+<td>Only a limited domain/error allowlist permits an inconclusive HTTP result to reach browser verification. Other blocking or transport errors discard candidates immediately.</td>
+<td>Classify transport/challenge errors separately from proven unavailable listings. Permit bounded browser verification where transport is inconclusive; keep final positive-evidence requirements strict.</td>
+<td>A blocked ordinary retailer can reach browser verification; sold, removed and identity-mismatched listings stay rejected; inconclusive checks never become availability.</td></tr>
+<tr><td>P2</td>
+<td>Configuration validation is incomplete and optional during real runs</td>
+<td>Reproduced + inspected</td>
+<td>scalper.py:1649, 2419, 2593</td>
+<td>Validation accepts targets missing fields needed by the prompt and an invalid timeout. Normal run does not invoke configuration validation; malformed configuration can fail mid-run.</td>
+<td>Validate required fields, unique IDs, numeric bounds, destinations, regex lists, timeout/result limits and coherent inherited settings before any side effect. Reject unknown requested target IDs.</td>
+<td>Missing name/search intent/price, invalid timeouts and unknown selected IDs fail promptly with actionable messages and no network, state or publication changes.</td></tr>
+<tr><td>P2</td>
+<td>Diagnostic runs overwrite authoritative output</td>
+<td>Reproduced</td>
+<td>scalper.py:2421, 2561; README.md:26</td>
+<td>Dry-run writes the selected public directory, whose default is production output. A single-target run rebuilds the snapshot from a subset and can influence later publication comparisons.</td>
+<td>Use temporary output by default for diagnostics; require an explicit diagnostic export; label partial scans and keep them separate from authoritative snapshots.</td>
+<td>Dry-run and filtered diagnostic leave live output and state byte-identical; exported diagnostic clearly states selected scope and dry-run status.</td></tr>
+<tr><td>P2</td>
+<td>Lock skips and direct invocations are inadequately protected</td>
+<td>Observed skip; contention inferred; code inspected</td>
+<td>run_scalper.sh:15; scalper.py:312, 2419</td>
+<td>A recent trigger exited without a scan log; lock contention is plausible but unproven. The wrapper silently skips a busy lock. Direct CLI runs bypass the lock and share a fixed state temporary name.</td>
+<td>Acquire state/run locking inside the application; use unique temporary state files and atomic replacement; log and export skipped-lock/startup outcomes without adding a new persistent scheduler.</td>
+<td>Two overlapping isolated runs preserve acknowledgements; a held lock records a skipped outcome; cleanup leaves no lock, state or publication collision.</td></tr>
+<tr><td>P2</td>
+<td>End-to-end deadlines and failure isolation are incomplete</td>
+<td>Inspected</td>
+<td>scalper.py:555, 1079, 2354, 2463; otel_cron_runner.py:199</td>
+<td>Per-target search has a deadline, but publication, lease release and the whole job do not. Candidate normalization and some browser/cleanup failures can escape the target-level handler.</td>
+<td>Use an overall job budget, bounded subprocess and browser calls, process-group cleanup where needed, per-candidate error isolation and guaranteed final status persistence.</td>
+<td>Hung Git/broker, malformed candidate and cleanup exception end within budget; later valid candidates/targets continue when appropriate; job failure is recorded.</td></tr>
+<tr><td>P2</td>
+<td>Monitoring sees completion more clearly than discovery health</td>
+<td>Observed + inspected</td>
+<td>scalper.py:171, 2460; automation_health_digest.py:19, 337</td>
+<td>Direct stage metrics are disabled in recorded cron runs, although wrapper/API monitoring remains. Raw/normalized/verified counts and coverage are absent; generic health can tolerate a 30-hour-old completion for an hourly job.</td>
+<td>Export coverage, stage counts, rejection/error categories, duration, last-success age and skips to the textfile collector. Feed failures and coverage gaps into the automation snapshot and Digest.</td>
+<td>Fresh empty scan stays healthy; blocked search, unattempted targets, missed schedules, delivery failure and publish failure appear distinctly. A zero streak alone is not proof of failure.</td></tr>
+<tr><td>P2</td>
+<td>Partial target failures hide all good results downstream</td>
+<td>Inspected</td>
+<td>scalper.py:2448; digest_section_pages.py:399</td>
+<td>A failed search is omitted and raises the aggregate exit code. The current section consumer then hides verified results from every successful target.</td>
+<td>Retain explicit per-target outcomes and consume successful fresh target results while prominently displaying incomplete coverage and failed target states.</td>
+<td>One successful target and one timeout produce a partial report with the good verified result, the failed target and a clear incomplete-coverage indicator.</td></tr>
+<tr><td>P2</td>
+<td>Public payload and raw logs need an explicit privacy boundary</td>
+<td>Reproduced sanitizer gaps; no current leak found</td>
+<td>scalper.py:1954, 2097, 579</td>
+<td>The sanitizer handles only three token formats. Synthetic personal identifiers, custom private destinations and query tokens survive. Raw subprocess error text and arbitrary model fields can enter public output. Limited current-artifact scans found no matching exposure.</td>
+<td>Publish an allowlisted summary schema; keep detailed traces private with bounded retention; sanitize URLs and personal fields; block publication on a failed privacy scan.</td>
+<td>Synthetic credentials, contact details, private endpoints and personal identifiers never reach the public build. Safe technical summaries remain useful.</td></tr>
+<tr><td>P2</td>
+<td>Deduplication mixes identity and price and loses query identifiers</td>
+<td>Reproduced + inspected</td>
+<td>scalper.py:1798, 1859</td>
+<td>Generic keys remove every query parameter, so distinct query-identified items at the same price collide. Price changes create a new identity; capped history can evict active items.</td>
+<td>Retain listing/variant identifiers and remove tracking keys only; separate identity, price history and delivery acknowledgements; define explicit re-alert and retention rules.</td>
+<td>Different query-identified items stay distinct; tracking variants collapse; price oscillation follows policy and does not cause accidental duplicate or suppressed alerts.</td></tr>
+<tr><td>P2</td>
+<td>Publication freshness and status transitions are conflated</td>
+<td>Reproduced signature behavior</td>
+<td>scalper.py:2380, 2404</td>
+<td>The signature includes targets but not status. Status-only changes can remain unpublished within the 12-hour heartbeat. Scan time, evidence time and public publication time are not consistently separated.</td>
+<td>Include status, target coverage and configuration revision in signatures; track per-target evidence time and last successful publication separately.</td>
+<td>Status-only failure publishes promptly; unchanged verified results refresh on schedule; consumers can distinguish current evidence from an older public snapshot.</td></tr>
+<tr><td>P3</td>
+<td>Search effort is expensive without explicit coverage accounting</td>
+<td>Measured prior diagnostic + inspected</td>
+<td>scalper.py:392, 552; automation model configuration</td>
+<td>One earlier live diagnostic used about 109000 reported tokens in 106 seconds. This is usage, not a monetary estimate. Suggested queries are discretionary; the configured reference URL is unused.</td>
+<td>Record executed queries, attempted/opened sources, truncation, token usage and timings. For ordinary consumer-product monitoring, evaluate bounded deterministic checks and use model assistance for discovery or ambiguous pages under an explicit budget.</td>
+<td>Representative benign-product fixtures show equivalent verification quality; budget exhaustion is reported as incomplete, and performed coverage is inspectable.</td></tr>
+<tr><td>P3</td>
+<td>Legacy consumers and shared telemetry retain separate risks</td>
+<td>Legacy reproduced; shared-writer risk inspected</td>
+<td>scalper_digest.py:78; web_digest.py:628; automation_api_otel.py:205, 317</td>
+<td>The callable legacy summary can label old cached offers active and prefer them over newer failed state, but normal current email integration replaces that fragment with the fresher section consumer. Shared telemetry uses thread locking/fixed temporary names across processes; actual loss was not shown.</td>
+<td>Retire or align the legacy consumer with the current result contract. Use interprocess-safe writes or a single aggregator for shared telemetry.</td>
+<td>Legacy and normal consumers agree on freshness/coverage; concurrent isolated telemetry writers retain every record without replacement collisions.</td></tr>
+<tr><td>P3</td>
+<td>Tests and module boundaries need to match the real failure paths</td>
+<td>Observed passing tests; coverage inspected</td>
+<td>test_scalper_filters.py; test_ebay_validation.py; scalper.py</td>
+<td>29 generic tests and 2 automation-health tests pass, despite the reproduced defects. Search, normalization, transport, delivery, state, rendering and Git are coupled in one large module.</td>
+<td>Add meaningful offline scenario tests for the findings; split components around a typed outcome/evidence contract; use an isolated ordinary-product smoke test for the real wrapper and consumers when verifying implementation.</td>
+<td>Acceptance checks above pass; a controlled integration run exercises the actual wrapper, state, rendering and consumer boundary without real notification or publication.</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+<script>const auditRows=[...document.querySelectorAll('tbody tr')];const search=document.getElementById('audit-search');const priority=document.getElementById('audit-priority');function filterAudit(){let shown=0;const text=search.value.toLowerCase();for(const row of auditRows){const ok=(!priority.value||row.cells[0].textContent===priority.value)&&row.textContent.toLowerCase().includes(text);row.hidden=!ok;if(ok)shown++;}document.getElementById('audit-count').textContent=shown+' of '+auditRows.length+' findings shown';}search.addEventListener('input',filterAudit);priority.addEventListener('change',filterAudit);filterAudit();</script></body>
+</html>
