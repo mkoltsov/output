@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>NVMe ext4 and NFSv4 migration runbook</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#17283c;font:17px/1.65 system-ui,sans-serif}header{background:#102c40;color:#fff;padding:2rem max(1.2rem,calc((100vw - 1200px)/2))}header p{color:#d8e8f1;margin:.4rem 0}.layout{max-width:1280px;margin:auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:2rem;padding:2rem 1rem}nav{position:sticky;top:1rem;align-self:start;font-size:14px;max-height:92vh;overflow:auto}nav ul{list-style:none;padding-left:.8rem}nav a{display:block;padding:.2rem 0;color:#294a68;text-decoration:none}main{background:white;padding:2rem;border:1px solid #d9e2e9;border-radius:12px;min-width:0}h1{line-height:1.2;font-size:2rem}h2{border-top:1px solid #d8e2e8;padding-top:1.6rem;scroll-margin-top:1rem}h3{scroll-margin-top:1rem}a{color:#07599a}pre{background:#102c40;color:#eff7fa;padding:1rem;overflow:auto;border-radius:8px;font-size:13px;line-height:1.6}code{overflow-wrap:anywhere;font-size:.86em;background:#eef2f6;padding:.1em .25em}pre code{background:none;padding:0;overflow-wrap:normal}li{margin:.45rem 0}.notice{background:#fff4d8;border-left:4px solid #bb8200;padding:1rem}strong{font-weight:650}@media(max-width:850px){.layout{display:block;padding:1rem}nav{position:static;max-height:none;margin-bottom:1rem}main{padding:1.1rem}h1{font-size:1.65rem}}@media print{nav,header{display:none}.layout{display:block;padding:0}main{border:0;padding:0}pre{white-space:pre-wrap;background:#eee;color:#000}a{color:inherit}}</style></head><body><header><strong>Storage migration plan · 19 October 2026</strong><p>Redacted public copy · Planning only · No migration performed</p></header><div class="layout"><nav aria-label="Contents"><div class="toc">
+<ul>
+<li><a href="#1-outcome-and-fixed-decisions">1. Outcome and fixed decisions</a></li>
+<li><a href="#2-verified-current-state-and-limits-of-evidence">2. Verified current state and limits of evidence</a><ul>
+<li><a href="#physical-storage-and-mounts">Physical storage and mounts</a></li>
+<li><a href="#corruption-and-backup-evidence">Corruption and backup evidence</a></li>
+<li><a href="#services-and-access">Services and access</a></li>
+</ul>
+</li>
+<li><a href="#3-preparation-evidence-and-gono-go-gates">3. Preparation, evidence, and go/no-go gates</a><ul>
+<li><a href="#private-evidence-workspace">Private evidence workspace</a></li>
+<li><a href="#commands-below-are-execution-templates">Commands below are execution templates</a></li>
+</ul>
+</li>
+<li><a href="#4-phase-a-preserve-configuration-and-make-the-initial-copy">4. Phase A — preserve configuration and make the initial copy</a></li>
+<li><a href="#5-phase-b-freeze-writers-and-prove-the-staging-copy">5. Phase B — freeze writers and prove the staging copy</a><ul>
+<li><a href="#independent-content-and-tree-verification">Independent content and tree verification</a></li>
+</ul>
+</li>
+<li><a href="#6-phase-c-create-ext4-and-restore-while-writers-stay-stopped">6. Phase C — create ext4 and restore while writers stay stopped</a></li>
+<li><a href="#7-permissions-guards-and-local-service-restoration">7. Permissions, guards, and local service restoration</a><ul>
+<li><a href="#permissions-policy">Permissions policy</a></li>
+<li><a href="#configuration-changes-to-make-together">Configuration changes to make together</a></li>
+<li><a href="#restore-and-verify-local-consumers">Restore and verify local consumers</a></li>
+</ul>
+</li>
+<li><a href="#8-phase-d-nfsv4-server-and-client-transition">8. Phase D — NFSv4 server and client transition</a><ul>
+<li><a href="#network-and-identity-choices">Network and identity choices</a></li>
+<li><a href="#export-layout-and-mount-safety">Export layout and mount safety</a></li>
+<li><a href="#export-template">Export template</a></li>
+<li><a href="#client-mount-and-transition">Client mount and transition</a></li>
+</ul>
+</li>
+<li><a href="#9-monitoring-reboot-acceptance-and-recovery">9. Monitoring, reboot acceptance, and recovery</a><ul>
+<li><a href="#monitoring-and-instrumentation">Monitoring and instrumentation</a></li>
+<li><a href="#reboot-and-completion-gates">Reboot and completion gates</a></li>
+<li><a href="#recovery-by-failure-stage">Recovery by failure stage</a></li>
+</ul>
+</li>
+<li><a href="#10-references-checked-for-this-runbook">10. References checked for this runbook</a></li>
+</ul>
+</div>
+</nav><main><p class="notice"><strong>Redacted copy:</strong> device identifiers, local account names, and network addresses are replaced by placeholders. Use the private local runbook for execution planning. Formatting requires the documented verification gates and separate execution authorization.</p><h1 id="nvme-ntfs-to-ext4-migration-and-nfsv4-transition-runbook">NVMe NTFS to ext4 migration and NFSv4 transition runbook</h1>
+<p>Prepared: 19 October 2026. Live inspection refreshed on the preparation date.<br />
+Status: <strong>plan only</strong>. No copy, checksum pass, mount change, format, package installation, service interruption, or NFS configuration was performed while preparing this document.</p>
+<h2 id="1-outcome-and-fixed-decisions">1. Outcome and fixed decisions</h2>
+<p>Migrate the existing main NVMe data partition to ext4, preserve local application paths, verify the restored data, and then migrate approved Linux network clients to NFSv4.</p>
+<ul>
+<li><strong>Format only the existing main data partition, currently <code>/dev/sda3</code>.</strong> Keep the GPT and the EFI, reserved, and recovery partitions unchanged. This avoids unnecessary repartitioning and keeps recovery separate from the data migration. Reclaiming those small partitions is a later optional project.</li>
+<li>Keep <code>/mnt/disk1_part1</code> and its current directory layout. Retain <code>/mnt/disk1_part2</code> read-only.</li>
+<li>Use an off-NVMe file copy on the microSD as the default staging destination; keep it outside the home directory and outside routine home backups. A second copy on a separate device is preferable if available.</li>
+<li>Use ext4 defaults with a 1% reserved-block allocation, plus <code>nodev,nosuid</code>. Games may need execution, so do not mount the whole volume <code>noexec</code>.</li>
+<li>Restore local storage first. Retain SMB only for a controlled compatibility window, then switch clients to NFS in a separate phase.</li>
+<li>Use an NFSv4-only server, explicit approved client addresses, selected child exports, and a dedicated anonymous share identity. Private backups and the existing private exchange tree are excluded.</li>
+<li>Do not add a migration scheduler. Existing monitoring must cover the changed mount and new sharing service.</li>
+</ul>
+<p><strong>Destructive boundary:</strong> the filesystem creation step replaces the NTFS data filesystem. It requires separate execution authorization naming the physical drive, partition, verified staging copy, impact, and recovery approach. This document is preparation, not authorization to format.</p>
+<h2 id="2-verified-current-state-and-limits-of-evidence">2. Verified current state and limits of evidence</h2>
+<h3 id="physical-storage-and-mounts">Physical storage and mounts</h3>
+<p>The host runs Debian 13.4 and boots from the microSD, not the USB NVMe.</p>
+<ul>
+<li>NVMe: WDC PC SN530 SDBPMPZ-256G-1101, approximately 256 GB; serial <code>&lt;DEVICE_SERIAL&gt;</code>.</li>
+<li>Stable whole-drive selector:
+  <code>&lt;NVME_BY_ID&gt;</code>.</li>
+<li>Main partition selector: the same path with <code>-part3</code>.</li>
+<li>Main filesystem UUID: <code>&lt;OLD_NTFS_UUID&gt;</code>; NTFS mounted read/write at <code>/mnt/disk1_part1</code>.</li>
+<li>Recovery filesystem UUID: <code>&lt;RECOVERY_UUID&gt;</code>; NTFS mounted read-only at <code>/mnt/disk1_part2</code>.</li>
+<li>microSD root UUID: <code>&lt;MICROSD_ROOT_UUID&gt;</code>, ext4 on <code>/dev/mmcblk0p2</code>.</li>
+<li>At inspection: main data filesystem used approximately 82.77 GB with 171.95 GB available; root filesystem had approximately 192.75 GB available.</li>
+</ul>
+<p>The earlier directory inventory counted about 82.53 GB of visible files and 22,590 files. Its aggregate categories were backups 42.59 GB, ROMs 19.43 GB, games/installers 15.43 GB, exchange 4.50 GB, print 0.49 GB, and miscellaneous 0.08 GB. Allocated usage and file totals measure different things. The directory scan and content totals were <strong>not repeated in full</strong> for this runbook.</p>
+<h3 id="corruption-and-backup-evidence">Corruption and backup evidence</h3>
+<p>The exact entry <code>/mnt/disk1_part1/.codex-smb-onboot-write-test</code> still returns <code>Invalid argument</code> during a shallow directory listing. Current kernel messages also report an NTFS MFT sequence mismatch for record <code>51371</code>.</p>
+<p>This named test entry is a candidate for a documented exception because its name indicates prior agent test data. Its contents have not been recovered or proven disposable. Record the error and obtain an explicit decision to recover it or waive that single entry. No other read or copy error is permitted.</p>
+<p>The home backup program archives only the home directory. Its saved state records a successful backup and remote-integrity verification, but Drive was not queried afresh. This does not establish coverage or integrity of the other NVMe data.</p>
+<h3 id="services-and-access">Services and access</h3>
+<ul>
+<li>Samba is active. Its loaded systemd configuration requires both NVMe mount paths and runs <code>/usr/local/libexec/verify-nvme-mounts</code> before starting.</li>
+<li>The current Samba data share permits guest writes with a forced local user and hides <code>backups</code> using a veto rule. This is compatibility configuration, not an NFS security model.</li>
+<li>The home-backup timer is active; its backup service was inactive at inspection. The timer is persistent and may catch up when restarted.</li>
+<li>Docker and containerd are active; <code>docker ps -a</code> returned no containers. No Kodi, RetroArch, or qBittorrent process was found. Recheck all of these before execution.</li>
+<li>OctoPrint was reported active by the prior inventory; its own data paths were on the microSD. Recheck job state and any actual NVMe handles before deciding whether it needs intervention.</li>
+<li>NFS packages are not installed and no exports file exists.</li>
+<li>The wired server address was <code>&lt;WIRED_SERVER_ADDRESS&gt;</code>; Wi-Fi also had an address. No approved NFS client list or client mount tests have been established.</li>
+<li><code>sudo -n true</code> failed because a password is required. Protected configuration and root-only handle checks remain execution prerequisites. No privilege prompt was opened during planning.</li>
+</ul>
+<h2 id="3-preparation-evidence-and-gono-go-gates">3. Preparation, evidence, and go/no-go gates</h2>
+<p>Complete these before setting a maintenance window:</p>
+<ol>
+<li>Obtain root access and preserve a second administrative session. Ensure local recovery access and stable power. If a printer or ComfyUI session is running, coordinate the maintenance window; never interrupt an active ComfyUI job.</li>
+<li>Re-identify the drive by model, serial, size, partition number, UUID, and stable path. Verify that the format target is not the microSD, recovery, EFI, or reserved partition. Never trust the historical <code>/dev/sda</code> name alone.</li>
+<li>Inventory all local and remote consumers, including scripts containing either old UUID or mount path. Confirm client owners, mount paths, approved addresses, and their read/write needs. Idle TCP connections do not constitute a complete client inventory.</li>
+<li>Validate the staging filesystem identity and free space. Require projected staging size, small-partition images, logs, and <strong>at least 30 GB additional free root space</strong>. Recalculate if data has grown. Check inode availability as well.</li>
+<li>Determine whether any Windows ACLs, alternate streams, encryption, reparse objects, or other NTFS-only metadata must survive. Linux file copies preserve only metadata exposed by the mount. If any irreplaceable NTFS-specific information is needed, add a raw image on a separate device before formatting.</li>
+<li>Decide the exact broken-entry exception. Recover or specifically waive it. Do not broaden the exception to hidden files, Windows metadata folders, or all unreadable entries.</li>
+<li>Verify that all required tools are present: <code>rsync</code>, GNU <code>find</code>/<code>sort</code>/<code>xargs</code>/<code>sha256sum</code>, <code>sfdisk</code>, <code>blkid</code>, <code>mkfs.ext4</code>, <code>e2fsck</code>, ACL/xattr tools, and the tools for each archive format being preserved. Some are already present; <code>blkid</code> availability and root operation must be confirmed.</li>
+<li>Inspect the actual protected Samba drop-in, effective firewall, backup guard, service-health configuration, and all matching consumers before editing. Read-only systemd properties do not replace a configuration backup.</li>
+<li>Agree on a multi-hour maintenance window and staging retention. No throughput measurement supports a fixed completion promise.</li>
+</ol>
+<p><strong>Stop conditions:</strong> unexpected device identity; insufficient staging space; missing administrative recovery access; unapproved private-data exposure; any unexplained copy/read/hash error; any active writer that cannot be quiesced; unverified staging data; or a format target that remains mounted.</p>
+<h3 id="private-evidence-workspace">Private evidence workspace</h3>
+<p>During execution, create <code>/var/lib/nvme-migration/2026-10-19</code> owned by root with mode <code>0700</code>. Use these subdirectories:</p>
+<ul>
+<li><code>data</code>: the dedicated main-volume staging tree, initially empty.</li>
+<li><code>config</code>: original configurations, unit definitions, permissions, service states, and identity inventory.</li>
+<li><code>legacy</code>: images of partitions 1, 2, and 4 plus the partition-table dump.</li>
+<li><code>manifests</code>: frozen-source checksums and path/type inventories.</li>
+<li><code>logs</code>: phase logs, command statuses, error decisions, and acceptance evidence.</li>
+</ul>
+<p>It is deliberately outside <code>/home/&lt;LOCAL_USER&gt;</code> so the normal home-backup process cannot archive the entire migration copy. Confirm that it is on the microSD, not a bind mount or symlink into the NVMe. Use a unique execution-date directory if this runbook is executed later; never reuse a populated staging tree blindly.</p>
+<p>Keep raw logs, manifests, archive contents, and device identifiers private. Public status should contain only aggregate phase results.</p>
+<h3 id="commands-below-are-execution-templates">Commands below are execution templates</h3>
+<p>Run them only in the corresponding phase after its gate passes. Use a root Bash session with strict pipeline failure handling. These snippets are <strong>not</strong> a single script to paste and run.</p>
+<pre><code class="language-bash">set -euo pipefail
+umask 077
+MIGRATION_WORK=/var/lib/nvme-migration/2026-10-19
+NVME_DISK=&lt;NVME_BY_ID&gt;
+NVME_DATA=&quot;$NVME_DISK-part3&quot;
+NVME_MOUNT=/mnt/disk1_part1
+LOCAL_UID=&lt;LOCAL_UID&gt;
+LOCAL_GID=&lt;LOCAL_GID&gt;
+
+lsblk -b -o NAME,PATH,SIZE,MODEL,SERIAL,FSTYPE,UUID,MOUNTPOINTS
+findmnt -rn -M &quot;$NVME_MOUNT&quot; -o SOURCE,UUID,FSTYPE,OPTIONS
+findmnt -rn -T /var/lib -o SOURCE,UUID,FSTYPE
+df -B1 / &quot;$NVME_MOUNT&quot;
+df -i / &quot;$NVME_MOUNT&quot;
+</code></pre>
+<p>Record the actual resolved paths and identities in the evidence directory after creating it. Quote every path. Do not overwrite system environment variables such as <code>HOME</code>.</p>
+<h2 id="4-phase-a-preserve-configuration-and-make-the-initial-copy">4. Phase A — preserve configuration and make the initial copy</h2>
+<ol>
+<li>Save <code>lsblk</code> and mount inventories; dump the GPT with <code>sfdisk --dump "$NVME_DISK"</code>. Save checksums of the saved evidence.</li>
+<li>Copy, with original ownership/mode/ACLs, <code>/etc/fstab</code>, Samba configuration and drop-ins, the mount guard, backup program and units, health exporter, storage findings, relevant consumer configuration, and client mount configuration. Record enabled/active states separately.</li>
+<li>Capture the recovery image from a stable read-only filesystem and images of the unused EFI/reserved partitions. Use <code>dd if=... of=... bs=4M status=progress conv=fsync</code> with exact stable partition selectors and no <code>conv=noerror</code>. Any read error stops the image step. Hash the images.</li>
+<li>These small images plus the partition table do <strong>not</strong> contain the main data filesystem and are not a full-drive rollback image. Do not attempt an uncompressed 256 GB full-drive image in approximately 193 GB of free space or assume compression will make it fit.</li>
+<li>Run an initial whole-tree copy, including dotfiles and hidden system directories. The source trailing slash matters; never use <code>"$NVME_MOUNT"/*</code>.</li>
+</ol>
+<p>Initial copy template, before adding any specifically approved exception:</p>
+<pre><code class="language-bash">rsync -aHAXSx --numeric-ids --info=progress2 \
+  &quot;$NVME_MOUNT/&quot; &quot;$MIGRATION_WORK/data/&quot; \
+  &gt;&quot;$MIGRATION_WORK/logs/initial-copy.log&quot; 2&gt;&amp;1
+</code></pre>
+<p>The known bad entry is expected to prevent a completely successful unfiltered copy. After recording and explicitly waiving it, add exactly <code>--exclude=/.codex-smb-onboot-write-test</code> to every main-tree copy and comparison, and prune precisely that path from source inventories. A successful repeat must exit zero. Do not accept rsync status 23 merely because one known entry exists.</p>
+<p>Review any ACL/xattr errors independently: NTFS ownership and modes are synthesized by mount options, and some Windows metadata cannot be transplanted to ext4. If preservation flags fail, identify each attribute, document what Linux exposes, retain a metadata inventory, and stop until its treatment is agreed. Do not silently remove <code>-A</code> or <code>-X</code> or suppress errors.</p>
+<p>The initial copy can run while normal writers remain active. It is a warm copy and cannot authorize formatting.</p>
+<h2 id="5-phase-b-freeze-writers-and-prove-the-staging-copy">5. Phase B — freeze writers and prove the staging copy</h2>
+<ol>
+<li>Record current states again. Stop the home-backup timer first, then allow any backup service to finish normally. Do not kill an archive/upload mid-write.</li>
+<li>Notify known clients of the outage through the agreed channel. Inspect root <code>smbstatus</code>, stop Samba, and prevent automatic restart or new sharing sessions for the maintenance window.</li>
+<li>Stop only actual NVMe consumers. Gracefully close Kodi/RetroArch and stop torrent containers if running. Do not stop unrelated Docker, containerd, or OctoPrint simply because they are active.</li>
+<li>Check root-level open files and working directories with <code>fuser -vm</code> or <code>lsof</code>, running copies, hashes, backup jobs, and all mount namespaces used by containers. An unprivileged empty listing is insufficient.</li>
+<li>Remount the main NTFS filesystem read-only and confirm <code>ro</code>. If it is busy, find and resolve the holder; do not force or lazily unmount.</li>
+<li>Reconcile the frozen source into the dedicated staging tree. A deletion pass may target only this migration's <code>data</code> directory, after reviewing a dry run and confirming its filesystem identity and path. Never apply deletion to the source.</li>
+<li>Produce the final source manifest and path/type inventory while the source remains read-only. If the known exception is approved, use exactly the same exclusion throughout.</li>
+</ol>
+<p>Frozen-copy template:</p>
+<pre><code class="language-bash">rsync -aHAXSxnic --delete --numeric-ids \
+  &quot;$NVME_MOUNT/&quot; &quot;$MIGRATION_WORK/data/&quot; \
+  &gt;&quot;$MIGRATION_WORK/logs/final-copy-dry-run.log&quot; 2&gt;&amp;1
+# Review additions, changes, and deletions before the real reconciliation.
+rsync -aHAXSxc --delete --numeric-ids \
+  &quot;$NVME_MOUNT/&quot; &quot;$MIGRATION_WORK/data/&quot; \
+  &gt;&quot;$MIGRATION_WORK/logs/final-copy.log&quot; 2&gt;&amp;1
+</code></pre>
+<p>The approved one-entry exclusion, if any, must be added to both commands. All unexpected errors are hard stops.</p>
+<h3 id="independent-content-and-tree-verification">Independent content and tree verification</h3>
+<p>Build a deterministic manifest containing relative filename, size, and SHA-256 for every regular file; inventory directories, symlink targets, special file types, and hardlink relationships separately. Handle names with spaces, newlines, and non-UTF-8 bytes without loss. A one-shot Python implementation should use byte paths with Base64 encoding in its private manifest, <code>lstat</code>, <code>O_NOFOLLOW</code> for regular-file opens, and explicit errors; reject unknown special types until reviewed.</p>
+<p>The following GNU checksum pattern is a simpler content-check template. GNU escaped checksum records handle unusual filenames; do not combine <code>--zero</code> output with <code>sha256sum --check</code>.</p>
+<pre><code class="language-bash">(
+  cd &quot;$NVME_MOUNT&quot;
+  find . -xdev -type f -print0 |
+    LC_ALL=C sort -z |
+    xargs -0 -r sha256sum --
+) &gt;&quot;$MIGRATION_WORK/manifests/source.sha256&quot;
+(
+  cd &quot;$MIGRATION_WORK/data&quot;
+  sha256sum --check --strict &quot;$MIGRATION_WORK/manifests/source.sha256&quot;
+) &gt;&quot;$MIGRATION_WORK/logs/staging-sha256-check.log&quot; 2&gt;&amp;1
+</code></pre>
+<p>If the one-entry waiver is approved, the <code>find</code> expression must prune <code>./.codex-smb-onboot-write-test</code> <strong>before evaluating file type</strong>. Without this, traversal may fail even though rsync excludes it.</p>
+<p>Also run a zero-change rsync dry run using the frozen source and stage. Checksums alone do not detect extra files, missing empty directories, or incorrect symlinks. Retain file counts and total sizes as supplementary evidence, not substitutes for hashes.</p>
+<p>Test every backup archive with its format-specific integrity tool, then spot-restore representative home and Fedora files into a private scratch directory. Document any archives not tested; an unexplained archive failure blocks formatting even if the migration copy matches the corrupt source.</p>
+<p><strong>Formatting gate:</strong> source frozen; zero unexplained read errors; final copy exits zero; staging checksums match; tree comparison has zero unexplained differences; archive checks pass; all exceptions are signed off; source manifest and configuration backup are retained outside the NVMe.</p>
+<h2 id="6-phase-c-create-ext4-and-restore-while-writers-stay-stopped">6. Phase C — create ext4 and restore while writers stay stopped</h2>
+<ol>
+<li>Capture the gate results and obtain execution authorization for the exact physical device and partition.</li>
+<li>Normally unmount <code>/mnt/disk1_part1</code>. Confirm no other mount namespace holds partition 3. Retained legacy partitions must not be formatted or repartitioned.</li>
+<li>Temporarily prevent automatic mount or Samba restart using the existing units; record any temporary runtime masks and remove them only at the restoration phase. Keep the rollback configuration available.</li>
+<li>With the data mount absent, ensure the underlying directory is empty and root-owned. Set it to mode <code>0000</code>. Do not run this command while the NVMe is mounted: that would change the mounted filesystem root.</li>
+<li>Recheck model, serial, size, target partition, old UUID, and absence of the target from all mount tables immediately before the destructive command.</li>
+</ol>
+<pre><code class="language-bash"># DESTRUCTIVE: only after every formatting gate and explicit authorization.
+mkfs.ext4 -L nvme-data -m 1 &quot;$NVME_DATA&quot;
+blkid &quot;$NVME_DATA&quot;
+</code></pre>
+<p>Do not add <code>-F</code> to override a mounted-device or identity warning. Record the newly generated UUID as <code>NEW_EXT4_UUID</code> and do not reuse the old NTFS UUID.</p>
+<ol start="6">
+<li>Replace only the main-data fstab entry with:</li>
+</ol>
+<pre><code class="language-fstab">UUID=&lt;NEW_EXT4_UUID&gt; /mnt/disk1_part1 ext4 defaults,nofail,nodev,nosuid,x-systemd.device-timeout=15s 0 2
+</code></pre>
+<p>Keep the recovery entry read-only. <code>nofail</code> allows the machine to boot without the USB disk; explicit service guards must still prohibit fallback writes. Validate with <code>findmnt --verify --verbose</code>, run <code>systemctl daemon-reload</code>, then mount the data volume through the corrected fstab entry.</p>
+<ol start="7">
+<li>Confirm exact UUID, ext4, and read/write state before creating any directory. Restore the staging tree with <code>rsync -aHAXSx --numeric-ids</code>. Do not add a broad deletion option or remove ext4's new <code>lost+found</code>.</li>
+<li>Verify the restored regular files against the <strong>same frozen-source manifest</strong>. Compare relative path/type/link inventories; allow only documented ext4 additions such as <code>lost+found</code>.</li>
+<li>Before resuming writers, perform a clean unmount and <code>e2fsck -fn "$NVME_DATA"</code>; a clean result must exit zero. Investigate any other result rather than enabling automatic repair. Remount and recheck identity. Filesystem checking must be done unmounted.</li>
+<li>Apply the explicit permissions policy below and record intentional metadata differences. Recheck content hashes if any content was changed during troubleshooting.</li>
+</ol>
+<p>A successful <code>mkfs</code> or mount alone is not restoration acceptance.</p>
+<h2 id="7-permissions-guards-and-local-service-restoration">7. Permissions, guards, and local service restoration</h2>
+<h3 id="permissions-policy">Permissions policy</h3>
+<p>NTFS currently synthesizes broadly writable ownership/modes. Do not copy those modes into the final access policy unchanged.</p>
+<ul>
+<li>Main filesystem root: local owner UID/GID <code>&lt;LOCAL_UID&gt;:&lt;LOCAL_GID&gt;</code>, directory mode <code>0750</code>. Give <code>nvme-nfs</code> a named access ACL of execute-only (<code>--x</code>) on this root and the <code>shared</code> ancestor directory, with no default share ACL on the main root. Record the effective ACL mask and verify traversal without directory listing; do not assume bind mounts bypass all subtree-check permission requirements.</li>
+<li>Backups, the original <code>exchange</code> tree, and other private directories: local owner, directories <code>0700</code> and ordinary data files <code>0600</code>; remove ACLs granting share-account access. Review executable files before changing modes.</li>
+<li>Do not expose the existing exchange folder: it contains private exports and documents. Create <code>shared/exchange</code> as an initially empty curated share; copy only reviewed shareable files there after original-data verification. Preserve the original private files and paths.</li>
+<li>Create system account <code>nvme-nfs</code> with no login and primary group <code>nvme-share</code>. Record its assigned numeric UID/GID; do not assume they match a client.</li>
+<li>Selected shared trees (<code>shared/exchange</code>, <code>print</code>, <code>roms</code>): local user owns them, group <code>nvme-share</code>; directories <code>2770</code>, ordinary non-executable data files <code>0660</code>, and default group ACLs for collaborative writes.</li>
+<li>ROMs are exported read-only at the protocol layer, even though the local owner may update them.</li>
+<li>Add only required local accounts/services to <code>nvme-share</code> and restart the relevant sessions to acquire group membership.</li>
+<li>Audit game/software executable requirements separately. Avoid a recursive mode command that makes every NTFS file executable or removes executable bits from real software.</li>
+<li>Bind the NFS identity to shared trees only; it must fail access to backups and the original exchange tree.</li>
+</ul>
+<h3 id="configuration-changes-to-make-together">Configuration changes to make together</h3>
+<ul>
+<li><code>/usr/local/libexec/verify-nvme-mounts</code>: require the new <strong>main</strong> UUID, exact mountpoint, ext4, and writable state. Remove the recovery dependency from Samba's main-data guard, while retaining independent recovery monitoring.</li>
+<li>Samba service drop-in: require <code>mnt-disk1_part1.mount</code> only; add <code>BindsTo=</code> and <code>After=</code> for that mount. The actual protected drop-in must be inspected and backed up first. Remove the recovery Samba share during maintenance before dropping its dependency: recovery remains mounted read-only and monitored locally, but is no longer network-exported.</li>
+<li><code>~/.local/bin/home-gdrive-backup.py</code>: update <code>BACKUP_UUID</code> and require ext4 in the existing storage preflight. Preserve its free-space checks, directory containment, writable probe, and open-directory protection.</li>
+<li>The backup program and health exporter currently uppercase observed UUIDs before comparing them. Normalize <strong>both</strong> sides, or store the expected ext4 UUID uppercase. A lowercase constant compared with an uppercased actual UUID will fail.</li>
+<li><code>~/.local/bin/export-service-health-metrics.py</code>: update the main UUID and filesystem expectation; retain the recovery UUID/presence check because this plan retains partition 4. Add explicit main ext4 validation and recovery ntfs3/read-only validation: the current recovery require_write=False setting merely permits read-only operation and does not enforce it.</li>
+<li><code>~/dev/qbittorrent-vpn/up.sh</code>: validate exact mount, new UUID, ext4, and writable state <strong>before</strong> creating downloads directories or starting containers. Replace Docker volume syntax that creates missing host directories with <code>--mount type=bind</code>. Keep <code>torrents/downloads</code> as the download path.</li>
+<li>Search other application launchers, cron jobs, unit files, skills, and backup configuration for old UUIDs and NTFS-only assumptions. Update only active relevant consumers; preserve historical evidence as history.</li>
+<li>Archive the old NTFS integrity finding privately. Clear only that resolved active warning after copy, restoration, and filesystem checks pass. Make any remaining filesystem-check alert text filesystem-neutral.</li>
+</ul>
+<h3 id="restore-and-verify-local-consumers">Restore and verify local consumers</h3>
+<ol>
+<li>Remove temporary masks after corrected configuration is loaded. Verify mount guards positively with the disk mounted and negatively during a controlled unmounted maintenance check. Guard failure must occur before writing or serving an underlying microSD directory.</li>
+<li>Run the existing health exporter and inspect its output and automation snapshot.</li>
+<li>Restore Samba only if needed for the compatibility phase. Before restart, disable the old full-volume data share and recovery share. Configure only curated <code>shared/exchange</code>, print, and read-only ROM shares, restricted to the same approved client addresses. Preserve existing guest/forced-local-user behavior only for these selected trees, force group <code>nvme-share</code>, and use matching create/directory permissions. Validate <code>testparm</code> and real client access. Because the old forced user owns the private data, private directory modes alone do not make the old full-volume share safe. Remap any dependent clients before restarting their applications; leave SMB stopped if client scope is not agreed.</li>
+<li>Check RetroArch ROM paths, Kodi local sources, and torrent bind paths without starting applications that were previously stopped. If a consumer needs an actual run to validate, schedule its bounded acceptance check.</li>
+<li>Run the backup storage preflight under the existing backup service identity. Its <code>--check-storage</code> option <strong>writes</strong> a probe, state, and metrics; this belongs to execution validation. <code>--check-drive</code> can create remote folders and is not a harmless read-only check.</li>
+<li>Complete one fresh backup with <code>--skip-retention</code>, using the existing instrumented backup integration under its normal user identity, and inspect local integrity plus fresh Drive-verification results. This first validation must not rotate existing local or remote recovery archives. Keep the timer stopped until it finishes; resume ordinary retention after acceptance.</li>
+<li>Restore the timer to its previous enabled/active state last; account for persistent catch-up behavior and avoid overlapping a manual backup.</li>
+</ol>
+<h2 id="8-phase-d-nfsv4-server-and-client-transition">8. Phase D — NFSv4 server and client transition</h2>
+<p>Start after local ext4 acceptance. Record explicit authorization for the persistent NFS server during migration execution; no NFS daemon or timer is created by this planning task.</p>
+<h3 id="network-and-identity-choices">Network and identity choices</h3>
+<p>Use the wired server address, reserved in DHCP, and an explicit list of approved client addresses. Reconfirm the recorded <code>&lt;WIRED_SERVER_ADDRESS&gt;</code> address. Never export to <code>*</code> or the entire LAN by default.</p>
+<p>Use <code>sec=sys</code> only on the trusted LAN. It does not encrypt or cryptographically authenticate clients. Requests to these shares are mapped with <code>all_squash</code> to the dedicated <code>nvme-nfs</code> identity; also retain explicit <code>root_squash</code>. This mirrors single-owner shared-file behavior without accepting arbitrary client-supplied owner IDs. Per-user ownership or access over an untrusted network requires a separate authenticated/encrypted design.</p>
+<p>Install <code>nfs-kernel-server</code> on the server and <code>nfs-common</code> on clients only after blocking package-triggered serving until configuration is complete. Configure <code>/etc/nfs.conf.d/nvme.conf</code>:</p>
+<pre><code class="language-ini">[nfsd]
+vers3=n
+vers4=y
+vers4.0=n
+vers4.1=y
+vers4.2=y
+udp=n
+tcp=y
+</code></pre>
+<p>Allow TCP 2049 only from the approved clients on the intended interface. Inspect existing firewall policy before changing it; preserve administrative access. Verify actual protocol versions and listeners after startup rather than assuming package defaults.</p>
+<h3 id="export-layout-and-mount-safety">Export layout and mount safety</h3>
+<p>Create root-owned <code>/srv/nfs/nvme</code> mode <code>0755</code> as the NFSv4 pseudoroot. Do not bind or export the whole data volume. Its children are separate bind mounts:</p>
+<ul>
+<li><code>/srv/nfs/nvme/exchange</code> → <code>/mnt/disk1_part1/shared/exchange</code>, read/write.</li>
+<li><code>/srv/nfs/nvme/print</code> → <code>/mnt/disk1_part1/print</code>, read/write.</li>
+<li><code>/srv/nfs/nvme/roms</code> → <code>/mnt/disk1_part1/roms</code>, read-only.</li>
+</ul>
+<p>Create only these approved exports. Games, installers, torrents, backups, the private exchange tree, and recovery are not exported. Add a media export only after identifying the actual media subdirectory and reviewing its contents.</p>
+<p>Use native systemd bind-mount units named for their destination paths. Each requires, follows, and binds its lifetime to <code>mnt-disk1_part1.mount</code>. Keep the underlying unmounted child directories root-owned mode <code>0000</code>.</p>
+<p>Example <code>srv-nfs-nvme-exchange.mount</code>:</p>
+<pre><code class="language-ini">[Unit]
+Description=Curated NVMe exchange bind
+Requires=mnt-disk1_part1.mount
+After=mnt-disk1_part1.mount
+BindsTo=mnt-disk1_part1.mount
+
+[Mount]
+What=/mnt/disk1_part1/shared/exchange
+Where=/srv/nfs/nvme/exchange
+Type=none
+Options=bind
+</code></pre>
+<p>Use analogous units for print and ROMs; use <code>Options=bind,ro</code> for ROMs and verify the effective bind mount is read-only.</p>
+<p>The NFS server unit must require and follow all bind mounts and a fresh pre-export guard oneshot. Bind its lifetime to the main mount and bind mounts. The guard must verify the new UUID, ext4, and the exact <code>FSROOT</code> of each child (<code>/shared/exchange</code>, <code>/print</code>, <code>/roms</code>). A mere existing directory or matching path prefix is insufficient.</p>
+<p>Make the guard a required dependency ordered before the NFS server, rather than appending it after packaged <code>ExecStartPre</code> commands that may already run <code>exportfs</code>. Avoid <code>RemainAfterExit</code> so the guard is checked on each start, and do not bind server lifetime to the completed inactive oneshot. Inspect the installed Debian unit names and full startup chain before applying drop-ins.</p>
+<h3 id="export-template">Export template</h3>
+<p>Create <code>/etc/exports.d/nvme.exports</code>. Substitute an actual approved client address and the dedicated server-side numeric UID/GID; repeat host entries for each approved client. Placeholder text is not a runnable configuration.</p>
+<pre><code class="language-text">/srv/nfs/nvme CLIENT_IP(ro,fsid=0,sync,sec=sys,root_squash,all_squash,anonuid=NFS_UID,anongid=SHARE_GID,subtree_check,mountpoint=/mnt/disk1_part1)
+/srv/nfs/nvme/exchange CLIENT_IP(rw,fsid=101,sync,sec=sys,root_squash,all_squash,anonuid=NFS_UID,anongid=SHARE_GID,subtree_check,mountpoint)
+/srv/nfs/nvme/print CLIENT_IP(rw,fsid=102,sync,sec=sys,root_squash,all_squash,anonuid=NFS_UID,anongid=SHARE_GID,subtree_check,mountpoint)
+/srv/nfs/nvme/roms CLIENT_IP(ro,fsid=103,sync,sec=sys,root_squash,all_squash,anonuid=NFS_UID,anongid=SHARE_GID,subtree_check,mountpoint)
+</code></pre>
+<p>No <code>crossmnt</code>, <code>no_root_squash</code>, <code>insecure</code>, or whole-volume export.</p>
+<p>A bind mount is not a distinct security filesystem. Keep <code>subtree_check</code> because these are subdirectories of a filesystem that also holds private data; exercise rename/open-file cases because subtree checking can complicate filehandles. The dedicated squashed identity must lack permissions on private trees even if a client guesses a filehandle. This is access control for trusted approved clients, not isolation against arbitrary hostile hosts.</p>
+<h3 id="client-mount-and-transition">Client mount and transition</h3>
+<p>For each client, save the original SMB mount/app configuration, install its NFS client package, and first mount to a temporary test location. Use NFSv4.2 over TCP with <code>hard</code>, <code>_netdev</code>, <code>nosuid</code>, and <code>nodev</code>; confirm version 4.1 compatibility only if the client cannot use 4.2.</p>
+<pre><code class="language-fstab">SERVER:/exchange /mnt/nvme-exchange nfs vers=4.2,proto=tcp,hard,_netdev,nosuid,nodev,nofail,x-systemd.automount,x-systemd.mount-timeout=30s 0 0
+</code></pre>
+<p>Use matching lines for print and ROMs with <code>ro</code> for ROMs. The mount timeout bounds the initial mount attempt, not ongoing operations: a <code>hard</code> mount can wait during a server outage. Do not use <code>soft</code> to make write operations fail quickly.</p>
+<p>Preserve application-facing client paths when switching away from SMB, and ensure clients do not write into empty local mount directories. Each writer needs an actual mount/source guard before directory creation. Stop the application before unmounting its old share.</p>
+<p>Client acceptance for every approved host:</p>
+<ul>
+<li>Confirm mounted server, export, NFS version, and read/write mode.</li>
+<li>Create, read, checksum, rename, and remove a test file in exchange/print as the intended application user.</li>
+<li>Confirm server-side ownership maps to <code>nvme-nfs:nvme-share</code>, including a client-root write; client root must never create server-root-owned files.</li>
+<li>Confirm ROM reads succeed and writes fail.</li>
+<li>Confirm the private backup and original exchange directories cannot be mounted or accessed, including attempts using client root or a claimed server-owner UID.</li>
+<li>Verify symlink and renamed/open-file behavior; test any application requiring locks.</li>
+<li>Prove a non-allowlisted client cannot mount.</li>
+<li>During a scheduled idle test, verify loss of the main mount or a bind mount prevents serving; restore the correct mount, restart the guarded server, and verify recovery. Do not unplug a busy drive or interrupt active jobs.</li>
+</ul>
+<p>After all clients pass and a <strong>seven-day observation window</strong> completes, retire the broad SMB data share. Retire smbd/nmbd/winbind only if no other use is found. Preserve their configuration for rollback and update service/TCP health expectations at the same time.</p>
+<h2 id="9-monitoring-reboot-acceptance-and-recovery">9. Monitoring, reboot acceptance, and recovery</h2>
+<h3 id="monitoring-and-instrumentation">Monitoring and instrumentation</h3>
+<p>Keep the existing metrics exporter and existing scheduling. Update expected main UUID/type, retain the recovery check, and switch Samba service/TCP expectations to NFS only when SMB is retired. NFS health needs both the service/listener and correct mounted/exported data, not merely an open TCP 2049 port.</p>
+<p>Capture wrong UUID, wrong filesystem, missing data mount, missing bind, unexpected export, copy/hash failure, and backup failure in the Microserver automation snapshot and Morning Digest. Preserve other findings when resolving the old NTFS warning.</p>
+<p>Instrument the required <code>nvme-nfs-guard</code> service before deployment with stable <code>OTEL_SERVICE_NAME=nvme-nfs-guard</code>, the local wrapper/bootstrap integration, failure metrics, and automation snapshot visibility. Mount validation must remain fail-closed even when telemetry export is unavailable; a telemetry error cannot turn a failed mount check into success. If execution is wrapped in an additional script with network or device-control paths, instrument that script before use: stable <code>OTEL_SERVICE_NAME=nvme-migration</code>, the existing <code>otel-python-cron.sh</code>/<code>automation_otel_bootstrap</code> integration, every-third-API-call sampling, every failing call/job recorded, atomic phase/success/duration metrics under <code>~/.local/state/node-textfile</code>, and failure visibility through the existing automation summary consumed by Morning Digest. No new scheduler is needed. Raw checksums, filenames, identities, and private data must not become metric labels or public reports.</p>
+<h3 id="reboot-and-completion-gates">Reboot and completion gates</h3>
+<p>Reboot only during an agreed idle window after checking printer, ComfyUI, backup, and other active work. Then verify:</p>
+<ol>
+<li>The host boots from the microSD. Main data is the new UUID/ext4 at the original path, recovery is unchanged/read-only, and no service wrote into the underlying microSD mountpoint.</li>
+<li>Restored data verification and the offline filesystem check passed before writers resumed.</li>
+<li>Ownership and permissions match the deliberate policy; local application paths work.</li>
+<li>One fresh backup and remote-integrity verification pass; the timer is restored without overlapping jobs.</li>
+<li>NFS exports, firewall allowlist, positive/negative client tests, and mount guards pass.</li>
+<li>The automation snapshot and Morning Digest report the correct mount/service state, without a stale resolved NTFS warning or fabricated healthy result.</li>
+</ol>
+<p>Retain the verified staging copy until all gates pass, SMB has completed its seven-day transition, and at least one fresh post-migration backup is confirmed. Then obtain a separate retention decision before deleting it. Existing home-only backups still do not protect ROMs, games, exchange, or print data; document that coverage gap and design a separate backup policy if those data require ongoing protection. The migration copy is temporary recovery material, not that long-term policy.</p>
+<h3 id="recovery-by-failure-stage">Recovery by failure stage</h3>
+<ul>
+<li><strong>Before formatting:</strong> leave NTFS intact. If safe, remount it in the prior state and restore saved service configuration/states. Do not bring inconsistent NTFS back read/write merely to shorten an outage.</li>
+<li><strong>After formatting, before restoration acceptance:</strong> stop writers and shares. Repair/recreate ext4 as appropriate and restore from the verified staging tree again. Preserve the immutable source manifest. Restoring the GPT cannot recover overwritten NTFS data.</li>
+<li><strong>After ext4 local success, NFS failure:</strong> disable the failed NFS exports and restore selected SMB access over ext4 using the saved client configuration. Keep private data protected. There is no need to return to NTFS.</li>
+<li><strong>Actual return to NTFS:</strong> separately destructive; create a new NTFS filesystem and restore the verified files, or restore a full original raw image if one was explicitly taken. File copies do not recreate original NTFS metadata.</li>
+<li><strong>microSD/staging failure after formatting:</strong> the only other recovery copy is an independently verified external copy if one was made. Home-only cloud backups do not restore the entire NVMe. This residual risk is why a second device copy is preferred.</li>
+<li><strong>Unreadable data or unstable hardware:</strong> stop rather than repeatedly remounting or clearing flags. Reassess recovery/imaging on separate storage. Escalate any unresolved fix after 20 concrete attempts through the user's ntfy procedure with the last error and evidence.</li>
+</ul>
+<h2 id="10-references-checked-for-this-runbook">10. References checked for this runbook</h2>
+<p>These are implementation references, not evidence that migration or client validation has occurred.</p>
+<ul>
+<li><a href="https://manpages.debian.org/trixie/rsync/rsync.1.en.html">Debian rsync manual</a>: copy flags, checksum comparison, and dry-run/deletion behavior.</li>
+<li><a href="https://manpages.debian.org/trixie/e2fsprogs/mke2fs.8.en.html">Debian mke2fs manual</a>: filesystem creation and reserved-block configuration.</li>
+<li><a href="https://manpages.debian.org/trixie/e2fsprogs/e2fsck.8.en.html">Debian e2fsck manual</a>: offline checking and exit statuses.</li>
+<li><a href="https://manpages.debian.org/trixie/nfs-kernel-server/exports.5.en.html">Debian exports manual</a>: client ACLs, pseudoroot, squashing, subtree checks, and mountpoint guards.</li>
+<li><a href="https://manpages.debian.org/trixie/nfs-common/nfs.5.en.html">Debian NFS client manual</a>: protocol selection and hard/soft mount behavior.</li>
+<li><a href="https://manpages.debian.org/trixie/nfs-common/nfs.conf.5.en.html">Debian nfs.conf manual</a>: version/transport configuration.</li>
+<li><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html">systemd unit dependency documentation</a>: requirements, ordering, and lifetime coupling.</li>
+</ul></main></div></body></html>
