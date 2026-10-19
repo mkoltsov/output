@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>NVMe ext4 and NFSv4 migration runbook</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#17283c;font:17px/1.65 system-ui,sans-serif}header{background:#102c40;color:#fff;padding:2rem max(1.2rem,calc((100vw - 1200px)/2))}header p{color:#d8e8f1;margin:.4rem 0}.layout{max-width:1280px;margin:auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:2rem;padding:2rem 1rem}nav{position:sticky;top:1rem;align-self:start;font-size:14px;max-height:92vh;overflow:auto}nav ul{list-style:none;padding-left:.8rem}nav a{display:block;padding:.2rem 0;color:#294a68;text-decoration:none}main{background:white;padding:2rem;border:1px solid #d9e2e9;border-radius:12px;min-width:0}h1{line-height:1.2;font-size:2rem}h2{border-top:1px solid #d8e2e8;padding-top:1.6rem;scroll-margin-top:1rem}h3{scroll-margin-top:1rem}a{color:#07599a}pre{background:#102c40;color:#eff7fa;padding:1rem;overflow:auto;border-radius:8px;font-size:13px;line-height:1.6}code{overflow-wrap:anywhere;font-size:.86em;background:#eef2f6;padding:.1em .25em}pre code{background:none;padding:0;overflow-wrap:normal}li{margin:.45rem 0}.notice{background:#fff4d8;border-left:4px solid #bb8200;padding:1rem}strong{font-weight:650}@media(max-width:850px){.layout{display:block;padding:1rem}nav{position:static;max-height:none;margin-bottom:1rem}main{padding:1.1rem}h1{font-size:1.65rem}}@media print{nav,header{display:none}.layout{display:block;padding:0}main{border:0;padding:0}pre{white-space:pre-wrap;background:#eee;color:#000}a{color:inherit}}</style></head><body><header><strong>Storage migration plan · 19 October 2026</strong><p>Redacted public copy · Planning only · No migration performed</p></header><div class="layout"><nav aria-label="Contents"><div class="toc">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>NVMe migration runbook · Revision 2 · One ext4 partition</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#17283c;font:17px/1.65 system-ui,sans-serif}header{background:#102c40;color:#fff;padding:2rem max(1.2rem,calc((100vw - 1200px)/2))}header p{color:#d8e8f1;margin:.4rem 0}.layout{max-width:1280px;margin:auto;display:grid;grid-template-columns:260px minmax(0,1fr);gap:2rem;padding:2rem 1rem}nav{position:sticky;top:1rem;align-self:start;font-size:14px;max-height:92vh;overflow:auto}nav ul{list-style:none;padding-left:.8rem}nav a{display:block;padding:.2rem 0;color:#294a68;text-decoration:none}main{background:white;padding:2rem;border:1px solid #d9e2e9;border-radius:12px;min-width:0}h1{line-height:1.2;font-size:2rem}h2{border-top:1px solid #d8e2e8;padding-top:1.6rem;scroll-margin-top:1rem}h3{scroll-margin-top:1rem}a{color:#07599a}pre{background:#102c40;color:#eff7fa;padding:1rem;overflow:auto;border-radius:8px;font-size:13px;line-height:1.6}code{overflow-wrap:anywhere;font-size:.86em;background:#eef2f6;padding:.1em .25em}pre code{background:none;padding:0;overflow-wrap:normal}li{margin:.45rem 0}.notice{background:#fff4d8;border-left:4px solid #bb8200;padding:1rem}strong{font-weight:650}@media(max-width:850px){.layout{display:block;padding:1rem}nav{position:static;max-height:none;margin-bottom:1rem}main{padding:1.1rem}h1{font-size:1.65rem}}@media print{nav,header{display:none}.layout{display:block;padding:0}main{border:0;padding:0}pre{white-space:pre-wrap;background:#eee;color:#000}a{color:inherit}}</style></head><body><header><strong>Storage migration plan · 19 October 2026 · Revision 2</strong><p>One NVMe partition · Redacted public copy · No migration performed</p></header><div class="layout"><nav aria-label="Contents"><div class="toc">
 <ul>
 <li><a href="#1-outcome-and-fixed-decisions">1. Outcome and fixed decisions</a></li>
 <li><a href="#2-verified-current-state-and-limits-of-evidence">2. Verified current state and limits of evidence</a><ul>
@@ -18,7 +18,11 @@
 <li><a href="#independent-content-and-tree-verification">Independent content and tree verification</a></li>
 </ul>
 </li>
-<li><a href="#6-phase-c-create-ext4-and-restore-while-writers-stay-stopped">6. Phase C — create ext4 and restore while writers stay stopped</a></li>
+<li><a href="#6-phase-c-replace-the-entire-partition-layout-then-restore">6. Phase C — replace the entire partition layout, then restore</a><ul>
+<li><a href="#remove-old-signatures-and-create-one-partition">Remove old signatures and create one partition</a></li>
+<li><a href="#create-ext4-and-update-mounts">Create ext4 and update mounts</a></li>
+</ul>
+</li>
 <li><a href="#7-permissions-guards-and-local-service-restoration">7. Permissions, guards, and local service restoration</a><ul>
 <li><a href="#permissions-policy">Permissions policy</a></li>
 <li><a href="#configuration-changes-to-make-together">Configuration changes to make together</a></li>
@@ -41,21 +45,21 @@
 <li><a href="#10-references-checked-for-this-runbook">10. References checked for this runbook</a></li>
 </ul>
 </div>
-</nav><main><p class="notice"><strong>Redacted copy:</strong> device identifiers, local account names, and network addresses are replaced by placeholders. Use the private local runbook for execution planning. Formatting requires the documented verification gates and separate execution authorization.</p><h1 id="nvme-ntfs-to-ext4-migration-and-nfsv4-transition-runbook">NVMe NTFS to ext4 migration and NFSv4 transition runbook</h1>
-<p>Prepared: 19 October 2026. Live inspection refreshed on the preparation date.<br />
+</nav><main><p class="notice"><strong>Redacted copy:</strong> device identifiers, local account names, and network addresses are replaced by placeholders. Use the private local runbook for execution planning. The whole-drive wipe requires the documented verification gates and execution authorization.</p><h1 id="nvme-ntfs-to-ext4-migration-and-nfsv4-transition-runbook">NVMe NTFS to ext4 migration and NFSv4 transition runbook</h1>
+<p>Prepared: 19 October 2026. <strong>Revision 2: consolidate all NVMe partitions into one ext4 volume.</strong> Storage layout rechecked for this revision; service and backup observations retain their earlier inspection time on the same date.<br />
 Status: <strong>plan only</strong>. No copy, checksum pass, mount change, format, package installation, service interruption, or NFS configuration was performed while preparing this document.</p>
 <h2 id="1-outcome-and-fixed-decisions">1. Outcome and fixed decisions</h2>
-<p>Migrate the existing main NVMe data partition to ext4, preserve local application paths, verify the restored data, and then migrate approved Linux network clients to NFSv4.</p>
+<p>Replace the NVMe's entire four-partition layout with a new GPT containing one ext4 data partition, restore the useful main-volume files at their existing local paths, verify them, and then migrate approved Linux network clients to NFSv4.</p>
 <ul>
-<li><strong>Format only the existing main data partition, currently <code>/dev/sda3</code>.</strong> Keep the GPT and the EFI, reserved, and recovery partitions unchanged. This avoids unnecessary repartitioning and keeps recovery separate from the data migration. Reclaiming those small partitions is a later optional project.</li>
-<li>Keep <code>/mnt/disk1_part1</code> and its current directory layout. Retain <code>/mnt/disk1_part2</code> read-only.</li>
+<li><strong>Remove all four existing NVMe partitions and create one GPT Linux data partition spanning the usable disk, formatted ext4.</strong> The new data device will be partition 1 (currently this would be <code>/dev/sda1</code>); there will be no separate EFI, reserved, or Windows recovery partition.</li>
+<li>Keep <code>/mnt/disk1_part1</code> and its main-data directory layout, now backed by the new partition 1. Retire <code>/mnt/disk1_part2</code> and all of its live configuration dependencies. Old EFI/recovery contents are retained only as temporary off-device images for recovery, not recreated or merged into the live data tree.</li>
 <li>Use an off-NVMe file copy on the microSD as the default staging destination; keep it outside the home directory and outside routine home backups. A second copy on a separate device is preferable if available.</li>
 <li>Use ext4 defaults with a 1% reserved-block allocation, plus <code>nodev,nosuid</code>. Games may need execution, so do not mount the whole volume <code>noexec</code>.</li>
 <li>Restore local storage first. Retain SMB only for a controlled compatibility window, then switch clients to NFS in a separate phase.</li>
 <li>Use an NFSv4-only server, explicit approved client addresses, selected child exports, and a dedicated anonymous share identity. Private backups and the existing private exchange tree are excluded.</li>
 <li>Do not add a migration scheduler. Existing monitoring must cover the changed mount and new sharing service.</li>
 </ul>
-<p><strong>Destructive boundary:</strong> the filesystem creation step replaces the NTFS data filesystem. It requires separate execution authorization naming the physical drive, partition, verified staging copy, impact, and recovery approach. This document is preparation, not authorization to format.</p>
+<p><strong>Destructive boundary:</strong> the first old-filesystem signature erasure begins whole-NVMe destruction, before GPT creation or ext4 formatting. Execution authorization must cover the exact physical NVMe, removal of every old partition, verified off-device copies, impact, and recovery approach. The user's requested scope is incorporated here; this update changes the plan only.</p>
 <h2 id="2-verified-current-state-and-limits-of-evidence">2. Verified current state and limits of evidence</h2>
 <h3 id="physical-storage-and-mounts">Physical storage and mounts</h3>
 <p>The host runs Debian 13.4 and boots from the microSD, not the USB NVMe.</p>
@@ -63,9 +67,9 @@ Status: <strong>plan only</strong>. No copy, checksum pass, mount change, format
 <li>NVMe: WDC PC SN530 SDBPMPZ-256G-1101, approximately 256 GB; serial <code>&lt;DEVICE_SERIAL&gt;</code>.</li>
 <li>Stable whole-drive selector:
   <code>&lt;NVME_BY_ID&gt;</code>.</li>
-<li>Main partition selector: the same path with <code>-part3</code>.</li>
+<li>Current/source main partition selector: the same path with <code>-part3</code>. After repartitioning, the destination will instead be <code>-part1</code>. Before repartitioning, <code>-part1</code> still denotes the old EFI partition; its mere existence is not proof of a valid destination.</li>
 <li>Main filesystem UUID: <code>&lt;OLD_NTFS_UUID&gt;</code>; NTFS mounted read/write at <code>/mnt/disk1_part1</code>.</li>
-<li>Recovery filesystem UUID: <code>&lt;RECOVERY_UUID&gt;</code>; NTFS mounted read-only at <code>/mnt/disk1_part2</code>.</li>
+<li>Current recovery filesystem UUID: <code>&lt;OLD_RECOVERY_UUID&gt;</code>; NTFS mounted read-only at <code>/mnt/disk1_part2</code>. This is current inventory only; the partition and mount are removed by the proposed migration.</li>
 <li>microSD root UUID: <code>&lt;MICROSD_ROOT_UUID&gt;</code>, ext4 on <code>/dev/mmcblk0p2</code>.</li>
 <li>At inspection: main data filesystem used approximately 82.77 GB with 171.95 GB available; root filesystem had approximately 192.75 GB available.</li>
 </ul>
@@ -89,22 +93,22 @@ Status: <strong>plan only</strong>. No copy, checksum pass, mount change, format
 <p>Complete these before setting a maintenance window:</p>
 <ol>
 <li>Obtain root access and preserve a second administrative session. Ensure local recovery access and stable power. If a printer or ComfyUI session is running, coordinate the maintenance window; never interrupt an active ComfyUI job.</li>
-<li>Re-identify the drive by model, serial, size, partition number, UUID, and stable path. Verify that the format target is not the microSD, recovery, EFI, or reserved partition. Never trust the historical <code>/dev/sda</code> name alone.</li>
+<li>Re-identify the whole NVMe by model, serial, exact byte size, stable path, and all four old partitions. The destructive scope includes every old NVMe partition; the microSD and every other device are outside it. Never trust the historical <code>/dev/sda</code> name alone.</li>
 <li>Inventory all local and remote consumers, including scripts containing either old UUID or mount path. Confirm client owners, mount paths, approved addresses, and their read/write needs. Idle TCP connections do not constitute a complete client inventory.</li>
 <li>Validate the staging filesystem identity and free space. Require projected staging size, small-partition images, logs, and <strong>at least 30 GB additional free root space</strong>. Recalculate if data has grown. Check inode availability as well.</li>
-<li>Determine whether any Windows ACLs, alternate streams, encryption, reparse objects, or other NTFS-only metadata must survive. Linux file copies preserve only metadata exposed by the mount. If any irreplaceable NTFS-specific information is needed, add a raw image on a separate device before formatting.</li>
+<li>Determine whether any Windows ACLs, alternate streams, encryption, reparse objects, or other NTFS-only metadata must survive. Linux file copies preserve only metadata exposed by the mount. If any irreplaceable NTFS-specific information is needed, add a raw image on a separate device before any signature erasure or repartitioning.</li>
 <li>Decide the exact broken-entry exception. Recover or specifically waive it. Do not broaden the exception to hidden files, Windows metadata folders, or all unreadable entries.</li>
-<li>Verify that all required tools are present: <code>rsync</code>, GNU <code>find</code>/<code>sort</code>/<code>xargs</code>/<code>sha256sum</code>, <code>sfdisk</code>, <code>blkid</code>, <code>mkfs.ext4</code>, <code>e2fsck</code>, ACL/xattr tools, and the tools for each archive format being preserved. Some are already present; <code>blkid</code> availability and root operation must be confirmed.</li>
+<li>Verify that all required tools are present: <code>rsync</code>, GNU <code>find</code>/<code>sort</code>/<code>xargs</code>/<code>sha256sum</code>, <code>sfdisk</code>, <code>parted</code>, <code>partprobe</code>, <code>udevadm</code>, <code>wipefs</code>, <code>blkid</code>, <code>mkfs.ext4</code>, <code>e2fsck</code>, ACL/xattr tools, and the tools for each archive format being preserved. Some are already present; <code>blkid</code> availability and root operation must be confirmed.</li>
 <li>Inspect the actual protected Samba drop-in, effective firewall, backup guard, service-health configuration, and all matching consumers before editing. Read-only systemd properties do not replace a configuration backup.</li>
 <li>Agree on a multi-hour maintenance window and staging retention. No throughput measurement supports a fixed completion promise.</li>
 </ol>
-<p><strong>Stop conditions:</strong> unexpected device identity; insufficient staging space; missing administrative recovery access; unapproved private-data exposure; any unexplained copy/read/hash error; any active writer that cannot be quiesced; unverified staging data; or a format target that remains mounted.</p>
+<p><strong>Stop conditions:</strong> unexpected device identity; insufficient staging space; missing administrative recovery access; unapproved private-data exposure; any unexplained copy/read/hash error; any active writer that cannot be quiesced; unverified staging data; or any NVMe partition that remains mounted or held when destructive work would begin.</p>
 <h3 id="private-evidence-workspace">Private evidence workspace</h3>
 <p>During execution, create <code>/var/lib/nvme-migration/2026-10-19</code> owned by root with mode <code>0700</code>. Use these subdirectories:</p>
 <ul>
 <li><code>data</code>: the dedicated main-volume staging tree, initially empty.</li>
 <li><code>config</code>: original configurations, unit definitions, permissions, service states, and identity inventory.</li>
-<li><code>legacy</code>: images of partitions 1, 2, and 4 plus the partition-table dump.</li>
+<li><code>legacy</code>: verified images of old partitions 1, 2, and 4, the original GPT dump, and signature backups. These remain off-NVMe throughout the migration; the final NVMe still has exactly one partition.</li>
 <li><code>manifests</code>: frozen-source checksums and path/type inventories.</li>
 <li><code>logs</code>: phase logs, command statuses, error decisions, and acceptance evidence.</li>
 </ul>
@@ -116,7 +120,8 @@ Status: <strong>plan only</strong>. No copy, checksum pass, mount change, format
 umask 077
 MIGRATION_WORK=/var/lib/nvme-migration/2026-10-19
 NVME_DISK=&lt;NVME_BY_ID&gt;
-NVME_DATA=&quot;$NVME_DISK-part3&quot;
+OLD_NVME_DATA=&quot;$NVME_DISK-part3&quot;
+# NEW_NVME_DATA is assigned only after the new GPT is verified.
 NVME_MOUNT=/mnt/disk1_part1
 LOCAL_UID=&lt;LOCAL_UID&gt;
 LOCAL_GID=&lt;LOCAL_GID&gt;
@@ -132,7 +137,7 @@ df -i / &quot;$NVME_MOUNT&quot;
 <ol>
 <li>Save <code>lsblk</code> and mount inventories; dump the GPT with <code>sfdisk --dump "$NVME_DISK"</code>. Save checksums of the saved evidence.</li>
 <li>Copy, with original ownership/mode/ACLs, <code>/etc/fstab</code>, Samba configuration and drop-ins, the mount guard, backup program and units, health exporter, storage findings, relevant consumer configuration, and client mount configuration. Record enabled/active states separately.</li>
-<li>Capture the recovery image from a stable read-only filesystem and images of the unused EFI/reserved partitions. Use <code>dd if=... of=... bs=4M status=progress conv=fsync</code> with exact stable partition selectors and no <code>conv=noerror</code>. Any read error stops the image step. Hash the images.</li>
+<li>Capture old partition 4 from its stable read-only recovery filesystem, plus images of unused old EFI partition 1 and reserved partition 2. Use <code>dd if=... of=... bs=4M status=progress conv=fsync</code> with exact stable partition selectors and no <code>conv=noerror</code>. Any read error stops the image step. Hash and verify the images before any signature erasure. These small off-device images preserve a recovery option without retaining their partitions on the rebuilt NVMe.</li>
 <li>These small images plus the partition table do <strong>not</strong> contain the main data filesystem and are not a full-drive rollback image. Do not attempt an uncompressed 256 GB full-drive image in approximately 193 GB of free space or assume compression will make it fit.</li>
 <li>Run an initial whole-tree copy, including dotfiles and hidden system directories. The source trailing slash matters; never use <code>"$NVME_MOUNT"/*</code>.</li>
 </ol>
@@ -143,7 +148,7 @@ df -i / &quot;$NVME_MOUNT&quot;
 </code></pre>
 <p>The known bad entry is expected to prevent a completely successful unfiltered copy. After recording and explicitly waiving it, add exactly <code>--exclude=/.codex-smb-onboot-write-test</code> to every main-tree copy and comparison, and prune precisely that path from source inventories. A successful repeat must exit zero. Do not accept rsync status 23 merely because one known entry exists.</p>
 <p>Review any ACL/xattr errors independently: NTFS ownership and modes are synthesized by mount options, and some Windows metadata cannot be transplanted to ext4. If preservation flags fail, identify each attribute, document what Linux exposes, retain a metadata inventory, and stop until its treatment is agreed. Do not silently remove <code>-A</code> or <code>-X</code> or suppress errors.</p>
-<p>The initial copy can run while normal writers remain active. It is a warm copy and cannot authorize formatting.</p>
+<p>The initial copy can run while normal writers remain active. It is a warm copy and cannot authorize signature erasure, repartitioning, or formatting.</p>
 <h2 id="5-phase-b-freeze-writers-and-prove-the-staging-copy">5. Phase B — freeze writers and prove the staging copy</h2>
 <ol>
 <li>Record current states again. Stop the home-backup timer first, then allow any backup service to finish normally. Do not kill an archive/upload mid-write.</li>
@@ -180,34 +185,61 @@ rsync -aHAXSxc --delete --numeric-ids \
 </code></pre>
 <p>If the one-entry waiver is approved, the <code>find</code> expression must prune <code>./.codex-smb-onboot-write-test</code> <strong>before evaluating file type</strong>. Without this, traversal may fail even though rsync excludes it.</p>
 <p>Also run a zero-change rsync dry run using the frozen source and stage. Checksums alone do not detect extra files, missing empty directories, or incorrect symlinks. Retain file counts and total sizes as supplementary evidence, not substitutes for hashes.</p>
-<p>Test every backup archive with its format-specific integrity tool, then spot-restore representative home and Fedora files into a private scratch directory. Document any archives not tested; an unexplained archive failure blocks formatting even if the migration copy matches the corrupt source.</p>
-<p><strong>Formatting gate:</strong> source frozen; zero unexplained read errors; final copy exits zero; staging checksums match; tree comparison has zero unexplained differences; archive checks pass; all exceptions are signed off; source manifest and configuration backup are retained outside the NVMe.</p>
-<h2 id="6-phase-c-create-ext4-and-restore-while-writers-stay-stopped">6. Phase C — create ext4 and restore while writers stay stopped</h2>
+<p>Test every backup archive with its format-specific integrity tool, then spot-restore representative home and Fedora files into a private scratch directory. Document any archives not tested; an unexplained archive failure blocks all destructive work even if the migration copy matches the corrupt source.</p>
+<p><strong>Whole-drive destruction gate:</strong> source frozen; zero unexplained read errors; final copy exits zero; staging checksums match; tree comparison has zero unexplained differences; archive checks pass; old GPT and all three small-partition images are verified off-device; all exceptions are signed off; source manifest and configuration backup are retained outside the NVMe. This gate precedes the FIRST signature wipe, not just <code>mkfs</code>.</p>
+<h2 id="6-phase-c-replace-the-entire-partition-layout-then-restore">6. Phase C — replace the entire partition layout, then restore</h2>
 <ol>
-<li>Capture the gate results and obtain execution authorization for the exact physical device and partition.</li>
-<li>Normally unmount <code>/mnt/disk1_part1</code>. Confirm no other mount namespace holds partition 3. Retained legacy partitions must not be formatted or repartitioned.</li>
-<li>Temporarily prevent automatic mount or Samba restart using the existing units; record any temporary runtime masks and remove them only at the restoration phase. Keep the rollback configuration available.</li>
-<li>With the data mount absent, ensure the underlying directory is empty and root-owned. Set it to mode <code>0000</code>. Do not run this command while the NVMe is mounted: that would change the mounted filesystem root.</li>
-<li>Recheck model, serial, size, target partition, old UUID, and absence of the target from all mount tables immediately before the destructive command.</li>
+<li>Record the whole-drive gate results and confirm execution authorization covers all four old partitions on the identified NVMe.</li>
+<li>While writers and shares are stopped, prevent automatic restart/remount through both old mount units and any automounts. Record temporary runtime masks. Normally unmount <strong>both</strong> <code>/mnt/disk1_part1</code> and <code>/mnt/disk1_part2</code>, plus any other discovered mount of any NVMe child. Check every relevant mount namespace and open-device holder; do not force or lazily unmount.</li>
+<li>After unmounting, inspect the underlying mount directories. Preserve any unexpected files already on the microSD. Set the empty main mountpoint root-owned mode <code>0000</code>. Retire the empty recovery mountpoint after its fstab/unit references are removed; do not create a replacement recovery mount.</li>
+<li>Recheck the whole-device model, serial <code>&lt;DEVICE_SERIAL&gt;</code>, size <code>&lt;NVME_BYTES&gt;</code> bytes, and old partition layout. Confirm that the microSD remains the root/boot device and every NVMe child is unmounted and unused. Device identity must still match immediately before the first destructive command.</li>
 </ol>
-<pre><code class="language-bash"># DESTRUCTIVE: only after every formatting gate and explicit authorization.
-mkfs.ext4 -L nvme-data -m 1 &quot;$NVME_DATA&quot;
-blkid &quot;$NVME_DATA&quot;
+<h3 id="remove-old-signatures-and-create-one-partition">Remove old signatures and create one partition</h3>
+<p>The following is the destructive execution template. Old partition-relative signatures are erased while the old device map is still valid; replacing only the GPT would leave old filesystem signatures at their previous offsets. Signature backups supplement, and never replace, the verified file copy and legacy images.</p>
+<pre><code class="language-bash"># FIRST DESTRUCTIVE STEP: only after the whole-drive gate and authorization.
+mkdir -m 0700 &quot;$MIGRATION_WORK/legacy/signatures&quot;
+wipefs --all --backup=&quot;$MIGRATION_WORK/legacy/signatures&quot; \
+  &quot;$NVME_DISK-part1&quot; &quot;$NVME_DISK-part2&quot; \
+  &quot;$NVME_DISK-part3&quot; &quot;$NVME_DISK-part4&quot;
+
+# Replace the entire old GPT with one aligned Linux data partition.
+parted --script --align optimal &quot;$NVME_DISK&quot; \
+  mklabel gpt \
+  mkpart nvme-data ext4 1MiB 100%
+
+partprobe &quot;$NVME_DISK&quot;
+udevadm settle --timeout=30
+
+# This selector used to refer to EFI; verify its NEW geometry before use.
+NEW_NVME_DATA=&quot;$NVME_DISK-part1&quot;
+lsblk -b -o NAME,PATH,PKNAME,SIZE,START,PARTTYPE,PARTUUID,FSTYPE,UUID,MOUNTPOINTS &quot;$NVME_DISK&quot;
+parted --script &quot;$NVME_DISK&quot; unit B print
+parted --script &quot;$NVME_DISK&quot; align-check optimal 1
+wipefs --json &quot;$NEW_NVME_DATA&quot;
 </code></pre>
-<p>Do not add <code>-F</code> to override a mounted-device or identity warning. Record the newly generated UUID as <code>NEW_EXT4_UUID</code> and do not reuse the old NTFS UUID.</p>
-<ol start="6">
-<li>Replace only the main-data fstab entry with:</li>
+<p><strong>Stop for inspection before formatting.</strong> Prove that the kernel sees GPT and exactly one partition, starting at 1,048,576 bytes and filling the usable region up to GPT's trailing metadata. Verify the new partition's parent device, start, size, Linux data type, and fresh PARTUUID. The <code>-part1</code> link must resolve to that new partition; old partition 2, 3, and 4 devices and links must be gone. No filesystem signature should remain on the new partition.</p>
+<p><code>partprobe</code> or udev settlement alone is not proof that the kernel accepted the new layout. If rereading fails, a holder remains, a stale link survives, or geometry/identity disagrees, stop before formatting and resolve the mismatch. Do not reuse <code>OLD_NVME_DATA</code>, force the operation, or treat old EFI's <code>-part1</code> link as sufficient evidence.</p>
+<p>This procedure changes the logical layout; it is not a secure erasure of every old data byte.</p>
+<h3 id="create-ext4-and-update-mounts">Create ext4 and update mounts</h3>
+<pre><code class="language-bash"># DESTRUCTIVE: only after the new single-partition topology gate passes.
+mkfs.ext4 -L nvme-data -m 1 &quot;$NEW_NVME_DATA&quot;
+blkid &quot;$NEW_NVME_DATA&quot;
+</code></pre>
+<p>Do not add <code>-F</code> to override a mounted-device or identity warning. Record the new filesystem UUID as <code>NEW_EXT4_UUID</code>; do not reuse either old NTFS UUID.</p>
+<ol start="5">
+<li>Replace the main-data fstab entry and <strong>delete</strong> the old recovery entry. The only NVMe filesystem entry is:</li>
 </ol>
 <pre><code class="language-fstab">UUID=&lt;NEW_EXT4_UUID&gt; /mnt/disk1_part1 ext4 defaults,nofail,nodev,nosuid,x-systemd.device-timeout=15s 0 2
 </code></pre>
-<p>Keep the recovery entry read-only. <code>nofail</code> allows the machine to boot without the USB disk; explicit service guards must still prohibit fallback writes. Validate with <code>findmnt --verify --verbose</code>, run <code>systemctl daemon-reload</code>, then mount the data volume through the corrected fstab entry.</p>
-<ol start="7">
-<li>Confirm exact UUID, ext4, and read/write state before creating any directory. Restore the staging tree with <code>rsync -aHAXSx --numeric-ids</code>. Do not add a broad deletion option or remove ext4's new <code>lost+found</code>.</li>
-<li>Verify the restored regular files against the <strong>same frozen-source manifest</strong>. Compare relative path/type/link inventories; allow only documented ext4 additions such as <code>lost+found</code>.</li>
-<li>Before resuming writers, perform a clean unmount and <code>e2fsck -fn "$NVME_DATA"</code>; a clean result must exit zero. Investigate any other result rather than enabling automatic repair. Remount and recheck identity. Filesystem checking must be done unmounted.</li>
-<li>Apply the explicit permissions policy below and record intentional metadata differences. Recheck content hashes if any content was changed during troubleshooting.</li>
+<p>Remove explicit old recovery mount/automount definitions and references. Reload systemd to refresh generated units. Keep the replacement main mount temporarily stopped until its definition and guards are ready; clear its temporary mask before mounting. The old recovery unit must not start again.</p>
+<p><code>nofail</code> allows the machine to boot without the USB disk; explicit service guards must still prohibit fallback writes. Validate with <code>findmnt --verify --verbose</code>, then mount the new data volume through the corrected fstab entry. Verify partition 1, UUID, ext4, and writable state.</p>
+<ol start="6">
+<li>Restore the main staging tree with <code>rsync -aHAXSx --numeric-ids</code>. Preserve the existing main-data directory layout. Do not restore EFI/reserved/recovery images to the new NVMe or add their contents as live data; retain those images only in the off-device evidence directory. Do not add a broad deletion option or remove ext4's new <code>lost+found</code>.</li>
+<li>Verify restored regular files against the <strong>same frozen-source manifest</strong>. Compare relative path/type/link inventories; allow only documented ext4 additions such as <code>lost+found</code>.</li>
+<li>Before resuming writers, cleanly unmount and run <code>e2fsck -fn "$NEW_NVME_DATA"</code>; a clean result must exit zero. Investigate any other result rather than enabling automatic repair. Remount and recheck the single-partition topology and exact UUID. Filesystem checking must be done unmounted.</li>
+<li>Apply the explicit permissions policy below and record intentional metadata differences. Recheck content hashes if any content changed during troubleshooting.</li>
 </ol>
-<p>A successful <code>mkfs</code> or mount alone is not restoration acceptance.</p>
+<p>A successful GPT write, <code>mkfs</code>, or mount alone is not restoration acceptance.</p>
 <h2 id="7-permissions-guards-and-local-service-restoration">7. Permissions, guards, and local service restoration</h2>
 <h3 id="permissions-policy">Permissions policy</h3>
 <p>NTFS currently synthesizes broadly writable ownership/modes. Do not copy those modes into the final access policy unchanged.</p>
@@ -224,13 +256,14 @@ blkid &quot;$NVME_DATA&quot;
 </ul>
 <h3 id="configuration-changes-to-make-together">Configuration changes to make together</h3>
 <ul>
-<li><code>/usr/local/libexec/verify-nvme-mounts</code>: require the new <strong>main</strong> UUID, exact mountpoint, ext4, and writable state. Remove the recovery dependency from Samba's main-data guard, while retaining independent recovery monitoring.</li>
-<li>Samba service drop-in: require <code>mnt-disk1_part1.mount</code> only; add <code>BindsTo=</code> and <code>After=</code> for that mount. The actual protected drop-in must be inspected and backed up first. Remove the recovery Samba share during maintenance before dropping its dependency: recovery remains mounted read-only and monitored locally, but is no longer network-exported.</li>
+<li><code>/usr/local/libexec/verify-nvme-mounts</code>: require the new <strong>main</strong> UUID, exact mountpoint, ext4, and writable state. Remove every recovery UUID/mount requirement; only the new ext4 data volume remains.</li>
+<li>Samba service drop-in: require <code>mnt-disk1_part1.mount</code> only; add <code>BindsTo=</code> and <code>After=</code> for that mount. The actual protected drop-in must be inspected and backed up first. Remove the recovery Samba share and its mount dependency during maintenance: that partition and mount no longer exist after consolidation.</li>
 <li><code>~/.local/bin/home-gdrive-backup.py</code>: update <code>BACKUP_UUID</code> and require ext4 in the existing storage preflight. Preserve its free-space checks, directory containment, writable probe, and open-directory protection.</li>
 <li>The backup program and health exporter currently uppercase observed UUIDs before comparing them. Normalize <strong>both</strong> sides, or store the expected ext4 UUID uppercase. A lowercase constant compared with an uppercased actual UUID will fail.</li>
-<li><code>~/.local/bin/export-service-health-metrics.py</code>: update the main UUID and filesystem expectation; retain the recovery UUID/presence check because this plan retains partition 4. Add explicit main ext4 validation and recovery ntfs3/read-only validation: the current recovery require_write=False setting merely permits read-only operation and does not enforce it.</li>
+<li><code>~/.local/bin/export-service-health-metrics.py</code>: update the main UUID and filesystem expectation; remove the recovery mount from current <code>MOUNTS</code> expectations entirely and require ext4 for the new main volume. Regenerate current exporter state/metrics so removed recovery labels stop being emitted; preserve historical telemetry and private evidence.</li>
 <li><code>~/dev/qbittorrent-vpn/up.sh</code>: validate exact mount, new UUID, ext4, and writable state <strong>before</strong> creating downloads directories or starting containers. Replace Docker volume syntax that creates missing host directories with <code>--mount type=bind</code>. Keep <code>torrents/downloads</code> as the download path.</li>
-<li>Search other application launchers, cron jobs, unit files, skills, and backup configuration for old UUIDs and NTFS-only assumptions. Update only active relevant consumers; preserve historical evidence as history.</li>
+<li>Update the active <code>revive-nvme-smb</code> skill and <code>scripts/revive_nvme_smb.sh</code> under <code>~/.codex/skills/revive-nvme-smb</code> before maintenance ends. They currently require both old NTFS UUIDs and revive the retired recovery/full-volume shares. Replace those active procedures with the single ext4 UUID guard and selected-share/NFS recovery instructions; they must never recreate the removed partition/mount or re-enable the retired broad share. Instrument any revised critical device/network script through the existing OTel integration.</li>
+<li>Search other application launchers, cron jobs, unit files, skills, and backup configuration for old UUIDs, partition numbers, the retired recovery mount, and NTFS-only assumptions. Update only active relevant consumers; preserve historical evidence as history.</li>
 <li>Archive the old NTFS integrity finding privately. Clear only that resolved active warning after copy, restoration, and filesystem checks pass. Make any remaining filesystem-check alert text filesystem-neutral.</li>
 </ul>
 <h3 id="restore-and-verify-local-consumers">Restore and verify local consumers</h3>
@@ -266,7 +299,7 @@ tcp=y
 <li><code>/srv/nfs/nvme/print</code> → <code>/mnt/disk1_part1/print</code>, read/write.</li>
 <li><code>/srv/nfs/nvme/roms</code> → <code>/mnt/disk1_part1/roms</code>, read-only.</li>
 </ul>
-<p>Create only these approved exports. Games, installers, torrents, backups, the private exchange tree, and recovery are not exported. Add a media export only after identifying the actual media subdirectory and reviewing its contents.</p>
+<p>Create only these approved exports. Games, installers, torrents, backups, the private exchange tree, and off-device legacy images are not exported. Add a media export only after identifying the actual media subdirectory and reviewing its contents.</p>
 <p>Use native systemd bind-mount units named for their destination paths. Each requires, follows, and binds its lifetime to <code>mnt-disk1_part1.mount</code>. Keep the underlying unmounted child directories root-owned mode <code>0000</code>.</p>
 <p>Example <code>srv-nfs-nvme-exchange.mount</code>:</p>
 <pre><code class="language-ini">[Unit]
@@ -310,16 +343,16 @@ Options=bind
 <li>Prove a non-allowlisted client cannot mount.</li>
 <li>During a scheduled idle test, verify loss of the main mount or a bind mount prevents serving; restore the correct mount, restart the guarded server, and verify recovery. Do not unplug a busy drive or interrupt active jobs.</li>
 </ul>
-<p>After all clients pass and a <strong>seven-day observation window</strong> completes, retire the broad SMB data share. Retire smbd/nmbd/winbind only if no other use is found. Preserve their configuration for rollback and update service/TCP health expectations at the same time.</p>
+<p>The old broad SMB data share is removed before compatibility restart. After all clients pass and a <strong>seven-day observation window</strong> completes, retire the selected SMB compatibility shares. Retire smbd/nmbd/winbind only if no other use is found. Preserve their configuration for rollback and update service/TCP health expectations at the same time.</p>
 <h2 id="9-monitoring-reboot-acceptance-and-recovery">9. Monitoring, reboot acceptance, and recovery</h2>
 <h3 id="monitoring-and-instrumentation">Monitoring and instrumentation</h3>
-<p>Keep the existing metrics exporter and existing scheduling. Update expected main UUID/type, retain the recovery check, and switch Samba service/TCP expectations to NFS only when SMB is retired. NFS health needs both the service/listener and correct mounted/exported data, not merely an open TCP 2049 port.</p>
+<p>Keep the existing metrics exporter and existing scheduling. Update expected main UUID/type, remove the retired recovery mount from current expectations, and switch Samba service/TCP expectations to NFS only when SMB is retired. NFS health needs both the service/listener and correct mounted/exported data, not merely an open TCP 2049 port.</p>
 <p>Capture wrong UUID, wrong filesystem, missing data mount, missing bind, unexpected export, copy/hash failure, and backup failure in the Microserver automation snapshot and Morning Digest. Preserve other findings when resolving the old NTFS warning.</p>
 <p>Instrument the required <code>nvme-nfs-guard</code> service before deployment with stable <code>OTEL_SERVICE_NAME=nvme-nfs-guard</code>, the local wrapper/bootstrap integration, failure metrics, and automation snapshot visibility. Mount validation must remain fail-closed even when telemetry export is unavailable; a telemetry error cannot turn a failed mount check into success. If execution is wrapped in an additional script with network or device-control paths, instrument that script before use: stable <code>OTEL_SERVICE_NAME=nvme-migration</code>, the existing <code>otel-python-cron.sh</code>/<code>automation_otel_bootstrap</code> integration, every-third-API-call sampling, every failing call/job recorded, atomic phase/success/duration metrics under <code>~/.local/state/node-textfile</code>, and failure visibility through the existing automation summary consumed by Morning Digest. No new scheduler is needed. Raw checksums, filenames, identities, and private data must not become metric labels or public reports.</p>
 <h3 id="reboot-and-completion-gates">Reboot and completion gates</h3>
 <p>Reboot only during an agreed idle window after checking printer, ComfyUI, backup, and other active work. Then verify:</p>
 <ol>
-<li>The host boots from the microSD. Main data is the new UUID/ext4 at the original path, recovery is unchanged/read-only, and no service wrote into the underlying microSD mountpoint.</li>
+<li>The host boots from the microSD. The NVMe has GPT and <strong>exactly one physical partition</strong>, partition 1, with the new UUID/ext4 mounted at the original main-data path. The old recovery mount, fstab entry, share, unit dependencies, and current health expectation are absent. No service wrote into the underlying microSD mountpoint.</li>
 <li>Restored data verification and the offline filesystem check passed before writers resumed.</li>
 <li>Ownership and permissions match the deliberate policy; local application paths work.</li>
 <li>One fresh backup and remote-integrity verification pass; the timer is restored without overlapping jobs.</li>
@@ -329,17 +362,20 @@ Options=bind
 <p>Retain the verified staging copy until all gates pass, SMB has completed its seven-day transition, and at least one fresh post-migration backup is confirmed. Then obtain a separate retention decision before deleting it. Existing home-only backups still do not protect ROMs, games, exchange, or print data; document that coverage gap and design a separate backup policy if those data require ongoing protection. The migration copy is temporary recovery material, not that long-term policy.</p>
 <h3 id="recovery-by-failure-stage">Recovery by failure stage</h3>
 <ul>
-<li><strong>Before formatting:</strong> leave NTFS intact. If safe, remount it in the prior state and restore saved service configuration/states. Do not bring inconsistent NTFS back read/write merely to shorten an outage.</li>
-<li><strong>After formatting, before restoration acceptance:</strong> stop writers and shares. Repair/recreate ext4 as appropriate and restore from the verified staging tree again. Preserve the immutable source manifest. Restoring the GPT cannot recover overwritten NTFS data.</li>
+<li><strong>Before any signature erasure or repartitioning:</strong> leave the original layout and NTFS filesystems intact. If safe, remount it in the prior state and restore saved service configuration/states. Do not bring inconsistent NTFS back read/write merely to shorten an outage.</li>
+<li><strong>After signature erasure/repartitioning, before restoration acceptance:</strong> stop writers and shares. Repair/recreate ext4 as appropriate and restore from the verified staging tree again. Preserve the immutable source manifest. Restoring only the old GPT or saved signature bytes cannot recover overwritten filesystems/data. Do not assume a quick partition-table rollback is safe.</li>
 <li><strong>After ext4 local success, NFS failure:</strong> disable the failed NFS exports and restore selected SMB access over ext4 using the saved client configuration. Keep private data protected. There is no need to return to NTFS.</li>
-<li><strong>Actual return to NTFS:</strong> separately destructive; create a new NTFS filesystem and restore the verified files, or restore a full original raw image if one was explicitly taken. File copies do not recreate original NTFS metadata.</li>
-<li><strong>microSD/staging failure after formatting:</strong> the only other recovery copy is an independently verified external copy if one was made. Home-only cloud backups do not restore the entire NVMe. This residual risk is why a second device copy is preferred.</li>
+<li><strong>Actual return to the former Windows/NTFS layout:</strong> separately destructive and not part of normal recovery. A full original raw disk image, if explicitly taken, can restore the original arrangement. Otherwise reconstruction requires the saved GPT, old EFI/reserved/recovery images, creation of a replacement main NTFS filesystem at the correct bounds, and restoration of the verified main files. File copies and small-partition images do not recreate the original main NTFS metadata. Stop for a dedicated recovery procedure rather than replaying old partition offsets onto live ext4.</li>
+<li><strong>microSD/staging failure after destructive work begins:</strong> the only other recovery copy is an independently verified external copy if one was made. Home-only cloud backups do not restore the entire NVMe. This residual risk is why a second device copy is preferred.</li>
 <li><strong>Unreadable data or unstable hardware:</strong> stop rather than repeatedly remounting or clearing flags. Reassess recovery/imaging on separate storage. Escalate any unresolved fix after 20 concrete attempts through the user's ntfy procedure with the last error and evidence.</li>
 </ul>
 <h2 id="10-references-checked-for-this-runbook">10. References checked for this runbook</h2>
 <p>These are implementation references, not evidence that migration or client validation has occurred.</p>
 <ul>
 <li><a href="https://manpages.debian.org/trixie/rsync/rsync.1.en.html">Debian rsync manual</a>: copy flags, checksum comparison, and dry-run/deletion behavior.</li>
+<li><a href="https://manpages.debian.org/trixie/parted/parted.8.en.html">Debian Parted manual</a>: GPT creation, partition bounds, and alignment checks.</li>
+<li><a href="https://manpages.debian.org/trixie/util-linux/wipefs.8.en.html">Debian wipefs manual</a>: signature removal, signature backups, and its distinction from data erasure.</li>
+<li><a href="https://manpages.debian.org/trixie/parted/partprobe.8.en.html">Debian partprobe manual</a>: kernel partition-table reread.</li>
 <li><a href="https://manpages.debian.org/trixie/e2fsprogs/mke2fs.8.en.html">Debian mke2fs manual</a>: filesystem creation and reserved-block configuration.</li>
 <li><a href="https://manpages.debian.org/trixie/e2fsprogs/e2fsck.8.en.html">Debian e2fsck manual</a>: offline checking and exit statuses.</li>
 <li><a href="https://manpages.debian.org/trixie/nfs-kernel-server/exports.5.en.html">Debian exports manual</a>: client ACLs, pseudoroot, squashing, subtree checks, and mountpoint guards.</li>
