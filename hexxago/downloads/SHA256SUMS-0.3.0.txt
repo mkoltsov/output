@@ -1,0 +1,2 @@
+185b25f7874d509df602840c7aff3e1509469e77dc430e1ba4a9d804eb1ab467  hexxago-last-signal-browser-0.3.0.zip
+f01ab4a08ed1a32ffef101cfdcb4b70b45b2ff118cbb71d0e49414afa38962e1  hexxago-last-signal-macos-arm64-0.3.0.tar.xz

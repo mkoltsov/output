@@ -1,0 +1,119 @@
+{
+  "scope": "Actual generated PCM readback and native compact-codec decode; not browser/application acceptance.",
+  "files": [
+    {
+      "file": "menu-loop.wav",
+      "pcmHashMatched": true,
+      "frames": 1628308,
+      "compactFile": "menu-loop.m4a",
+      "compactDecodedFrames": 1628308,
+      "compactLoopClippedSamples": 0,
+      "compactLoopSeamToP99": [
+        0.06696878147029205,
+        0.16469993256911666
+      ]
+    },
+    {
+      "file": "battle-loop.wav",
+      "pcmHashMatched": true,
+      "frames": 1764000,
+      "compactFile": "battle-loop.m4a",
+      "compactDecodedFrames": 1764000,
+      "compactLoopClippedSamples": 0,
+      "compactLoopSeamToP99": [
+        0.0010688654756451366,
+        0.014099783080260303
+      ]
+    },
+    {
+      "file": "select.wav",
+      "pcmHashMatched": true,
+      "frames": 7938
+    },
+    {
+      "file": "move.wav",
+      "pcmHashMatched": true,
+      "frames": 15876
+    },
+    {
+      "file": "jump.wav",
+      "pcmHashMatched": true,
+      "frames": 27342
+    },
+    {
+      "file": "capture.wav",
+      "pcmHashMatched": true,
+      "frames": 33516
+    },
+    {
+      "file": "resource.wav",
+      "pcmHashMatched": true,
+      "frames": 25578
+    },
+    {
+      "file": "victory.wav",
+      "pcmHashMatched": true,
+      "frames": 167580
+    },
+    {
+      "file": "defeat.wav",
+      "pcmHashMatched": true,
+      "frames": 123480
+    },
+    {
+      "file": "invalid.wav",
+      "pcmHashMatched": true,
+      "frames": 12789
+    },
+    {
+      "file": "start.wav",
+      "pcmHashMatched": true,
+      "frames": 55125
+    },
+    {
+      "file": "shield.wav",
+      "pcmHashMatched": true,
+      "frames": 31752
+    },
+    {
+      "file": "emp.wav",
+      "pcmHashMatched": true,
+      "frames": 61740
+    },
+    {
+      "file": "reinforce.wav",
+      "pcmHashMatched": true,
+      "frames": 41895
+    },
+    {
+      "file": "combo.wav",
+      "pcmHashMatched": true,
+      "frames": 40131
+    },
+    {
+      "file": "carbine.wav",
+      "pcmHashMatched": true,
+      "frames": 18522
+    },
+    {
+      "file": "railgun.wav",
+      "pcmHashMatched": true,
+      "frames": 48510
+    },
+    {
+      "file": "arc.wav",
+      "pcmHashMatched": true,
+      "frames": 28224
+    },
+    {
+      "file": "unlock.wav",
+      "pcmHashMatched": true,
+      "frames": 47628
+    },
+    {
+      "file": "mission.wav",
+      "pcmHashMatched": true,
+      "frames": 54684
+    }
+  ]
+}

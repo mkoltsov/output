@@ -1,0 +1,99 @@
+{
+  "contentVersion": "0.3",
+  "scope": "Actual file/PCM/native-codec readback and legacy byte comparison only; no v0.3 browser/native UI or full-game acceptance by this worker.",
+  "effectCount": 18,
+  "logicalEntries": 20,
+  "physicalAudioFiles": 22,
+  "legacyPcmByteIdentical": true,
+  "legacyAudioByteIdentical": [
+    "battle-loop.wav",
+    "capture.wav",
+    "combo.wav",
+    "defeat.wav",
+    "emp.wav",
+    "invalid.wav",
+    "jump.wav",
+    "menu-loop.wav",
+    "move.wav",
+    "reinforce.wav",
+    "resource.wav",
+    "select.wav",
+    "shield.wav",
+    "start.wav",
+    "victory.wav"
+  ],
+  "changedLegacyCompactFiles": [
+    "battle-loop.m4a",
+    "menu-loop.m4a"
+  ],
+  "newCues": [
+    {
+      "name": "carbine",
+      "file": "carbine.wav",
+      "durationSeconds": 0.42,
+      "frames": 18522,
+      "samplePeak": 0.711029052734375,
+      "oversampledPeak4x": 0.767349021217141,
+      "peakDbfs": -2.9622530716368924,
+      "rms": 0.10602110387643648,
+      "clippedSamples": 0,
+      "bytes": 74132,
+      "sha256": "debefd912187f6d1e21f5a2ba0585a0e375f27efc63e70b28d9be6c4330d4a97"
+    },
+    {
+      "name": "railgun",
+      "file": "railgun.wav",
+      "durationSeconds": 1.1,
+      "frames": 48510,
+      "samplePeak": 0.67193603515625,
+      "oversampledPeak4x": 0.7673272938550794,
+      "peakDbfs": -3.4534413514494107,
+      "rms": 0.12088751844052607,
+      "clippedSamples": 0,
+      "bytes": 194084,
+      "sha256": "b62cf5bd550abe91c03b4780c69e81725d03f9df52d5670b1baab5232f27279a"
+    },
+    {
+      "name": "arc",
+      "file": "arc.wav",
+      "durationSeconds": 0.64,
+      "frames": 28224,
+      "samplePeak": 0.726409912109375,
+      "oversampledPeak4x": 0.7673392465183098,
+      "peakDbfs": -2.7763647670236935,
+      "rms": 0.1405361457606351,
+      "clippedSamples": 0,
+      "bytes": 112940,
+      "sha256": "d43eb7d17ed65138b2d7e3eedab65600bef9457ee42ffd49f160918014887664"
+    },
+    {
+      "name": "unlock",
+      "file": "unlock.wav",
+      "durationSeconds": 1.08,
+      "frames": 47628,
+      "samplePeak": 0.763519287109375,
+      "oversampledPeak4x": 0.7673338591918636,
+      "peakDbfs": -2.343599756843363,
+      "rms": 0.11570761710976517,
+      "clippedSamples": 0,
+      "bytes": 190556,
+      "sha256": "26b21d1572cac86be4d092e42ff02c383f10f1640add3d5297f0f064d5d682e2"
+    },
+    {
+      "name": "mission",
+      "file": "mission.wav",
+      "durationSeconds": 1.24,
+      "frames": 54684,
+      "samplePeak": 0.766754150390625,
+      "oversampledPeak4x": 0.767349440046223,
+      "peakDbfs": -2.306877290623453,
+      "rms": 0.19470362630147803,
+      "clippedSamples": 0,
+      "bytes": 218780,
+      "sha256": "2f88cc52b51e83aa21c11b5c0511c862d28fad5119623e6e6b3a4c7197839702"
+    }
+  ],
+  "normalAudioFetchBytes": 5209928,
+  "allAudioBytes": 18779248,
+  "historicalBrowserEvidence": "browser-audio-readback.json covers the prior 17-file bank only; root owns fresh integrated checks."
+}

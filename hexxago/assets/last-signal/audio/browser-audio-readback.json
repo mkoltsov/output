@@ -1,0 +1,329 @@
+{
+  "scope": "Managed Brave direct audio-module and file readback in a task-owned manifest tab; not full game UI acceptance. Playback master volume was zero.",
+  "audioFilesDecoded": 17,
+  "files": [
+    {
+      "file": "menu-loop.wav",
+      "hashMatched": true,
+      "decodedFrames": 1628308,
+      "sampleRate": 44100,
+      "durationSeconds": 36.92308390022676,
+      "channels": 2,
+      "peak": 0.7071878910064697,
+      "rms": 0.1398633034839653,
+      "clippedSamples": 0,
+      "loopSeconds": 36.92308390022676,
+      "seamDelta": [
+        0.01680244319140911,
+        0.03467219136655331
+      ],
+      "edges": [
+        {
+          "first50msRms": 0.3093666304555451,
+          "last50msRms": 0.06495563244586164
+        },
+        {
+          "first50msRms": 0.3099489287000556,
+          "last50msRms": 0.093805956578385
+        }
+      ]
+    },
+    {
+      "file": "menu-loop.m4a",
+      "hashMatched": true,
+      "decodedFrames": 1628308,
+      "sampleRate": 44100,
+      "durationSeconds": 36.92308390022676,
+      "channels": 2,
+      "peak": 0.7618899345397949,
+      "rms": 0.13922510844679412,
+      "clippedSamples": 0,
+      "loopSeconds": 36.92308390022676,
+      "seamDelta": [
+        0.012159310281276703,
+        0.029774416238069534
+      ],
+      "edges": [
+        {
+          "first50msRms": 0.3080729138530553,
+          "last50msRms": 0.06468451509540137
+        },
+        {
+          "first50msRms": 0.3082211485232392,
+          "last50msRms": 0.09327502940767592
+        }
+      ]
+    },
+    {
+      "file": "battle-loop.wav",
+      "hashMatched": true,
+      "decodedFrames": 1764000,
+      "sampleRate": 44100,
+      "durationSeconds": 40,
+      "channels": 2,
+      "peak": 0.6733380556106567,
+      "rms": 0.15224003760505186,
+      "clippedSamples": 0,
+      "loopSeconds": 40,
+      "seamDelta": [
+        0.005702462047338486,
+        0.006159879267215729
+      ],
+      "edges": [
+        {
+          "first50msRms": 0.31756658993892195,
+          "last50msRms": 0.058809453532425275
+        },
+        {
+          "first50msRms": 0.3175348228037233,
+          "last50msRms": 0.07933163447073766
+        }
+      ]
+    },
+    {
+      "file": "battle-loop.m4a",
+      "hashMatched": true,
+      "decodedFrames": 1764000,
+      "sampleRate": 44100,
+      "durationSeconds": 40,
+      "channels": 2,
+      "peak": 0.715078592300415,
+      "rms": 0.15147588493762149,
+      "clippedSamples": 0,
+      "loopSeconds": 40,
+      "seamDelta": [
+        0.00022680312395095825,
+        0.0027581993490457535
+      ],
+      "edges": [
+        {
+          "first50msRms": 0.3185835913634789,
+          "last50msRms": 0.05887209927931421
+        },
+        {
+          "first50msRms": 0.3172784654757399,
+          "last50msRms": 0.07879909036271086
+        }
+      ]
+    },
+    {
+      "file": "select.wav",
+      "hashMatched": true,
+      "decodedFrames": 7938,
+      "sampleRate": 44100,
+      "durationSeconds": 0.18,
+      "channels": 2,
+      "peak": 0.7647022008895874,
+      "rms": 0.17343591314093953,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "move.wav",
+      "hashMatched": true,
+      "decodedFrames": 15876,
+      "sampleRate": 44100,
+      "durationSeconds": 0.36,
+      "channels": 2,
+      "peak": 0.7662879824638367,
+      "rms": 0.15578513284555548,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "jump.wav",
+      "hashMatched": true,
+      "decodedFrames": 27342,
+      "sampleRate": 44100,
+      "durationSeconds": 0.62,
+      "channels": 2,
+      "peak": 0.7662879824638367,
+      "rms": 0.18432137586526773,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "capture.wav",
+      "hashMatched": true,
+      "decodedFrames": 33516,
+      "sampleRate": 44100,
+      "durationSeconds": 0.76,
+      "channels": 2,
+      "peak": 0.7662879824638367,
+      "rms": 0.1770638640077945,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "resource.wav",
+      "hashMatched": true,
+      "decodedFrames": 25578,
+      "sampleRate": 44100,
+      "durationSeconds": 0.58,
+      "channels": 2,
+      "peak": 0.7458560466766357,
+      "rms": 0.13029349109664853,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "victory.wav",
+      "hashMatched": true,
+      "decodedFrames": 167580,
+      "sampleRate": 44100,
+      "durationSeconds": 3.8,
+      "channels": 2,
+      "peak": 0.7635433673858643,
+      "rms": 0.18479115379047983,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "defeat.wav",
+      "hashMatched": true,
+      "decodedFrames": 123480,
+      "sampleRate": 44100,
+      "durationSeconds": 2.8,
+      "channels": 2,
+      "peak": 0.7653802633285522,
+      "rms": 0.1263910501616795,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "invalid.wav",
+      "hashMatched": true,
+      "decodedFrames": 12789,
+      "sampleRate": 44100,
+      "durationSeconds": 0.29,
+      "channels": 2,
+      "peak": 0.7662879824638367,
+      "rms": 0.21428499072033846,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "start.wav",
+      "hashMatched": true,
+      "decodedFrames": 55125,
+      "sampleRate": 44100,
+      "durationSeconds": 1.25,
+      "channels": 2,
+      "peak": 0.7662879824638367,
+      "rms": 0.131336921175264,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "shield.wav",
+      "hashMatched": true,
+      "decodedFrames": 31752,
+      "sampleRate": 44100,
+      "durationSeconds": 0.72,
+      "channels": 2,
+      "peak": 0.7498204708099365,
+      "rms": 0.20924221857566772,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "emp.wav",
+      "hashMatched": true,
+      "decodedFrames": 61740,
+      "sampleRate": 44100,
+      "durationSeconds": 1.4,
+      "channels": 2,
+      "peak": 0.76198810338974,
+      "rms": 0.13534858737916272,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "reinforce.wav",
+      "hashMatched": true,
+      "decodedFrames": 41895,
+      "sampleRate": 44100,
+      "durationSeconds": 0.95,
+      "channels": 2,
+      "peak": 0.7619038820266724,
+      "rms": 0.1637210380723896,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    },
+    {
+      "file": "combo.wav",
+      "hashMatched": true,
+      "decodedFrames": 40131,
+      "sampleRate": 44100,
+      "durationSeconds": 0.91,
+      "channels": 2,
+      "peak": 0.7662879824638367,
+      "rms": 0.14682500668813572,
+      "clippedSamples": 0,
+      "loopSeconds": null,
+      "seamDelta": null,
+      "edges": null
+    }
+  ],
+  "lifecycle": {
+    "initial": {
+      "noContextBeforeUnlock": true,
+      "firstCueQueued": true,
+      "firstCueActuallyStarted": true,
+      "contextState": "running",
+      "scene": "battle",
+      "musicVoices": 1
+    },
+    "crossfade": {
+      "scene": "menu",
+      "musicVoices": 1
+    },
+    "stopped": {
+      "musicRequested": false,
+      "musicVoices": 0,
+      "activeMusic": false
+    },
+    "mutedDoesNotQueue": true,
+    "destroyed": {
+      "destroyed": true,
+      "musicVoices": 0,
+      "effects": 0,
+      "contextCleared": true
+    },
+    "stopDuringLoad": {
+      "musicVoices": 0,
+      "musicRequested": false
+    },
+    "destroyDuringLoad": {
+      "destroyed": true,
+      "musicVoices": 0,
+      "effects": 0,
+      "contextCleared": true
+    },
+    "unhandledRejections": []
+  }
+}
