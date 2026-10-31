@@ -1,0 +1,1427 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HEXXAGO · Design Atlas</title><style>
+:root{--ink:#163e37;--muted:#687971;--paper:#f7f6f0;--line:#dce2d9;--accent:#ab7638}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:74px}body{margin:0;color:var(--ink);background:var(--paper);font:16px/1.7 system-ui,-apple-system,sans-serif}a{color:#276e5a;text-underline-offset:3px}nav{position:sticky;top:0;z-index:2;background:#f7f6f0f5;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:24px;padding:18px 5vw;backdrop-filter:blur(12px);flex-wrap:wrap}nav strong{letter-spacing:3px;margin-right:auto}nav a{font-size:13px;text-decoration:none}nav .play{padding:8px 18px;background:var(--ink);color:#fff;border-radius:5px}.cover{padding:84px 7vw 76px;background:linear-gradient(90deg,#092f32f2,#092f3260),url('./assets/archipelago.png') center/cover;color:#fff;min-height:470px}.cover small{letter-spacing:3px;color:#d4c493}.cover h1{font:clamp(44px,6vw,82px)/1.07 Georgia,serif;max-width:760px;margin:24px 0}.cover p{max-width:610px;color:#d7e2dc;font-size:18px}.overview{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1250px;margin:38px auto;padding:0 30px}.overview article{padding:25px;background:#fff;border:1px solid var(--line);border-radius:8px}.overview small,.section-label{color:var(--accent);letter-spacing:2px;font-size:11px;text-transform:uppercase;font-weight:700}.overview h2{font:26px Georgia,serif;margin:8px 0}.overview p{font-size:14px;color:var(--muted);margin:8px 0}audio{width:100%;height:34px}.document{max-width:1190px;margin:35px auto 80px;padding:40px 54px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:auto}.document h1{font:44px/1.15 Georgia,serif;margin:20px 0 30px}.document h2{font:30px Georgia,serif;border-top:1px solid var(--line);padding-top:28px;margin-top:42px}.document h3{font-size:20px;margin-top:30px}.document h4{font-size:16px}table{border-collapse:collapse;width:100%;font-size:13px;margin:24px 0}th,td{text-align:left;border:1px solid var(--line);padding:12px 14px;vertical-align:top}th{background:#edf2ec}tr:nth-child(even){background:#fafbf8}pre{background:#123b35;color:#edf3ed;padding:20px;border-radius:6px;overflow:auto;font-size:13px;line-height:1.6}code{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.88em}p code,li code,td code{background:#edf2ec;padding:2px 5px;border-radius:3px}blockquote{margin:24px 0;border-left:3px solid #b88743;padding:6px 20px;background:#f8f7f0;color:#5c6c60}li{margin:5px 0}img{max-width:100%}footer{max-width:1190px;margin:0 auto 50px;padding:0 30px;font-size:13px;color:var(--muted)}@media(max-width:760px){nav{gap:10px;padding:12px 20px}nav strong{width:100%}.cover{padding:50px 24px}.overview{grid-template-columns:1fr;padding:0 20px}.document{padding:26px 22px;margin:25px 14px 45px}.document h1{font-size:33px}table{min-width:700px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head><body><nav><strong>HEXXAGO</strong><a href="#design">Game design</a><a href="#research">Reference research</a><a href="#assets">Art, audio & menus</a><a href="#release">Distribution plan</a><a href="#verification">What was verified</a><a class="play" href="./index.html">Play the game ↗</a></nav><header class="cover"><small>THE RESOURCE FRONTIER · DESIGN ATLAS · v0.1</small><h1>A familiar classic.<br>A new world to play for.</h1><p>The mechanics, research, visual direction, original audio, menu concepts and browser-to-desktop distribution plan behind HEXXAGO.</p></header><div class="overview"><article><small>The game</small><h2>58 hexes. Every move matters.</h2><p>Clone, jump and convert. Lead an equal-stat country faction through an original resource-rich archipelago.</p></article><article><small>The delivery</small><h2>One core. Two ways to play.</h2><p>Phaser in the browser, a locally bundled desktop application, and a documented itch.io and Steam release path.</p></article><article><small>The original score</small><h2>Archipelago, at 80 bpm.</h2><p>A generated ambient loop. Press play to listen.</p><audio controls preload="none" loop src="./assets/audio/archipelago-loop.wav"></audio></article></div><section id="design" class="document"><div class="section-label">Game design</div><h1>HEXXAGO: The Resource Frontier</h1>
+<h2>1. Purpose, scope and evidence</h2>
+<p>HEXXAGO is an original, peaceful strategy game about allocating space on a small shared frontier. Two equal teams survey a stylized archipelago, establish markers, and persuade adjacent settlements to join their network. A move can grow a network or reposition it. A successful conversion changes a marker&#39;s affiliation; it does not depict violence, an invasion or the annexation of a real country.</p>
+<p>The core experience is an immediately readable abstract board game with the presentation quality of a modern strategy dashboard: tactile hexagonal land, a calm ocean, warm typography, visible resource ledgers and quick access to the next meaningful decision.</p>
+<p>This document serves two purposes:</p>
+<ol>
+<li>Specify the rules and intended player experience in enough detail to implement and maintain them.</li>
+<li>Separate source-inspected implementation, design targets and future work. A feature described as a target is not thereby delivered or tested.</li>
+</ol>
+<p>The implementation snapshot was inspected on 31 October 2026 UTC while the game was being assembled. The final documentation readback included the engine, board scene, frontend orchestration/styles, country registry, audio manager, assets and packaging configuration. Browser acceptance, desktop launch and publication are separate milestones; this document is not a receipt for any of them. See RELEASE.md for their boundaries.</p>
+<p>The authoritative local rule implementation is src/game/rules.ts. Its current behavior is specified below, including deliberately bounded repetition and resource rules. Implementation and release status must be reconciled from the actual integrated build.</p>
+<h3>1.1 Sources actually inspected</h3>
+<p>The five requested game-reference pages were read from the saved direct DOM inspection in research.json (local inspection evidence, excluded from the public build). That file records the requested URL, final URL, page title, inspected text, links and individual capture time on 31 October 2026 UTC. This documentation pass did not play either reference game, inspect its private source code or download its commercial executable.</p>
+<p>The requested references are:</p>
+<ul>
+<li><a href="https://phaser.io/news/2026/01/hexstorm-tears-of-arcadia">Phaser&#39;s HEXSTORM feature</a>, dated 30 January 2026.</li>
+<li><a href="https://tearevo.itch.io/tears-of-arcadia">The developer&#39;s HEXSTORM itch.io page</a>.</li>
+<li><a href="https://store.steampowered.com/app/4402950/HEXSTORM_Tears_of_Arcadia/">The developer/publisher&#39;s Steam store page</a>.</li>
+<li><a href="https://archive.org/details/msdos_Hexxagon_1993">Internet Archive&#39;s Hexxagon entry</a>.</li>
+<li><a href="https://www.old-games.com/download/3199/hexxagon">The requested Old-Games Hexxagon description</a>.</li>
+</ul>
+<p>Additional direct public HTTP reads were made of Valve&#39;s <a href="https://store.steampowered.com/api/appdetails?appids=4402950&amp;l=english">store API for app 4402950</a>, the official publishing documentation linked in RELEASE.md, Phaser&#39;s <a href="https://registry.npmjs.org/phaser/3.90.0">published 3.90.0 package metadata</a>, its <a href="https://github.com/phaserjs/phaser/blob/v3.90.0/LICENSE.md">MIT license</a>, and the current <a href="https://github.com/phaserjs/template-vite-ts/blob/main/package.json">official Vite/TypeScript template package</a>.</p>
+<h3>1.2 What the references establish</h3>
+<p><strong>HEXSTORM: presentation and product ambition.</strong> The developer describes an interconnected energy network, a flying fortress, pressure from multiple directions, resource decisions and persistent upgrades between missions. Phaser&#39;s feature describes the same network-oriented tower defense and hand-painted visual ambition. The itch.io page provides a browser launch affordance and a Phaser engine-category link. Together these support a Phaser-family reference and a polished browser presentation, without establishing a particular Phaser major version. <a href="https://phaser.io/news/2026/01/hexstorm-tears-of-arcadia">Phaser feature</a>, <a href="https://tearevo.itch.io/tears-of-arcadia">developer page</a>.</p>
+<p><strong>HEXSTORM: distribution.</strong> The inspected Steam page and Valve store API identify Tearevo as developer and publisher, a release date of 3 August 2026, a paid product, and Windows, macOS and Linux store-platform flags. The store page advertises a demo, Steam Cloud, controller support and Steam Deck verification. These are facts about that listing, not certification or platform support inherited by HEXXAGO. No reference executable was installed during this research. <a href="https://store.steampowered.com/app/4402950/HEXSTORM_Tears_of_Arcadia/">Steam listing</a>, <a href="https://store.steampowered.com/api/appdetails?appids=4402950&amp;l=english">Valve API</a>.</p>
+<p><strong>HEXSTORM: unknown technology.</strong> The inspected evidence does not establish its desktop wrapper, Electron version, packaging tool, Steamworks binding or source architecture. In particular, Electron is not a confirmed HEXSTORM fact. Phaser 3 plus TypeScript plus Vite, and the optional Electron wrapper, are this project&#39;s implementation choices.</p>
+<p><strong>Hexxagon: abstract rules.</strong> The archive describes a 58-cell hex board, three starting pieces per side, adjacent cloning, two-cell jumps and conversion of adjacent opponents. It attributes the 1993 DOS game to Argo Games and Software Creations. The Old-Games text corroborates those movement rules and describes three difficulty levels and two-player play. Both descriptions discuss eliminating the opponent, including an automatic board fill in the historical game. HEXXAGO reports its actual final counts and does not copy that fill behavior. <a href="https://archive.org/details/msdos_Hexxagon_1993">Archive entry</a>, <a href="https://www.old-games.com/download/3199/hexxagon">Old-Games description</a>.</p>
+<p><strong>Hexxagon: provenance limits.</strong> The archive text credits a secondary game database; Old-Games is also a secondary description. Neither is a license grant for game code, recordings, screenshots, branding or artwork. Its use of “freeware” is not sufficient evidence of permission to redistribute historical binaries or assets.</p>
+<h3>1.3 Original synthesis</h3>
+<p>HEXXAGO takes the clone/jump/conversion interaction as its abstract rules foundation and develops a distinct resource economy, equal-country identities, original island art, quiet synthesized sound and dashboard UX around it. It does not implement HEXSTORM&#39;s towers, combat waves, moving ship, story, metaprogression or energy-network destruction.</p>
+<p>The commercial analogy is a polished HTML5 game that can also be distributed as a desktop application. It is not a promise to reproduce either reference&#39;s product, exact engine version, content scale, platform certification or audience.</p>
+<h2>2. Creative pillars</h2>
+<h3>2.1 A readable decision every turn</h3>
+<p>A new player should understand three questions without opening a manual:</p>
+<ul>
+<li>Which of my markers can move?</li>
+<li>Where will cloning or jumping leave me?</li>
+<li>Which neighboring markers would change affiliation?</li>
+</ul>
+<p>Selection, legal destinations and contextual explanations must agree with the engine. Hover effects are supportive; the full interaction must work without hover.</p>
+<h3>2.2 Peaceful competition with recognizable identities</h3>
+<p>Real country names and small flag symbols make a match easy to personalize. They convey no resource multiplier, attack strength, intelligence level or cultural trait. Every country uses exactly the same legal moves, starting count, shield cost, income and victory rules.</p>
+<p>The archipelago is fictional. There are no real borders, real-world territorial claims, current conflicts, historical conquest scenarios, population losses, weapons or national superiority ratings.</p>
+<h3>2.3 Territory first; resources create choices</h3>
+<p>Winning territory remains the primary objective. Resource mode adds a public ledger and one concrete ability: spend three ore to shield an owned tile before moving. Energy and food contribute to a territorial tie, not to undisclosed spells or planned mechanics.</p>
+<p>Every UI description must match this small shipped ability set. There are no energy attacks, food recruitment bonuses, country ultimates, paid boosts or hidden research trees.</p>
+<h3>2.4 A complete small game</h3>
+<p>The first complete product has solo AI, local hotseat, two modes, two resource layouts, clear results, audio settings and local continuation. Online accounts, matchmaking, campaigns, procedural content and platform integrations are outside the initial critical path.</p>
+<h3>2.5 A tactile, calm strategy instrument</h3>
+<p>The ocean/ivory/forest/bronze palette, restrained movement and soft synthesized timbres should invite another thoughtful match. Clarity takes precedence over ornamental detail. Sound, animation and country color must never be the sole carrier of a rule.</p>
+<h2>3. Player promise and match structure</h2>
+<p><strong>Working title:</strong> HEXXAGO: The Resource Frontier.</p>
+<p><strong>Genre:</strong> turn-based abstract strategy.</p>
+<p><strong>Players:</strong> one person versus a local computer opponent, or two people sharing one device.</p>
+<p><strong>Runtime:</strong> local browser logic; optional desktop shell uses the same game build. No gameplay server or model service is required.</p>
+<p><strong>Session expectation:</strong> a short skirmish rather than an open-ended campaign. The hard limit is 180 individual turns, including automatic passes. A specific duration in minutes is a playtest question, not an established product claim.</p>
+<p>The intended loop is:</p>
+<pre><code>Home → Skirmish setup → First-turn briefing → Select a marker
+   → Inspect clone/jump options → Optional ore shield → Move
+   → Read conversions/income → Opponent turn → Repeat
+   → Result explanation → Rematch, new setup or home
+</code></pre>
+<p>“Continue” restores the local match and its settings where supported. It is not cross-device synchronization or Steam Cloud.</p>
+<h2>4. Board geometry and maps</h2>
+<h3>4.1 Coordinates and distance</h3>
+<p>The rules use axial coordinates (q, r), with implicit cube coordinate s = −q −r. A radius-four board contains all coordinates satisfying:</p>
+<pre><code>max(|q|, |r|, |q + r|) ≤ 4
+</code></pre>
+<p>The full hexagon contains:</p>
+<pre><code>1 + 3R(R + 1) = 1 + 3 × 4 × 5 = 61 cells
+</code></pre>
+<p>Three nonplayable coordinates are removed:</p>
+<pre><code>(1, 1), (−2, 1), (1, −2)
+</code></pre>
+<p>The result is exactly 58 playable cells. Holes do not contain markers, resources or legal destinations. They remain recognizable as absent land.</p>
+<p>The movement distance between cells a and b is:</p>
+<pre><code>Δq = b.q − a.q
+Δr = b.r − a.r
+d(a,b) = max(|Δq|, |Δr|, |Δq + Δr|)
+       = (|Δq| + |Δr| + |Δq + Δr|) / 2
+</code></pre>
+<p>The six adjacent directions are:</p>
+<pre><code>(1,0), (0,1), (−1,1), (−1,0), (0,−1), (1,−1)
+</code></pre>
+<h3>4.2 Opening position</h3>
+<p>Player 0 owns:</p>
+<pre><code>(4,0), (−4,4), (0,−4)
+</code></pre>
+<p>Player 1 owns:</p>
+<pre><code>(0,4), (−4,0), (4,−4)
+</code></pre>
+<p>The six outer corners alternate ownership. Each side starts with three pieces, no resources and no shields. There are 52 empty playable cells. No starting corner is a resource deposit.</p>
+<p>The current engine starts Player 0. Selecting a country does not change this. Alternating the starting seat in a rematch is a future fairness improvement unless frontend behavior explicitly implements it; it is not an engine capability to assume.</p>
+<h3>4.3 What symmetry does and does not prove</h3>
+<p>The removed cells are invariant under a 120° rotation:</p>
+<pre><code>R120(q,r) = (−q−r, q)
+</code></pre>
+<p>More importantly for two-player fairness, the reflection:</p>
+<pre><code>S(q,r) = (r,q)
+</code></pre>
+<p>preserves the playable field and exchanges the two starting teams. Every resource type is also placed in reflected pairs. This proves equal geometric access under a player-swapping transformation. It does not prove equal win rates, erase Player 0&#39;s initiative, or remove the second player&#39;s final opportunity to change ownership before round income.</p>
+<p>Do not describe this three-hole board as having sixfold or 180° rotational symmetry.</p>
+<h3>4.4 Frontier</h3>
+<p>Frontier is the baseline Resource layout. Each listed base coordinate also creates its reflected partner (r,q):</p>
+<ul>
+<li>Energy bases: (0,2), (−3,0), (−1,3).</li>
+<li>Ore bases: (0,3), (−2,0), (−3,1).</li>
+<li>Food bases: (−2,2), (−3,3), (−2,3).</li>
+</ul>
+<p>This produces six energy, six ore and six food nodes: 18 resource cells and 40 plain cells. Resource density is 18/58, approximately 31.0%.</p>
+<p>The distributed sites encourage more than a single central race. Outer deposits give openings a readable objective; moving away from a deposit creates a genuine opportunity cost because ownership follows the occupying marker.</p>
+<h3>4.5 Struggle</h3>
+<p>Struggle retains Frontier&#39;s complete field and adds these reflected pairs:</p>
+<ul>
+<li>Energy: (1,0) and (0,1).</li>
+<li>Ore: (−1,0) and (0,−1).</li>
+<li>Food: (−1,1) and (1,−1).</li>
+</ul>
+<p>This produces eight of each type: 24 resource cells and 34 plain cells. Resource density is 24/58, approximately 41.4%.</p>
+<p>The six extra sites sit near the center. The intended effect is earlier resource contact and more opportunities for resource conversion, without changing movement rules or adding a new ability.</p>
+<h3>4.6 Classic map behavior</h3>
+<p>Classic mode sets every terrain cell to plain. Both map names therefore have the same current geometry and starting pieces in Classic. There are not two mechanically different Classic boards in this implementation. Setup copy must not advertise them as such.</p>
+<p>Future genuinely different maps require explicit layouts, starting-access analysis and separate acceptance; a map label alone is not new content.</p>
+<h2>5. Exact movement and conversion rules</h2>
+<h3>5.1 A legal move</h3>
+<p>A move identifies a source and a destination. It is legal only when:</p>
+<ol>
+<li>The match is still active.</li>
+<li>Both IDs identify playable cells.</li>
+<li>The source belongs to the active player.</li>
+<li>The destination is empty.</li>
+<li>The source-to-destination distance is one or two.</li>
+</ol>
+<p>Neither resource balances nor country selection affect movement legality. A player cannot move onto an opponent&#39;s occupied cell directly.</p>
+<h3>5.2 Clone: distance one</h3>
+<p>The destination becomes owned by the moving player and the source remains occupied. This creates one new piece.</p>
+<p>Example: moving from (0,0) to (1,0), when both cells exist and the latter is empty, retains the original marker and places a second one next to it.</p>
+<h3>5.3 Jump: distance two</h3>
+<p>The source is vacated and the destination becomes owned by the moving player. The number of occupied cells does not change before conversions.</p>
+<p>A jump uses hex distance, not a pathfinding route. It can cross a hole or occupied intermediate position. There is no requirement for an empty middle cell. The destination itself must still be playable and empty.</p>
+<p>Example: (0,0) to (2,0) is a jump. (0,0) to (2,−1) is also distance two. (0,0) to (3,0) is illegal.</p>
+<h3>5.4 Conversion</h3>
+<p>After placement, each adjacent enemy-owned cell changes to the moving player&#39;s ownership unless protected by its owner&#39;s active shield. All applicable neighbors resolve from the destination once.</p>
+<p>Newly converted pieces do not trigger additional conversions. Conversion is not a spreading flood fill.</p>
+<p>If c enemies convert:</p>
+<ul>
+<li>Clone: mover gains 1+c pieces; opponent loses c; territory differential improves by 1+2c.</li>
+<li>Jump: mover gains c pieces; opponent loses c; territory differential improves by 2c.</li>
+</ul>
+<p>Example: before a move the scores are 12–12. A clone converting three opponents produces 16–9. A jump converting three instead produces 15–9. The attractive immediate gain must still be weighed against the position left behind.</p>
+<p>Only cloning increases total occupancy. Starting with six pieces, a full board requires exactly 52 successful clones in total, irrespective of how many jumps or conversions occur. Therefore the absence of a turn cap would permit long jump cycles.</p>
+<h3>5.5 Turn resolution order</h3>
+<p>The current rules resolve a normal move as follows:</p>
+<ol>
+<li>Validate the source and destination.</li>
+<li>If jumping, clear the source and any shield attached to that source.</li>
+<li>Occupy the destination; award its resource capture bonus if applicable.</li>
+<li>Convert unprotected adjacent enemy cells and award bonuses for converted resource nodes.</li>
+<li>Record the move with player, coordinates, kind, converted cells and round.</li>
+<li>Expire shields belonging to the opponent, whose one opposing turn has now completed.</li>
+<li>Increment the individual-turn count, switch active player, and clear the per-turn shield-purchase flag.</li>
+<li>Record the new board-cycle key and check termination. If terminal, settle the result now; capture/conversion bonuses remain earned, but no recurring income or round advancement follows.</li>
+<li>If still active and Player 1 just acted, advance the round label and award income to both players from the resulting board.</li>
+<li>If the next player has no legal move and the match is still active, apply an automatic pass.</li>
+</ol>
+<p>The board renderer must display the resolved state, not independently recalculate conversions or income.</p>
+<h2>6. Resource mode</h2>
+<h3>6.1 Public resource ledger</h3>
+<p>Each player has nonnegative integer balances:</p>
+<pre><code>resources[player] = { energy, ore, food }
+</code></pre>
+<p>The starting value of every balance is zero. Resource balances are accumulated, not the current number of controlled nodes. A player can retain banked food after losing all food sites.</p>
+<p>Resource-site control is the owner of its occupying piece. An empty node is neutral. Jumping away relinquishes its income immediately; it does not preserve a separate territorial claim.</p>
+<h3>6.2 Capture awards</h3>
+<p>When a neutral or enemy node becomes owned by the active player, add one unit of that site&#39;s type. This includes:</p>
+<ul>
+<li>Moving onto an empty node by cloning.</li>
+<li>Moving onto an empty node by jumping.</li>
+<li>Converting an adjacent enemy piece on a node.</li>
+</ul>
+<p>Plain land gives no resource award. Each newly acquired node is credited once for that acquisition.</p>
+<p>Reclaiming a node after it became empty or changed owner can award another capture unit. The game intentionally has no first-capture-only marker. Do not describe resource capture rewards as globally one-time.</p>
+<h3>6.3 Round income</h3>
+<p>A full round is one Player 0 turn followed by one Player 1 turn, including any automatic passes. If the state remains active after Player 1 completes that pair, every occupied node adds one unit of its resource to its current owner. Terminal detection happens first; an ended match receives no final recurring payout even when its last action completes a pair.</p>
+<p>For player p and type t:</p>
+<pre><code>income(p,t) = count of currently p-owned nodes of type t
+bank&#39;(p,t) = bank(p,t) + income(p,t)
+</code></pre>
+<p>Both ledgers are credited from the same resolved, nonterminal board. Capturing a site and receiving its round income can both occur in one continuing round.</p>
+<p>Example: Player 1 clones onto an empty ore node immediately before round end, and converts an enemy food node. Player 1 receives one ore and one food from the acquisitions. If the game continues and those sites remain owned at payout, they provide another ore and food. If that move ends the game, only the acquisition bonuses apply. There is no extra “double capture”; these are different events.</p>
+<p>The current round counter starts at one and advances only after a nonterminal pair. At the 180-turn cap there are at most 89 income payouts; the final round label is 90 because turn 180 terminates before its payout/advancement. Results should explain individual turns and actual totals clearly.</p>
+<h3>6.4 What each resource does</h3>
+<p><strong>Ore</strong> can be spent on a shield and also contributes to a resource tiebreak if unspent.</p>
+<p><strong>Energy</strong> contributes only to the resource tiebreak.</p>
+<p><strong>Food</strong> contributes only to the resource tiebreak.</p>
+<p>There is no passive resource multiplier, upkeep, debt, trading, conversion rate, technology purchase or country-dependent production. These absences keep the rules explainable and match the implemented feature set.</p>
+<h3>6.5 Shield: the only resource ability</h3>
+<p>A player may spend three ore to protect one currently owned, currently unshielded tile. At most one shield purchase is allowed per turn. This is preparation before the normal move, not an extra movement action.</p>
+<p>A purchased shield:</p>
+<ul>
+<li>Prevents adjacent conversion of that tile.</li>
+<li>Remains through the owner&#39;s move and the opponent&#39;s next resolved turn.</li>
+<li>Expires after that opponent turn, including an automatic pass.</li>
+<li>Is anchored to the tile; it is removed if the owner jumps away.</li>
+<li>Does not move with the piece, convert other pieces, create a marker or change jump distance.</li>
+</ul>
+<p>The present applyShield operation deducts ore immediately. Selecting an owned tile and pressing the shield control is the purchase; ordinary selection alone costs nothing. The rules have no refund operation, but the current frontend keeps a pre-purchase snapshot for its same-session Undo action. That snapshot is not persisted, so a refund/undo after reloading the page must not be promised.</p>
+<p>Three ore earned from the move cannot pay for preparation retroactively. A player with no move is automatically passed; the UI must not offer shield-only turns.</p>
+<p>Example: Brazil protects an ore tile and clones elsewhere. Japan then moves beside the protected tile. Other adjacent Brazilian pieces convert normally; the protected tile does not. After Japan&#39;s turn its protection expires. If Japan was forced to pass, it still expires.</p>
+<h3>6.6 Balance mathematics</h3>
+<p><strong>Node income ceiling.</strong> Combined round income cannot exceed the number of resource nodes currently occupied. It is at most 18 units on Frontier and 24 on Struggle.</p>
+<p><strong>Type ceilings.</strong> There are six ore nodes on Frontier and eight on Struggle, with the same counts for energy and food. If a symmetric split gives each player half of every type, Frontier gives each player three ore, three energy and three food per round; Struggle gives four of each.</p>
+<p><strong>Shield sustainability.</strong> Ignoring capture bonuses:</p>
+<ul>
+<li>One held ore node supports a shield every three rounds.</li>
+<li>Three held ore nodes support one shield per round.</li>
+<li>Four held ore nodes permit one shield per round and one surplus ore.</li>
+</ul>
+<p>The purchase cap remains one per turn even when a player has a large balance. The current economy supports defensive decisions without allowing multiple protected tiles to be purchased on one turn.</p>
+<p><strong>Opportunity cost.</strong> Spending three ore gives up three units in a possible final resource tiebreak. It cannot compensate for a final territory deficit, because territory is always compared first.</p>
+<p><strong>Finite upper bounds.</strong> At most 90 pairs occur in 180 individual turns, but the terminal-before-income rule allows at most 89 recurring payouts. A move can acquire at most a destination plus six adjacent resource sites, so seven resource units is a safe per-move capture upper bound, not a claim that the current layouts realize that maximum.</p>
+<p>Thus a loose combined pre-spending ledger bound is:</p>
+<pre><code>Frontier: 89 × 18 + 180 × 7 = 2,862
+Struggle: 89 × 24 + 180 × 7 = 3,396
+</code></pre>
+<p>Automatic passes award no capture bonus. Actual totals will be lower, and spent ore reduces them further. Ordinary integer arithmetic is ample.</p>
+<p><strong>Balance questions to measure.</strong> First-seat win rate, average match length, ore ownership concentration, shield use, and the frequency of resource ties need actual playtests. Geometric symmetry and these bounds are design evidence, not empirical balance certification.</p>
+<h2>7. Classic mode</h2>
+<p>Classic uses the same 58 cells, starting corners and clone/jump/conversion rules. Every tile is plain. Resource gains and shield purchases are disabled; resource totals cannot decide a Classic tie.</p>
+<p>Classic is the clean first tutorial and an equally complete way to play. It must not feel like a restricted demo with unavailable purchases or empty upgrade slots.</p>
+<h2>8. Finite play, passes and results</h2>
+<h3>8.1 Automatic passes</h3>
+<p>A player may not voluntarily pass while a legal move exists. When the active player has no move, the engine records a forced pass, changes turns and applies the ordinary turn-boundary effects.</p>
+<p>One blocked player does not necessarily end the match; the other can continue. If neither side can move, play ends. The engine also tracks consecutive passes as a terminal safeguard.</p>
+<p>Passes count toward the 180-turn limit and can complete a round for income if the resulting state remains active. A terminal pass produces no final recurring payout. Passes also consume a shield&#39;s one opposing turn. UI feedback should state why a player was passed rather than appearing to skip input silently.</p>
+<h3>8.2 Terminal conditions</h3>
+<p>The engine recognizes:</p>
+<ul>
+<li>Elimination: one side has zero pieces.</li>
+<li>Full board: no empty playable cell remains.</li>
+<li>No moves for either side, or two consecutive forced passes.</li>
+<li>Threefold recurrence of the defined board-cycle key.</li>
+<li>180 individual turns.</li>
+</ul>
+<p>The current code checks elimination and full board first, then consecutive passes, the turn cap, repetition and mutual immobility. Multiple conditions can be true simultaneously; the recorded reason follows that order, while the score comparison remains the same.</p>
+<p>“Turn” means one player&#39;s move or pass. A round is a pair of turns. Shield preparation is not a second turn.</p>
+<h3>8.3 Board-cycle repetition</h3>
+<p>The implemented key contains:</p>
+<ul>
+<li>Active player.</li>
+<li>The ordered ownership of all 58 cells.</li>
+<li>The presence of active shields.</li>
+</ul>
+<p>It deliberately excludes resource balances, absolute round and turn numbers, move-log text and visual selection. The map and mode are fixed within a match.</p>
+<p>When that key has occurred three times, the match ends and uses the current score. This is board-cycle repetition, not exact-state repetition: the same board can recur with different banked resources and still trigger the limit.</p>
+<p>This definition is especially useful in Resource mode, where growing ledgers could otherwise prevent an exact full-state key from repeating. It also means a player cannot indefinitely farm an unchanged jump cycle for income. The 180-turn cap guarantees a finite upper limit independently.</p>
+<h3>8.4 Score comparison</h3>
+<p>At an ordinary terminal result:</p>
+<ol>
+<li>Count each player&#39;s actually owned cells.</li>
+<li>Greater territory wins.</li>
+<li>If tied in Resource mode, compare remaining energy + ore + food.</li>
+<li>If still tied, declare a draw.</li>
+<li>In Classic, a territorial tie is a draw.</li>
+</ol>
+<p>The display may show resources beside territory, but must not add them into a single weighted “total score.” The engine&#39;s primary total is territory; the resource total is a tiebreak.</p>
+<p>Examples:</p>
+<ul>
+<li>30 tiles and zero resources beats 28 tiles and 200 resources.</li>
+<li>29–29 with resource totals 14–12 is a Resource win for the first player.</li>
+<li>29–29 in Classic is a draw.</li>
+<li>Elimination displays actual counts and surviving ownership. Do not fill empty cells or award fictitious resource captures.</li>
+</ul>
+<h3>8.5 Surrender, restart and result explanation</h3>
+<p>The current frontend provides restart and concession confirmation. On concession it cancels the AI callback, sets the winner explicitly, persists the terminal state and displays results. The rules module&#39;s terminal-reason union does not model a surrender reason, so an explicit concession reason in the results/log remains a presentation improvement. A future change must preserve the current terminal state rather than letting Continue reopen a live match.</p>
+<p>A result panel should contain the winning team or draw, final territory, resource balances when relevant, end reason, turns played and the next action. Do not describe a turn-limit result as elimination or an AI resignation.</p>
+<h2>9. Countries and fair representation</h2>
+<p>The present registry contains Brazil, Japan, Canada, Norway, Kenya and Australia. These are selectable team identities with hand-authored small flag illustrations and presentation colors.</p>
+<p>Rules receive Player 0 or Player 1, not a country-specific ability table. AI difficulty is a separate selection. A country swap with the same seat, mode, map and move history must yield identical legal moves and outcomes.</p>
+<p>Guidelines for adding another country:</p>
+<ul>
+<li>Use a consistent contemporary common name and an accurate, legible simplified flag.</li>
+<li>Avoid territorial maps, disputed borders, political slogans and military emblems.</li>
+<li>Give no economic, social or intelligence stereotype a gameplay effect.</li>
+<li>Use the same card layout, typographic weight and selection treatment.</li>
+<li>Keep a text name beside the flag so recognition never depends on a symbol.</li>
+<li>Use seat-specific outlines or markers when palette choices are too similar.</li>
+</ul>
+<p>The chosen team colors do not define the resource colors. Ore, energy and food retain their own icon shapes and labels across every matchup.</p>
+<p>Local hotseat has public information. A privacy handoff screen is optional polish rather than a secret-information requirement; neither player has hidden cards or orders.</p>
+<h2>10. Computer opponents</h2>
+<h3>10.1 Shared constraints</h3>
+<p>The AI uses the same state and move generator as a human. It receives no extra pieces, resources, capture range, vision or illegal shield. There is no remote model call and no downloaded policy. “AI” here means deterministic local game-tree and heuristic logic.</p>
+<p>The implementation returns null only when no move is available. Automatic passes and end rules belong to the engine; the UI must not spin an AI timer forever on null.</p>
+<h3>10.2 Cadet: varied short-term decisions</h3>
+<p>Cadet ranks the same immediate legal moves, considers up to the best eight, then selects by a deterministic index:</p>
+<pre><code>index = (moveCount × 7 + round × 3) mod candidateCount
+</code></pre>
+<p>It therefore varies without a runtime random source, is reproducible from a saved state, and can miss the top immediate move. It is not a random-move bot and does not deliberately break rules.</p>
+<h3>10.3 Commander: best immediate evaluation</h3>
+<p>Commander picks the top-ranked legal move. Its ordering value is:</p>
+<pre><code>2 × immediateConversions
++ 1 if clone, otherwise 0
++ 0.65 if the destination is a resource node in Resource mode
++ 0.035 × adjacentFriendlyCount
+− 0.015 × destinationRadius
+</code></pre>
+<p>Stable coordinate ordering breaks equal values. Commander currently does not search opponent replies. Copy must not promise multi-turn planning at this difficulty.</p>
+<h3>10.4 Strategist: bounded reply search</h3>
+<p>Strategist considers the ten highest-ranked moves and up to six ranked replies to each. It minimizes over those replies and chooses the move with the strongest resulting evaluation. It is a beam-limited two-ply search, not exhaustive minimax, a proven solution or an adaptive learning opponent.</p>
+<p>The evaluation from a player&#39;s perspective is:</p>
+<pre><code>terminal win: +100,000
+terminal loss: −100,000
+terminal draw: 0
+
+otherwise:
+  10 × territoryDifference
+  + 0.3 × reachableEmptyDestinationDifference
+  + 1.8 × controlledNodeDifference, in Resource mode
+  + 0.03 × bankedResourceDifference, in Resource mode
+</code></pre>
+<p>A forced pass can return the move to the same player; the search handles that resolved engine state rather than assuming strict alternation after every submitted move.</p>
+<p>The exact coefficients are inspectable implementation facts, not a promise of strength. Future tuning should preserve territory as the terminal objective and keep difficulty deterministic for bug reproduction.</p>
+<h3>10.5 Shield selection</h3>
+<p>The separate chooseShield helper evaluates owned, affordable, unshielded tiles with a plausible enemy landing beside them. It scores threatened landings, nearby friendly pieces and a modest resource-site preference, with a stronger weight on ore.</p>
+<p>This is a preparation heuristic. The inspected frontend chooses a normal move first, passes it to chooseShield, applies an affordable chosen shield, then submits that move. The helper avoids protecting a source that the planned jump will vacate. The move search does not exhaustively search every shield-plus-move combination or jointly optimize the ore expenditure. This is source-level integration evidence, not an observed browser shield event.</p>
+<h3>10.6 Scheduling and cancellation</h3>
+<p>The frontend should make one AI action for one current state, show a short thinking indicator, and reject stale callbacks after restart, new setup, home navigation or save restoration. Resource preparation and the following move must refer to the same active seat.</p>
+<p>A fixed pause can improve readability, but must not be advertised as processing time or used to hide a nonresponsive browser. Actual slow-device measurements are still required. A worker or deeper search is a backlog option only if measured search blocks input.</p>
+<h2>11. Screen concepts and information hierarchy</h2>
+<h3>11.1 Home: the quiet sea</h3>
+<p>Use the original archipelago image full bleed, with a dark ocean area behind live title text. A small bronze eyebrow introduces the setting; the large ivory title is the main anchor.</p>
+<p>Primary action: New skirmish.</p>
+<p>Secondary actions: Continue when a valid save exists, How to play, and sound/settings.</p>
+<p>Show a concise promise near the primary action: “A shared world. A different frontier every move.” Avoid claiming procedural maps; the “different” refers to player decisions. The subtitle may instead be strictly descriptive: “Clone, leap and connect across 58 hexes.”</p>
+<p>The hero image contains no baked title. All typography and buttons remain real interface elements.</p>
+<h3>11.2 Setup: the expedition desk</h3>
+<p>The setup must expose, without an advanced-options drawer:</p>
+<ul>
+<li>Solo or local hotseat.</li>
+<li>Player country and opponent country.</li>
+<li>Cadet, Commander or Strategist for solo.</li>
+<li>Resource or Classic.</li>
+<li>Frontier or Struggle, with a precise note that Classic removes deposits.</li>
+<li>Start and back actions.</li>
+</ul>
+<p>Both country cards use equal visual prominence. Each explains that countries have identical stats. Default choices should form a readable color contrast, not a claim that one country is better.</p>
+<p>Each map card uses a small schematic plus its concrete rule difference: 18 versus 24 resource nodes. Never promise different board sizes.</p>
+<h3>11.3 Match: the survey table</h3>
+<p>Recommended desktop hierarchy:</p>
+<pre><code>Top bar: brand · mode/map · round/turn · sound/settings · home
+Left ledger: both teams, territory, resources, active-player indicator
+Center: largest possible interactive Phaser board
+Right/context area: selection, clone/jump help, shield and recent moves
+Bottom or side actions: keyboard board, restart and surrender
+</code></pre>
+<p>The active player must be identifiable by text and shape as well as color. Territory is the largest number in each team ledger. Resource values are secondary with distinct icons.</p>
+<p>Selecting a piece reveals legal clone and jump destinations. The selected coordinate and instructions update immediately. Clicking another owned piece changes selection. Clicking an illegal destination leaves the match state unchanged and provides short, nonblocking feedback.</p>
+<p>A shield control states both price and effect: “Shield · 3 ore · blocks conversion for one opponent turn.” If unaffordable, show the reason in text rather than a silent disabled icon.</p>
+<h3>11.4 Contextual help</h3>
+<p>Help content follows the player&#39;s action:</p>
+<ul>
+<li>Nothing selected: “Choose one of your markers.”</li>
+<li>Piece selected: “Solid targets clone. Ring targets jump.”</li>
+<li>Resource node inspected: explain capture bonus, round income and current owner.</li>
+<li>Shield targeting: explain immediate purchase and the need to move afterward.</li>
+<li>AI turn: explain the current opponent and difficulty; prevent human actions.</li>
+<li>Forced pass: state that no legal move was available.</li>
+<li>Result: explain the exact terminal reason and comparison.</li>
+</ul>
+<p>The always-available rules summary covers conversion, scoring, the three-ore shield and board-cycle repetition. No tooltip may advertise an unimplemented resource ability.</p>
+<h3>11.5 Move log</h3>
+<p>Each human-readable record should identify:</p>
+<ul>
+<li>Acting country/seat.</li>
+<li>Clone, jump or pass.</li>
+<li>Source and destination where applicable.</li>
+<li>Number of conversions.</li>
+<li>Round or turn context.</li>
+</ul>
+<p>The engine stores converted coordinate IDs, which can support a richer replay later. The present frontend displays the three most recent move summaries; source/destination are available in the engine records but are not all printed in that compact log. A move log is currently an explanation aid, not a promised replay feature. Shield purchase history is not in MoveRecord; a future detailed audit log must add an explicit event instead of guessing it from the final balance.</p>
+<p>The frontend also provides Undo round in solo and Undo turn in hotseat through an in-memory state stack. It snapshots paid shield preparation separately, so undo can restore the pre-purchase state in the same session. Neither undo history nor that preparation snapshot is persisted. Do not promise an undo history or a preparation refund after browser reload.</p>
+<h3>11.6 Results and recovery</h3>
+<p>The result panel uses calm celebratory light, not explosions or a military victory scene. Display both teams and the exact score comparison.</p>
+<p>Primary: Play again or rematch.</p>
+<p>Secondary: Change setup and home.</p>
+<p>Restart and surrender require an explicit outcome for the saved session. A stale local save must not silently undo a finished result. A failed optional audio load must never prevent the result panel.</p>
+<h2>12. Responsive behavior, input and accessibility</h2>
+<h3>12.1 Layout priorities</h3>
+<p>Desktop target: a generous board with both ledgers visible at common 1366 × 768 and 1440 × 900 CSS-pixel windows.</p>
+<p>Tablet target: collapse secondary help/log panels before shrinking the board excessively. In portrait, place the team strip above the board and controls below it.</p>
+<p>Narrow-screen target: retain a usable setup and an alternative cell-control interface. At approximately 390 CSS pixels wide, fitting all 58 visual targets with generous hit areas is difficult; do not claim mobile acceptance from CSS breakpoints alone.</p>
+<p>The current Electron window has an 820 × 620 minimum. That is a desktop-shell constraint, not proof of mobile responsiveness or the browser&#39;s minimum size.</p>
+<h3>12.2 Pointer and touch</h3>
+<ul>
+<li>Click/tap to select, then click/tap a destination.</li>
+<li>No drag, double-click, precision hover or right-click is required.</li>
+<li>Hit testing must match the visible hex face and reject holes.</li>
+<li>Use destination markers as well as highlight color.</li>
+<li>Do not scroll the page unexpectedly when interacting with the board.</li>
+</ul>
+<p>The current board scene implements pointer selection and responsive redraw. A reduced-motion option suppresses its conversion rings. Its clone/jump indicators are visibly different circle treatments; dashed paths and trajectory previews are future polish, not current assets.</p>
+<h3>12.3 Keyboard and assistive technology</h3>
+<p>Canvas graphics are not sufficient accessibility. The current frontend supplies a Keyboard board toggle and 58 DOM cell buttons that call the same clickCell/rules path as pointer input. Their labels identify coordinate, owner, terrain and legal-destination status, and selection uses aria-pressed. This is source evidence of a real alternative, not a browser keyboard acceptance result. An explicit shield label on those cell controls is still an accessibility improvement.</p>
+<p>The acceptance target is a real DOM alternative exposing each cell&#39;s coordinate, owner, terrain, shield and availability. Controls should call the same validated move path as pointer input. A keyboard user must be able to choose a source and destination, shield, inspect help, restart, surrender and dismiss results.</p>
+<p>Use visible focus, ordinary tab order, Enter/Space activation, Escape to dismiss transient selection, and appropriate dialog focus restoration. Do not capture browser shortcuts. A continuously changing move log should not create overwhelming announcements.</p>
+<h3>12.4 Perception and motion</h3>
+<ul>
+<li>Names, seat markers and outlines supplement country color.</li>
+<li>Resource shapes differ: energy bolt, ore crystal and food leaf.</li>
+<li>Normal text should target at least 4.5:1 contrast; large text and essential nontext controls at least 3:1.</li>
+<li>Small decorative caption text is not a substitute for essential instructions.</li>
+<li>Respect a reduced-motion setting and the operating-system preference where the frontend implements it.</li>
+<li>No rule depends on hearing an effect.</li>
+<li>No flashing, camera shake or urgent audio countdown is needed.</li>
+</ul>
+<p>These are design and acceptance targets, not a claim of audited WCAG conformance.</p>
+<h2>13. Visual art bible</h2>
+<h3>13.1 Material and palette</h3>
+<p><strong>Ocean:</strong> deep teal and midnight blue, with quiet contour lines. Example anchors: #173E3A, #244E4C and #102B35.</p>
+<p><strong>Land and paper:</strong> warm ivory, pale limestone and desaturated grass: #F6F5EF, #D3D8B5 and #C6D0AD.</p>
+<p><strong>Forest:</strong> restrained pine and moss: #5B8367 and #739576.</p>
+<p><strong>Bronze:</strong> warm mineral accents and primary actions: #B78442, #E9AE48 and #F2C66D.</p>
+<p><strong>Text:</strong> near-black forest on light panels, warm ivory on dark panels. Avoid low-contrast gray body text over detailed artwork.</p>
+<p>The playable board is engine-drawn geometry, not a painted image with baked interactive cells. Decorative island art can suggest a three-dimensional tabletop; the gameplay view must preserve clear coordinates and destination shapes.</p>
+<h3>13.2 Typography</h3>
+<p>Use bundled or system fonts whose licenses are known. A high-contrast editorial display face may be used for the title, paired with a highly readable system sans-serif for controls and numbers.</p>
+<p>Keep the title in live text. Numeric ledgers should not shift width distracting the board; tabular numerals are preferable. Avoid all-caps paragraphs, excessive tracking on small labels, and national-character display stereotypes.</p>
+<h3>13.3 Implemented visual inventory</h3>
+<ul>
+<li>Original generated archipelago backdrop: public/assets/archipelago.png, 1672 × 941 PNG.</li>
+<li>Country SVG/Phaser flag treatments authored in the project.</li>
+<li>Raised land, ocean contours, pieces, trees, resource icons, shields and destination overlays drawn in BoardScene.</li>
+<li>No downloaded sprites, HEXSTORM screenshots, DOS textures, historical game sounds or stock national maps.</li>
+</ul>
+<p>See <a href="#assets">ASSETS.md</a> for the exact delivered background prompt, original-source record, audio generation and file hashes. Its creation record is more authoritative than an inferred prompt here.</p>
+<h3>13.4 Exact prompts and specifications for the art backlog</h3>
+<p>The following are original production briefs. They are not delivered files unless the asset inventory says so. Generate without reference images from the source games. Any output still needs visual review, provenance recording and correct export.</p>
+<p><strong>A. Alternate archipelago key art — optional marketing master</strong></p>
+<p>Specification: 2560 × 1440 PNG, opaque background, composition safe for a 16:9 crop; no text or national symbols.</p>
+<p>Prompt: “Create an original premium strategy-board-game landscape. A peaceful near-future archipelago of tactile hexagonal limestone columns rises from a deep teal ocean. Warm ivory cliffs, moss and miniature pine groves, sparse copper ore, soft mineral light and a few modest nonmilitary research pavilions. Painterly gouache and handcrafted clay materials, sophisticated restrained detail. Place the larger islands on the right and leave the left forty percent as quiet dark water for live interface typography. Warm dusk light from the upper right, subtle mist, calm curiosity, no people, no weapons, no flags, no logos, no lettering, no interface, no existing game imagery.”</p>
+<p><strong>B. Country-neutral marker concept sheet</strong></p>
+<p>Specification: 2048 × 1024 concept PNG; final engine implementation remains vector geometry unless a separate atlas is approved.</p>
+<p>Prompt: “Design a clean concept sheet of six original tabletop strategy markers, all identical in strength and physical size. Rounded low ceramic counters with a gently raised ivory rim, subtle bronze sidewall and a small flat inset reserved for an interface symbol. Forest, coral, gold, slate blue, moss and muted violet colorways. Consistent three-quarter overhead view, soft upper-right light, neutral paper background, no letters, no numbers, no flags, no ornate insignia, no weapons, no national stereotypes.”</p>
+<p><strong>C. Resource icon family</strong></p>
+<p>Specification: one 1536 × 512 concept sheet containing three equally spaced icons; production exports are separate transparent 128 × 128 PNGs or project-authored SVGs.</p>
+<p>Prompt: “Create three original minimal strategy-resource icons in one consistent handcrafted style: a faceted copper-and-teal ore crystal, a warm amber energy spark, and a green food sprout with one seed. Clear distinct silhouettes, readable at twenty-four pixels, restrained ivory highlights, no containers or UI backgrounds, no text, no numbers, no logos. Equal optical weight and generous spacing. Flat orthographic icon presentation.”</p>
+<p><strong>D. Shield visual concept</strong></p>
+<p>Specification: transparent 512 × 512 PNG concept; final shipped shield may remain an engine ring. No implied additional ability.</p>
+<p>Prompt: “An original quiet protective halo for a peaceful tabletop hex strategy game: a thin ivory circular rim with a very subtle pale jade translucent surface, one small geometric clasp, isolated on transparency, orthographic view, precise simple silhouette, restrained soft light, no explosion, no weapon, no text, no emblem, no dramatic bloom.”</p>
+<p><strong>E. Frontier map-card vignette</strong></p>
+<p>Specification: 960 × 600 PNG; no baked labels; image must not be used as a factual replacement for the exact engine layout.</p>
+<p>Prompt: “Original miniature archipelago map-room vignette, horizontal composition: a broad balanced hexagonal island field in calm teal water, distributed small forest patches, copper mineral sites and green gardens near several outer routes. Tactile ivory limestone, warm bronze instrument details, contemplative strategy-table mood. No flags, no borders, no labels, no military hardware, no people, no recognizable real geography.”</p>
+<p><strong>F. Struggle map-card vignette</strong></p>
+<p>Specification: 960 × 600 PNG matching E&#39;s camera and light; differentiate central interest rather than combat.</p>
+<p>Prompt: “Original miniature archipelago map-room vignette in the same peaceful handcrafted strategy style: a balanced hexagonal limestone field with several luminous resource outcrops concentrated near the central lanes, deep teal water, moss and sparse pines, ivory and copper palette, warm dusk light. Convey a close strategic contest through tighter visual grouping, without battle, destruction, flags, real geography, lettering or interface elements.”</p>
+<p><strong>G. Result background</strong></p>
+<p>Specification: 1920 × 1080 PNG with a quiet central/left reading area. Remains optional; initial build can reuse the delivered background.</p>
+<p>Prompt: “Original calm strategy-game result backdrop: a handcrafted island survey table seen from a gentle overhead angle, a few ivory ceramic markers resting beside an unfurled blank field notebook, bronze compass and soft ocean light, forest green and warm paper palette. Reserve broad uncluttered negative space for live result text. Peaceful completion rather than conquest, no trophies shaped as weapons, no flags, no letters, no numbers, no logos.”</p>
+<p><strong>H. Steam capsule art base</strong></p>
+<p>Specification: at least 2560 × 1440 master plus separately composed portrait master; title/logotype added by a human-controlled layout pass using Valve&#39;s current templates.</p>
+<p>Prompt: “Original polished key art for a peaceful abstract hex strategy game. A strong central silhouette of a hexagonal island board emerging from a deep teal sea, alternating warm ceramic markers and bright tiny resource sites, ivory limestone sides, moss forests and bronze mineral accents. Rich but readable composition at thumbnail scale, warm inviting light, tactile painterly surfaces, no text, no lettering, no national symbols, no weapons, no copied game elements. Preserve a clear upper reading area for an original title logo added separately.”</p>
+<p><strong>I. Conversion shimmer — optional effect</strong></p>
+<p>Specification: six 128 × 128 transparent frames in a 768 × 128 strip, restrained values; a procedural tween is preferable if it meets the need.</p>
+<p>Prompt: “Six sequential frames of one original subtle tabletop strategy conversion shimmer, left to right: a thin ivory ring gently opens, changes to a soft jade light and dissolves. Perfectly aligned center and identical scale in all frames, isolated transparency, quiet elegant motion, no sparks suggesting damage, no text, no icons, no visible tile underneath, no hard flash.”</p>
+<p>For every generated asset, record generation date, tool, complete prompt, input references if any, actual output dimensions, SHA-256 and any editing steps. A prompt&#39;s requested resolution is not evidence that the returned file has that resolution.</p>
+<h2>14. Audio direction and delivered cues</h2>
+<h3>14.1 Musical identity</h3>
+<p>The audio should suggest curiosity, sea air and a well-made physical instrument. Use soft wooden plucks, light glass resonances, warm low pads and restrained stereo texture. Avoid orchestral war music, national anthems, recognizable borrowed tunes and realistic battle sound.</p>
+<p>The delivered composition is an original 24-second, eight-bar loop in 4/4 at 80 beats per minute. Its source describes a D Dorian miniature with a lower-register answer in the second half. Circularly written tails and echoes support the seam; it is not a commercially licensed recording.</p>
+<h3>14.2 Delivered sound files</h3>
+<p>All current WAVs are stereo, 44,100 Hz, 16-bit PCM:</p>
+<ul>
+<li>archipelago-loop.wav — 24.00 seconds; optional atmosphere.</li>
+<li>select.wav — 0.18 seconds; a focused marker or deliberate menu selection.</li>
+<li>move.wav — 0.42 seconds; a confirmed legal clone or jump.</li>
+<li>capture.wav — 0.67 seconds; one conversion event cluster.</li>
+<li>resource.wav — 0.65 seconds; resource acquisition/income feedback.</li>
+<li>victory.wav — 2.60 seconds; one result reveal.</li>
+<li>invalid.wav — 0.26 seconds; soft unavailable-action feedback.</li>
+</ul>
+<p>Do not play one full capture sound for every converted tile at the same instant. A single action-level cue can acknowledge the cluster and prevent clipping or fatigue. Resource sound should likewise summarize a payout rather than firing once per banked unit.</p>
+<h3>14.3 Runtime contract</h3>
+<p>AudioManager loads local files using Vite&#39;s base URL. Unlock must be triggered by a user gesture. Music is opt-in; it does not start at class construction. Muting and volume change a shared gain. Missing or denied audio is optional and must not block gameplay.</p>
+<p>The source supports play, startMusic, stopMusic, setMuted, setVolume and destroy. The frontend owns settings persistence and screen-to-screen lifetime. Leaving a match must not leak multiple looping sources.</p>
+<h3>14.4 Audio backlog</h3>
+<ul>
+<li>A distinct quiet shield-purchase cue, if the existing resource cue proves ambiguous.</li>
+<li>A noncelebratory draw/concede response, avoiding a triumphant cue for every terminal state.</li>
+<li>A longer optional menu arrangement, with a small asset budget.</li>
+<li>Listening acceptance on browser and desktop output devices.</li>
+<li>Alternative compressed exports only after measured download needs justify them.</li>
+</ul>
+<p>No voice narration, procedural music service or runtime generative audio is needed. Header/peak inspection is file evidence; it is not a listening acceptance claim.</p>
+<h2>15. Save and continuation design</h2>
+<h3>15.1 Persistence boundaries</h3>
+<p>The browser&#39;s local storage is a local convenience. It can be cleared, denied, tied to a particular origin, or isolated by an embedded frame/browser policy. It is not an account, backup service, cloud promise or tamper-proof competitive record.</p>
+<p>The optional desktop shell uses a different browser storage context and may not share a web save. The frontend can download a JSON field record, but an import flow and a verified browser-to-desktop round trip remain backlog. Export alone is not seamless continuation.</p>
+<h3>15.2 Required logical payload</h3>
+<p>A recoverable match needs:</p>
+<ul>
+<li>Format version; a save timestamp is useful future metadata but is not in the current payload.</li>
+<li>Mode, map, solo/hotseat, countries and difficulty.</li>
+<li>The complete resolved GameState.</li>
+<li>Relevant presentation preferences, separately versioned if convenient.</li>
+</ul>
+<p>The actual frontend persists the following logical TypeScript contract under the localStorage key hexxago-frontier-v1:</p>
+<pre><code>interface SavedExpeditionV1 {
+  version: 1;
+  state: GameState;
+  config: {
+    factions: [string, string];
+    opponent: &#39;solo&#39; | &#39;hotseat&#39;;
+    difficulty: &#39;cadet&#39; | &#39;commander&#39; | &#39;strategist&#39;;
+    mode: &#39;resource&#39; | &#39;classic&#39;;
+    map: &#39;frontier&#39; | &#39;struggle&#39;;
+  };
+  prefs: {
+    muted: boolean;
+    music: boolean;
+    volume: number;
+    reducedMotion: boolean;
+  };
+}
+</code></pre>
+<p>GameState is the complete serializable model in section 16, including all 58 Tile objects, resource ledgers, move and position histories, current player/round, moveCount, passes, winner and shieldUsedThisTurn. It optionally includes lastMove and endReason. The same envelope is used for the downloadable hexxago-expedition.json field record.</p>
+<p>Defaults are Brazil/Japan, solo Commander, Resource/Frontier, sound unmuted, music off and volume 0.45. The initial reduced-motion preference reads the operating-system media query. No savedAt field or import API is currently serialized.</p>
+<h3>15.3 What must survive restoration</h3>
+<p>Preserve active player, every owner, banks, active shields, shieldUsedThisTurn, pass count, individual-turn count and repetition history. Reconstructing only the visible board can change a future terminal result or allow a second shield purchase in the same turn.</p>
+<p>The log is valuable for explanation. The position history is required for the implemented repetition rule. AI timers, animation objects, DOM references, audio buffers and Phaser objects must not be serialized.</p>
+<h3>15.4 Validation and failure UX</h3>
+<p>The current restoration code checks version one, a 58-element tiles array, history/resources/positionHistory arrays, a legal current player, a recognized state mode, recognized faction IDs and solo/hotseat. Parsing/storage exceptions fall back to a new match.</p>
+<p>This is partial structural validation. Stronger acceptance should also verify expected map/difficulty enums, exactly two faction IDs, legal owner values, 58 unique playable IDs, coordinate agreement, finite nonnegative integer banks, a bounded move count and a sensible result state.</p>
+<p>Handle JSON parsing and storage access errors without discarding a currently valid match silently. Offer a clear start-new action for an invalid or unsupported save. Do not silently call an old save “migrated” unless a concrete migration has run.</p>
+<p>Save after committed state changes. If shield preparation can be saved before movement, it must preserve both the deduction and purchase flag. Result/surrender state must be persisted consistently or the unfinished save intentionally cleared.</p>
+<p>The frontend currently catches storage-write failures without blocking play; it does not display a storage-denied indicator. Stronger semantic validation, unsupported-save messaging and visible persistence failure feedback remain acceptance improvements rather than delivered guarantees.</p>
+<h2>16. Technical design and ownership</h2>
+<h3>16.1 Stack choice</h3>
+<p>The selected game stack is Phaser 3.90.0, TypeScript and Vite. The local package pins those choices. The official template&#39;s current main branch was inspected and now declares Phaser 4.0.0 despite retaining a Phaser 3 description, so copying its current dependency block would silently change the agreed engine. Use this repository&#39;s lockfile and package contract rather than template prose as version authority.</p>
+<p>Phaser 3.90.0&#39;s published metadata and source license identify MIT licensing. That permits use under the license terms; preserve the actual notices in redistributed dependencies. <a href="https://registry.npmjs.org/phaser/3.90.0">Published package</a>, <a href="https://github.com/phaserjs/phaser/blob/v3.90.0/LICENSE.md">license</a>.</p>
+<p>The optional desktop wrapper is Electron around the same Vite output. It is our packaging approach, not an inferred property of HEXSTORM.</p>
+<h3>16.2 Modules present in the inspected snapshot</h3>
+<ul>
+<li>src/game/rules.ts — serializable rules, maps, legal moves, shield, income, terminal detection and scoring.</li>
+<li>src/game/ai.ts — deterministic move ranking, difficulty selection and shield heuristic.</li>
+<li>src/game/BoardScene.ts — Phaser drawing, hit testing, selection overlays and conversion feedback.</li>
+<li>src/main.ts — DOM application shell, setup/help/settings/results dialogs, move orchestration, local save, keyboard cell controls, undo and AI scheduling.</li>
+<li>src/style.css — responsive dashboard, panels, controls, dialogs and country presentation.</li>
+<li>src/countries.ts — cosmetic country registry and flag presentation.</li>
+<li>src/audio.ts — local Web Audio lifecycle and effects/music.</li>
+<li>scripts/generate-audio.py — deterministic original PCM synthesis, with no third-party samples.</li>
+<li>scripts/package-itch.mjs — builds a ZIP from dist with root index.html.</li>
+<li>desktop/main.cjs — local Electron window loading dist/index.html.</li>
+<li>vite.config.ts — relative base, bundling target and development/preview ports.</li>
+</ul>
+<p>The frontend appeared during this documentation pass and was read back for this final source description. That source presence does not establish its browser interaction acceptance. This architecture does not require an additional frontend framework or a rewritten engine.</p>
+<h3>16.3 State flow</h3>
+<p>Keep one authoritative GameState in the orchestration layer:</p>
+<pre><code>input intent
+   → selection/setup validation
+   → rules applyShield/applyMove/applyPass
+   → one new resolved state
+   → update DOM ledger, help, log and accessible controls
+   → BoardScene.setView
+   → local save
+   → optional action-level sound
+   → schedule next AI action only if still appropriate
+</code></pre>
+<p>The board scene reports cell IDs. It does not mutate ownership. The AI returns a move or shield choice. It does not own the rendering lifecycle. Audio failures do not roll back or repeat an already applied move.</p>
+<h3>16.4 Serializable engine model</h3>
+<p>Important fields:</p>
+<ul>
+<li>Tile: id, q, r, terrain, owner, optional shieldedBy.</li>
+<li>Move: from and to.</li>
+<li>MoveRecord: player, source/destination or null, clone/jump/pass, converted IDs, round.</li>
+<li>GameState: tiles, turn, round, two resource ledgers, history, winner, passes, mode, map, moveCount, positionHistory, shieldUsedThisTurn, optional lastMove/endReason.</li>
+</ul>
+<p>The rules copy tiles, banks and history arrays before changing them. Consumers must treat returned states as the current snapshot and avoid mutating the engine&#39;s previous state for convenience.</p>
+<h3>16.5 Rendering and asset loading</h3>
+<p>The scene uses Phaser Graphics for board geometry and local text objects. Its resize handler recomputes positions to fit the available canvas. The hero image is a menu/background asset, not a tile hit-test map.</p>
+<p>All shipped assets must be local and use relative/base-aware paths. No CDN font, remote sprite service or analytics call should be necessary for a match. A browser reload still needs a host or an explicitly implemented offline cache; offline-capable game logic alone does not create a service worker.</p>
+<h2>17. Delivery milestones and acceptance evidence</h2>
+<h3>M0 — Reference and scope record</h3>
+<p>Present: research.json and the inspected official source links in these documents.</p>
+<p>Acceptance: references are attributed, uncertainties are explicit, and no asset/license/wrapper claim is inferred from a screenshot or genre.</p>
+<h3>M1 — Deterministic rules and AI</h3>
+<p>Present in source: two modes, symmetric resource layouts, cloning/jumping, conversion, one ore ability, income, deterministic AI, forced passes, finite endings and serialization-friendly state.</p>
+<p>Required behavior evidence: an authorized rules run should demonstrate the acceptance cases below. This documentation pass did not run the engine test suite or an exhaustive search.</p>
+<h3>M2 — Complete browser skirmish</h3>
+<p>Present in source: dashboard/home navigation, setup, country selection, solo/hotseat, Phaser board integration, ledgers, context help, recent log, restart/concede/results, audio preferences, keyboard cell controls, local continuation, JSON download and in-memory undo.</p>
+<p>Required evidence: start an actual browser match, make legal and invalid moves, observe the AI/hotseat transition, trigger a result, reload/continue and verify audio controls. A compiling source file is not this evidence.</p>
+<h3>M3 — Readable and accessible presentation</h3>
+<p>Present in source/assets: original hero illustration, board drawing, audio files, responsive layout, DOM keyboard alternative and reduced-motion controls. Target: measured contrast, full interaction/focus acceptance and small-device usability.</p>
+<p>Required evidence: desktop and narrow-window interaction, pointer/keyboard equivalence, focus restoration, readable ledgers and optional-audio failure behavior.</p>
+<h3>M4 — Browser distribution artifact</h3>
+<p>Present: package script and relative Vite base. Target: actual versioned ZIP, manifest/hash, root entry point and hosted-subdirectory acceptance.</p>
+<p>Required evidence: inspect the produced archive, run its actual contents on an HTTP origin, and verify every required asset loads. An itch.io upload and publication are later states.</p>
+<h3>M5 — Optional desktop candidate</h3>
+<p>Present: Electron wrapper and packaging commands. Target: Windows candidate first, followed by separately verified macOS and Linux releases.</p>
+<p>Required evidence: produce the OS artifact and launch it on that actual OS, including saves, audio, display scaling, offline assets and quit/relaunch. Packaging does not imply signing or Steam review.</p>
+<h3>M6 — Private review and authorized publication</h3>
+<p>Target: operator-reviewed itch/Steam materials, provenance, real build acceptance and explicit release authorization. No store listing, payment, account onboarding or public publication is performed by writing these docs.</p>
+<h2>18. Acceptance cases for implementation review</h2>
+<p>These are concrete checks for the integration owner to execute as authorized, not a fabricated list of completed tests.</p>
+<p><strong>Geometry and movement</strong></p>
+<ul>
+<li>Count exactly 58 cells and six starting pieces.</li>
+<li>Verify every resource label and opening owner under S(q,r)=(r,q).</li>
+<li>Reject hole destinations, occupied targets, enemy sources and distance-three moves.</li>
+<li>Accept a distance-two jump even when the intervening location is a hole.</li>
+<li>Confirm clone retains the source; jump clears it and its shield.</li>
+<li>Resolve several adjacent conversions together and stop after one adjacency step.</li>
+</ul>
+<p><strong>Resource ledger</strong></p>
+<ul>
+<li>Award a destination resource exactly once.</li>
+<li>Award every newly converted node exactly once.</li>
+<li>Award both sides&#39; round income once after Player 1&#39;s resolved nonterminal turn, including a nonterminal pass.</li>
+<li>Award capture/conversion bonuses but no recurring income on a terminal action, whether Player 0 or Player 1 acted.</li>
+<li>Do not award income after Player 0&#39;s turn alone.</li>
+<li>Allow a recaptured/reoccupied node to receive a new capture bonus.</li>
+<li>Keep Energy/Food as tiebreak values, without an undocumented ability.</li>
+<li>Verify Classic has plain terrain, no shield purchase and no resource tiebreak.</li>
+</ul>
+<p><strong>Shield</strong></p>
+<ul>
+<li>Reject an enemy, empty or already shielded target and insufficient ore.</li>
+<li>Deduct exactly three ore once; preserve the movement action.</li>
+<li>Reject a second purchase during the same turn.</li>
+<li>Prevent only that tile&#39;s conversion through one opposing move or pass.</li>
+<li>Remove protection after the opposing turn.</li>
+<li>Remove it if its owner jumps away.</li>
+<li>Preserve paid preparation through Continue; do not allow a second purchase after reload.</li>
+</ul>
+<p><strong>Ends and loops</strong></p>
+<ul>
+<li>Eliminate a side without inventing an automatic board fill.</li>
+<li>Show one forced pass and continue when the other side has moves.</li>
+<li>End mutual immobility.</li>
+<li>End on the third board-cycle key even when ledgers differ.</li>
+<li>End at 180 individual turns.</li>
+<li>Compare territory before resources and permit an exact draw.</li>
+<li>Persist or clear surrender/results consistently so Continue cannot resurrect an active game.</li>
+</ul>
+<p><strong>AI and integration</strong></p>
+<ul>
+<li>Produce the same AI move for the same state and difficulty.</li>
+<li>Use legal engine moves and ordinary resource costs.</li>
+<li>Handle forced passes and terminal moves without scheduling another invalid action.</li>
+<li>Cancel stale AI actions after restart/home/new setup.</li>
+<li>Keep source state unmodified when applying a move.</li>
+<li>Keep both human seats operable in hotseat.</li>
+</ul>
+<p><strong>Presentation and storage</strong></p>
+<ul>
+<li>Complete a pointer match and a keyboard-driven sequence using the same rule path.</li>
+<li>Read owner, terrain and shield without relying on color alone.</li>
+<li>Resize without hidden controls or mismatched hit targets.</li>
+<li>Disable sound, toggle music, and continue playing if audio fails.</li>
+<li>Resume a valid save with all counters/shields/repetition state intact.</li>
+<li>Reject malformed or unsupported saves with useful feedback.</li>
+<li>Load the production build from a subdirectory and the desktop local bundle.</li>
+</ul>
+<h2>19. Principal risks and deliberately deferred work</h2>
+<p><strong>Source and delivery drift.</strong> Parallel changes can leave rules, help and packaging out of agreement. Reconcile module interfaces and update status from actual artifacts; separate component completion does not establish application integration.</p>
+<p><strong>Economy ambiguity.</strong> Capture plus income, reacquisition and board-cycle repetition are intentionally explicit. If changed later, update rules, save compatibility, help and AI together.</p>
+<p><strong>First/second seat effects.</strong> Reflection proves structural access, not empirical fairness. Rematch seat swapping and measured self-play are future improvements, not a reason to invent country advantages.</p>
+<p><strong>AI cost and strength.</strong> Beam limits bound work, but latency still needs device measurement. Difficulty names are descriptive tiers, not a rating claim.</p>
+<p><strong>Canvas accessibility.</strong> An ARIA label alone is insufficient. The DOM alternative and real keyboard acceptance are required before advertising complete keyboard support.</p>
+<p><strong>Desktop/platform claims.</strong> Electron configuration is not OS acceptance, code signing, Steam Cloud, controller support or Steam Deck verification.</p>
+<p><strong>Save fragility.</strong> Browser origin changes, private mode and quota policy can remove or deny a save. Cloud synchronization and save import are not shipped; local JSON export is available.</p>
+<p><strong>Asset provenance.</strong> Generated art is original project material under applicable service terms, without an assertion of exclusive copyright. Historical assets and reference branding are excluded.</p>
+<p>Deferred: online multiplayer, ranked play, accounts, achievements, cloud saves, save import/verified cross-distribution transfer, campaigns, nation abilities, resource tech trees, procedural maps, gamepad support, map editor, replay viewer, localization beyond the delivered UI, mobile-store applications, and platform certification. None should appear as available in shipped descriptions until implemented and verified.</p>
+</section><section id="research" class="document"><div class="section-label">Reference research</div><h1>Reference research · HEXXAGO</h1>
+<p>Checked 30 October 2026 (local time) in the already-running managed Brave browser. Original game code, binaries, music and art were not imported. The raw inspection evidence remains local in <code>docs/research.json</code> and is not part of the public build.</p>
+<h2>What the references establish</h2>
+<p><strong>HEXSTORM is the engine and delivery reference.</strong> <a href="https://phaser.io/news/2026/01/hexstorm-tears-of-arcadia">Phaser’s feature</a> describes a steampunk tower defence with networked power, moving battles and persistent upgrades. Its <a href="https://tearevo.itch.io/tears-of-arcadia">itch.io page</a> offers a browser play button and links to Steam. The <a href="https://store.steampowered.com/app/4402950/HEXSTORM_Tears_of_Arcadia/">Steam page</a> currently presents a released game and a separate demo, lists Windows, macOS and Linux system requirement tabs, and discloses use of generated assets during development. This supports a browser discovery build followed by a downloadable commercial edition. It does not reveal the original desktop wrapper, build pipeline, engine minor version or source code. HEXXAGO uses Phaser 3.90.0 and proposes Electron for its own desktop shell.</p>
+<p><strong>Hexxagon is the rules reference.</strong> <a href="https://archive.org/details/msdos_Hexxagon_1993">Internet Archive’s catalogue</a> identifies the 1993 DOS game, developer Argo Games and publisher Software Creations. It describes 58 hexagonal spaces, three starting pieces per side, adjacent cloning, jumps of two spaces and conversion of opposing pieces adjacent to the destination. <a href="https://www.old-games.com/download/3199/hexxagon">Old-Games’ account</a> independently agrees and mentions three difficulty levels and local two-player play. Those are the recognizable foundation of HEXXAGO. Resource income, countries, defensive shields and the board art are new design choices.</p>
+<h2>Design decisions drawn from the research</h2>
+<ol>
+<li>Preserve the original move vocabulary. Players should learn clone, jump and convert without an economy blocking ordinary movement.</li>
+<li>Give resource control a visible spatial role. Ore funds one temporary defensive shield; energy and food accumulate toward the resource tie-break. No unimplemented units or abilities are advertised.</li>
+<li>Borrow HEXSTORM’s sense of a crafted miniature world: clear resource silhouettes, warm land against deep water, restrained movement and feedback. HEXXAGO has original assets and a turn-based board rather than HEXSTORM’s tower defence systems.</li>
+<li>Use real countries as equal-stat sporting factions on an imagined archipelago. Country identity changes flag, colour and label. It does not encode national stereotypes, military strength or real borders.</li>
+<li>Ship one local-first core to browser and desktop. No account, external API, paid currency or runtime generative model is required.</li>
+</ol>
+<h2>Delivery constraints checked against primary documentation</h2>
+<p><a href="https://itch.io/docs/creators/html5">itch.io’s HTML5 guide</a> calls for a ZIP with <code>index.html</code> at the root and relative asset paths. Its iframe/fullscreen modes require resizing and audio to start after player interaction. The build uses relative URLs, bundles Phaser and all assets, and makes music opt-in. The package script archives the <strong>contents</strong> of <code>dist</code>.</p>
+<p><a href="https://partner.steamgames.com/doc/gettingstarted/onboarding">Steamworks onboarding</a> requires a developer’s paperwork, identity, payment and tax setup, application deposit, store preparation and review. Those account actions are outside this local implementation. The current reference’s availability does not mean HEXXAGO has a store listing. See <code>RELEASE.md</code> for the staged delivery plan and exact completion boundaries.</p>
+<p><a href="https://docs.phaser.io/phaser/getting-started/installation">Phaser’s installation guide</a> supports npm distribution and bundled TypeScript definitions. Phaser 3.90.0 is pinned here for a reproducible TypeScript build. Phaser is packaged locally, with no runtime CDN dependence. Phaser’s <a href="https://github.com/phaserjs/phaser/tree/v3.90.0">3.90.0 source</a> and its bundled type definitions are the implementation references.</p>
+<h2>Deliberate differences</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Hexxagon foundation</th>
+<th>HEXXAGO v0.1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Teams</td>
+<td>Contrasting pieces</td>
+<td>Six selectable equal-stat countries</td>
+</tr>
+<tr>
+<td>Ordinary actions</td>
+<td>Clone, jump, adjacent conversion</td>
+<td>Same spatial rules</td>
+</tr>
+<tr>
+<td>Battlefield</td>
+<td>58-space hex board</td>
+<td>58 spaces, symmetric resource layouts</td>
+</tr>
+<tr>
+<td>Economy</td>
+<td>None</td>
+<td>Capture yield, round yield, ore shield, resource tie-break</td>
+</tr>
+<tr>
+<td>Opponent</td>
+<td>Computer or local player</td>
+<td>Three AI levels or hotseat</td>
+</tr>
+<tr>
+<td>Art</td>
+<td>Original DOS presentation</td>
+<td>Generated archipelago art and native Phaser board graphics</td>
+</tr>
+<tr>
+<td>Audio</td>
+<td>Historical game audio</td>
+<td>Original synthesized ambience and interaction sounds</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>DOS executable</td>
+<td>Browser ZIP and proposed desktop/store pipeline</td>
+</tr>
+</tbody></table>
+<h2>Uncertainties and boundaries</h2>
+<p>The research inspected the reference pages and official delivery documentation, not the proprietary HEXSTORM source or its complete downloadable builds. Store feature labels are the publisher’s current listings, not a device compatibility test by this project. HTML5 upload compatibility, a built desktop shell, a running desktop game, storefront publication and customer acceptance are distinct milestones.</p>
+</section><section id="assets" class="document"><div class="section-label">Art, audio & menus</div><h1>HEXXAGO art and sound</h1>
+<p>This build includes one original generated key-art illustration, one original
+seamless ambient composition, and six synthesized interaction sounds. No art,
+recording, sample, tune, logo, or screenshot from Hexxagon or HEXSTORM was copied.</p>
+<h2>Asset inventory</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+<th>Actual format</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>public/assets/archipelago.png</code></td>
+<td>Main-menu and briefing backdrop</td>
+<td>PNG, 1672 × 941, approximately 2.4 MB</td>
+</tr>
+<tr>
+<td><code>public/assets/audio/archipelago-loop.wav</code></td>
+<td>Optional menu/match atmosphere</td>
+<td>Stereo, 44.1 kHz, 16-bit PCM, 24.00 s</td>
+</tr>
+<tr>
+<td><code>public/assets/audio/select.wav</code></td>
+<td>Focused piece or selected menu option</td>
+<td>Stereo PCM, 0.18 s</td>
+</tr>
+<tr>
+<td><code>public/assets/audio/move.wav</code></td>
+<td>Confirmed legal clone or jump</td>
+<td>Stereo PCM, 0.42 s</td>
+</tr>
+<tr>
+<td><code>public/assets/audio/capture.wav</code></td>
+<td>Adjacent territory conversion</td>
+<td>Stereo PCM, 0.67 s</td>
+</tr>
+<tr>
+<td><code>public/assets/audio/resource.wav</code></td>
+<td>Resource tile secured or income granted</td>
+<td>Stereo PCM, 0.65 s</td>
+</tr>
+<tr>
+<td><code>public/assets/audio/victory.wav</code></td>
+<td>Match result revealed</td>
+<td>Stereo PCM, 2.60 s</td>
+</tr>
+<tr>
+<td><code>public/assets/audio/invalid.wav</code></td>
+<td>Unavailable action feedback</td>
+<td>Stereo PCM, 0.26 s</td>
+</tr>
+</tbody></table>
+<p>All seven WAV files total 5,077,100 bytes. WAV deliberately avoids codec
+compatibility gaps between a browser build and a packaged desktop build. The
+source hero image is retained without a destructive crop or extra compression.</p>
+<h2>Visual direction and actual generation</h2>
+<p>The illustration was generated on 30 October 2026 with the built-in imagegen
+tool, without a reference image. The final source file is also retained at
+the local built-in image generation cache (private path omitted).
+The game loads the copy in <code>public/assets</code>, so distribution does not depend on
+that machine-specific source path.</p>
+<p>Generation prompt:</p>
+<blockquote>
+<p>Create one premium original landscape key art image for a strategy board game
+called HEXXAGO, but INCLUDE NO TEXT, no letters, no logos, no flags, no borders.
+Landscape composition approximately 16:9. A mysterious painterly isometric
+tabletop archipelago made from discrete hexagonal columns rises out of a deep
+teal and midnight blue ocean. Warm ivory limestone cliffs, moss green grassy
+tops, miniature dense pine groves, softly glowing cyan mineral crystal seams,
+gold copper-colored ore, and a few tiny restrained modern settlement
+pavilions. Beautiful stylized physical game board craftsmanship, tactile clay
+and hand-painted gouache surfaces with precise isometric geometry, not a
+screenshot, not pixel art. Islands and buildings mostly detailed on the right
+half, large calm dark teal open water space across the left half for typography
+laid over it later. Intricate edge lighting along the hex column faces, muted
+warm amber twilight from upper right, a little atmospheric ocean mist, subtle
+waves and sparse tiny islands. Strategic, contemplative, sophisticated, warm
+and inviting, high visual quality suitable for indie Steam game&#39;s main menu.
+No people, no national or political symbols, no military machinery, no writing.
+Rich atmospheric full-bleed composition. Original illustration, no emulation
+of existing game artwork.</p>
+</blockquote>
+<p>The illustration makes the game feel like an inviting physical strategy board.
+Country identity belongs in readable interface labels and colored pieces; the
+island image stays reusable across every selected matchup. Its dark left half
+provides useful contrast behind live menu text, and the brighter right half
+introduces territory and resource competition before the first turn.</p>
+<h2>Menu and presentation concepts</h2>
+<ol>
+<li><strong>Main menu — the quiet sea.</strong> Full-height archipelago background, dark
+gradient behind a left-aligned title, small gold eyebrow, ivory title,
+one gold primary play button, quiet outlined secondary options. Keep text
+and controls as DOM or engine-rendered text so they stay sharp and accessible.</li>
+<li><strong>Operation briefing — the map room.</strong> Country selection and opponent cards
+sit above navy translucent panels. Show country name, flag rendered as a
+small interface symbol, piece color, difficulty, and resource rules together.
+Keep each card mechanically neutral; country choice conveys identity.</li>
+<li><strong>Match — the survey table.</strong> Deep ocean canvas, raised ivory hex islands,
+gold selected rings, cyan legal clones, and dashed amber jump destinations.
+Resource icons remain visually separate from player colors. A compact side
+ledger shows score, resource bank, turn, last action, and the selected piece&#39;s
+legal options.</li>
+<li><strong>Pause and settings — the field notebook.</strong> Use an opaque dark panel with
+an explicit resume action, separate sound/music controls, visible keyboard
+instructions, and restart confirmation. Never rely on a backdrop alone to
+make menu text readable.</li>
+<li><strong>Result — the illuminated ledger.</strong> Winning country color, large final
+score, resource breakdown, and one rematch button. Play the short victory
+motif once; use the same calm illustration rather than combat imagery.</li>
+</ol>
+<p>Future art concepts include separate forest, ore, and energy site vignettes;
+seasonal island backdrops; country-neutral tabletop pieces; and a five-frame
+conversion shimmer. These are concepts, not files delivered in this build.
+The current illustration is a menu asset, not a gameplay tile atlas.</p>
+<h2>Sound design and reproduction</h2>
+<p>Run <code>python3 scripts/generate-audio.py</code> to regenerate the complete sound set.
+Only Python&#39;s standard library is required. All randomness has a fixed seed,
+so the generated WAV bytes are reproducible with the same Python math behavior.
+There is no network request or outside sample dependency.</p>
+<p>The 24-second music loop is eight bars of 4/4 at 80 beats per minute. A sparse
+original D Dorian phrase sits over low warm sine harmonics. The higher notes
+use a soft wooden resonator, with glass-like color reserved for resources.
+Circularly written note tails, crossed stereo echoes, and circular filtered
+noise preserve the loop boundary. Slow noise envelopes suggest a distant sea
+without a literal or repetitive wave recording. The second four bars answer
+the first at a lower register.</p>
+<p>Sound meanings:</p>
+<ul>
+<li>Selection is a brief soft upper wooden tap.</li>
+<li>Movement is a restrained rising two-note pluck.</li>
+<li>Conversion is a warmer three-note glass cluster.</li>
+<li>Resource collection is a brighter rising pair.</li>
+<li>Victory resolves into a longer major-colored arpeggio and low pad.</li>
+<li>Invalid input uses a quiet low paired pulse without a harsh error buzzer.</li>
+</ul>
+<p><code>src/audio.ts</code> exports <code>AudioManager</code>. Call <code>unlock()</code> directly from a user
+gesture to satisfy browser audio policy. Call <code>play(name)</code> for interaction
+events. Music is opt-in through <code>startMusic()</code> and stops with <code>stopMusic()</code>;
+the class never starts music during construction. <code>setMuted()</code> and <code>setVolume()</code>
+control a shared gain, and <code>destroy()</code> stops sources, closes the audio context,
+and aborts pending fetches. Asset URLs respect Vite&#39;s <code>BASE_URL</code>. The frontend
+owns settings persistence and whether music should continue between screens.</p>
+<h2>Provenance and rights</h2>
+<ul>
+<li>The image is an original project-generated asset created through the built-in
+image generation service. Applicable service terms govern the generated
+output; no third-party artwork was supplied as an input.</li>
+<li>The musical composition, synthesis algorithm, and sound effects were created
+specifically for HEXXAGO. There are no third-party sample licenses to bundle.</li>
+<li>These files contain no customer data, personal data, internal company data,
+embedded country names, or political slogans.</li>
+<li>No claim of exclusive copyright in machine-generated artwork is made here.
+The source games&#39; names in project research identify references, not licensed
+source material or affiliation.</li>
+</ul>
+<h2>File verification performed</h2>
+<p>The generated image was visually inspected. Its observed PNG dimensions are
+1672 × 941. The WAV headers were read back: every file has two channels,
+44,100 frames per second, and 16-bit samples. All measured samples are below
+clipping. The music loop&#39;s measured peak is 0.140 and RMS is 0.0305 before
+runtime gain. Its last-to-first sample difference is 41/13 integer units for
+left/right, consistent with the quiet textured noise floor; no forced silent
+gap is inserted. This is file-level verification, not a claim of listening
+acceptance on the user&#39;s output device.</p>
+<p>SHA-256 records:</p>
+<pre><code class="language-text">archipelago.png        4373bd883967af5d90541d7869c581d50b45e29ec35906e9363b51763cf66c0f
+archipelago-loop.wav   82f9d2a3907d93862613f97f674841197cbec928b1b4f0e6044b55893ad5eaaa
+select.wav             887598fd8b2a5b9a8ba784b553715ad615afce03da6df8ec310a2680d793b3aa
+move.wav               c4c1887286ec823c6248565db3934f1338a4b873896f1c080f41c9198821caf5
+capture.wav            240169fccebe816babc96a36decff667a266c6858c57e83e33fbfb0aed544e5e
+resource.wav           ea2132c2d11590956b979c0210a1af7a69374516cf3bb46cb5171819cc25798d
+victory.wav            f0c84d83e18caefeac8712f5280882944d4253203c591ed526cc372a246aec6a
+invalid.wav            97bff0c3b6882013bbca7a6a81a003cf7e1423a90bd5f012d6fadd25d1b73fe7
+</code></pre>
+<h2>Publication metadata</h2>
+<p>Nonvisual PNG provenance metadata containing public certificate-authority contact emails was removed before publication. The compressed pixel data and all visual chunks are unchanged. The original generation output remains in the local image cache. The published image is disclosed here as generated artwork.</p>
+</section><section id="release" class="document"><div class="section-label">Distribution plan</div><h1>HEXXAGO release and distribution plan</h1>
+<h2>1. Release intent and current boundary</h2>
+<p>HEXXAGO: The Resource Frontier is planned as one local-first Phaser game with two distributions:</p>
+<ol>
+<li>A free browser game and downloadable browser ZIP, suitable for itch.io.</li>
+<li>An optional desktop application containing that same browser build, with Windows as the first Steam candidate and macOS/Linux as separately verified follow-ups.</li>
+</ol>
+<p>The game has no required account, gameplay server, advertising, purchased currency, pay-to-win upgrade, paid country or runtime generative service. Its CPU opponents run locally. Any future commercial change requires an explicit product decision and accurate store copy; a reference game&#39;s price does not set this game&#39;s price.</p>
+<p>This file is an execution plan, not a store submission, installation receipt or publication authorization. No credentials, banking details, payment, Steam application, itch listing or platform review are requested or created by this documentation task.</p>
+<p>The inspected source contains browser and desktop package scripts. Those are distinguished below from produced artifacts, actual OS acceptance, signing, store review and publication.</p>
+<h3>1.1 Inspected project facts</h3>
+<p>The following are facts from the repository during this documentation pass:</p>
+<ul>
+<li>Phaser is pinned to 3.90.0.</li>
+<li>TypeScript, Vite, Electron and electron-builder are configured in package.json.</li>
+<li>Vite uses a relative base and produces dist.</li>
+<li>scripts/package-itch.mjs archives the contents of dist, requiring root index.html.</li>
+<li>desktop/main.cjs serves the local dist directory through the secure hexxago://app origin and opens index.html.</li>
+<li>Electron renderer Node integration is disabled; context isolation, sandbox and web security are enabled.</li>
+<li>The wrapper allows document windows only on the same hexxago://app origin, prevents navigation to a different URL and denies permission requests.</li>
+<li>Desktop targets are Windows x64 ZIP, macOS arm64 ZIP and Linux x64 AppImage.</li>
+<li>The macOS configuration explicitly has no signing identity.</li>
+<li>Original art and local WAVs are present; ASSETS.md records their origin.</li>
+<li>THIRD_PARTY_NOTICES.md and a public Phaser MIT license file are present.</li>
+</ul>
+<p>Presence of these files is source/configuration evidence. This documentation pass did not install desktop candidates, test an itch iframe, approve a store checklist or publish a build. The actual integration and delivery results are recorded in <a href="#verification">VERIFICATION.md</a>.</p>
+<h2>2. Reference technology and distribution: confirmed versus proposed</h2>
+<h3>2.1 Confirmed reference facts</h3>
+<p>The coordinator&#39;s research.json (local inspection evidence; not in the public build) contains direct DOM inspections of all five requested game pages, captured on 31 October 2026 UTC.</p>
+<p><a href="https://phaser.io/news/2026/01/hexstorm-tears-of-arcadia">Phaser&#39;s feature</a> and the <a href="https://tearevo.itch.io/tears-of-arcadia">developer&#39;s itch.io page</a> support a Phaser-family engine reference. The itch page has browser play and links to Steam. Its exact Phaser major/minor version was not established.</p>
+<p>The <a href="https://store.steampowered.com/app/4402950/HEXSTORM_Tears_of_Arcadia/">Steam store page</a> and <a href="https://store.steampowered.com/api/appdetails?appids=4402950&amp;l=english">Valve store API</a> identify HEXSTORM as released on 3 August 2026, by Tearevo, with Windows, macOS and Linux platform flags. The listing advertises its own demo, Steam Cloud, controller features and Steam Deck status. None is inherited by HEXXAGO.</p>
+<p>No inspected reference establishes Electron, electron-builder or a particular Steamworks binding as HEXSTORM&#39;s desktop technology. Do not describe this plan as a verified recreation of its wrapper.</p>
+<p>The <a href="https://archive.org/details/msdos_Hexxagon_1993">Internet Archive</a> and <a href="https://www.old-games.com/download/3199/hexxagon">Old-Games</a> pages establish historical gameplay context. They are not licenses to bundle DOS binaries or historical assets.</p>
+<h3>2.2 Our chosen approach</h3>
+<p>“Same engine” means the Phaser engine family, with HEXXAGO specifically pinning Phaser 3.90.0. “Same distribution” means an itch.io browser offering and an eventual desktop Steam offering. It does not mean an identical dependency graph, proprietary source architecture, store feature set, price, release date or certification.</p>
+<p>The current <a href="https://github.com/phaserjs/template-vite-ts/blob/main/package.json">official Vite/TypeScript template package</a> was inspected and declares Phaser 4.0.0 despite retaining Phaser 3 in its description. Therefore use this project&#39;s pinned 3.90.0 package/lockfile, rather than blindly copying the template&#39;s moving main branch.</p>
+<p>Electron is our optional way to package the built local web content. <a href="https://www.electronjs.org/docs/latest/tutorial/application-distribution">Electron&#39;s packaging guide</a> describes distribution of an Electron application; it does not establish the reference game&#39;s technology.</p>
+<h2>3. Evidence vocabulary for every release note</h2>
+<p>Use these words precisely:</p>
+<p><strong>Designed:</strong> a feature or route is specified in DESIGN.md or this plan.</p>
+<p><strong>Implemented in source:</strong> the actual consumer/producer code is present.</p>
+<p><strong>Built:</strong> the exact production build command completed and its output exists.</p>
+<p><strong>Packaged:</strong> an actual ZIP/app/AppImage was produced and inspected.</p>
+<p><strong>Browser verified:</strong> the actual production contents were served and exercised in a named browser.</p>
+<p><strong>Desktop verified:</strong> the packaged application was launched and exercised on the claimed OS/architecture.</p>
+<p><strong>Signed/notarized:</strong> the actual artifact has the corresponding verified platform result.</p>
+<p><strong>Uploaded:</strong> a named channel/depot accepted an actual build.</p>
+<p><strong>Store reviewed:</strong> the platform approved the relevant store/build checks.</p>
+<p><strong>Published:</strong> a public listing/build is live and an independent readback confirms what users receive.</p>
+<p>Do not equate a package command in package.json with an artifact, a ZIP with a working game, an upload receipt with publication, or a store badge with our own device testing.</p>
+<h2>4. One game build, two delivery shells</h2>
+<h3>4.1 Browser payload</h3>
+<p>The production directory should contain:</p>
+<pre><code>dist/
+  index.html
+  assets/
+    bundled JavaScript and CSS
+    archipelago.png
+    audio/*.wav
+  licenses/
+    Phaser-MIT.txt
+</code></pre>
+<p>Exact hashed chunk names are build outputs and must not be hardcoded into store descriptions. Inspect the actual directory after building.</p>
+<p>All required game code, Phaser, artwork and audio are local. Do not make a runtime dependency on a CDN font, externally hosted image, analytics service, store API or private filesystem path.</p>
+<p>The development index.html may reference /src/main.ts because Vite transforms it. The relevant distribution check is the built index.html and its emitted asset URLs.</p>
+<h3>4.2 Relative URLs</h3>
+<p>The project uses Vite base &#39;./&#39;. This supports hosting inside an itch.io HTML CDN subdirectory and loading the local build inside the desktop shell. It is a configuration choice to verify, not proof that every URL is correct.</p>
+<p><a href="https://vite.dev/guide/static-deploy.html">Vite&#39;s deployment guide</a> identifies dist as the default production output and preview as a local build-preview tool, not a production hosting service. <a href="https://itch.io/docs/creators/html5">itch.io&#39;s HTML5 guide</a> specifically calls for relative paths and a ZIP entry point.</p>
+<h3>4.3 What “offline” means</h3>
+<p>Gameplay logic and the desktop candidate do not require a gameplay network service. The desktop application is intended to run after installation with networking disabled.</p>
+<p>The browser game still needs its initial HTML, chunks and assets to be delivered. No service worker/PWA offline installation has been established in the inspected source. A browser cache hit or an already-open tab is not a guarantee that the game can be reopened offline.</p>
+<p>Use precise copy:</p>
+<ul>
+<li>Appropriate after verification: “Local solo and hotseat play; no game account required.”</li>
+<li>Appropriate for a verified desktop build: “Playable offline after installation.”</li>
+<li>Not yet justified: “Installable offline browser app” or “browser saves automatically sync to desktop.”</li>
+</ul>
+<p>Browser persistence is tied to origin/storage policy. Desktop storage uses its own application context. A JSON download exists in the frontend; importing it or synchronizing between distributions requires an implemented and verified path.</p>
+<h2>5. Build environment and exact current commands</h2>
+<h3>5.1 Toolchain</h3>
+<p>The current scripts are npm scripts. Use the package manager and committed lockfile selected by the integration owner; do not regenerate the dependency graph casually during packaging.</p>
+<p>Direct published metadata inspected during this task reports:</p>
+<ul>
+<li><a href="https://registry.npmjs.org/vite/8.3.5">Vite 8.3.5</a>: Node requirement ^20.19.0 or at least 22.12.0.</li>
+<li><a href="https://registry.npmjs.org/electron/45.2.1">Electron 45.2.1</a>: Node at least 22.12.0.</li>
+<li><a href="https://registry.npmjs.org/electron-builder/26.18.0">electron-builder 26.18.0</a>: package metadata declares Node at least 14.0.0, but the full toolchain&#39;s stricter requirements still apply.</li>
+</ul>
+<p>The local shell reported Node 26.0.0 during inspection. That is an environment observation, not a claim that all builds passed. Record the actual Node, npm, package-lock hash and source revision used for a release.</p>
+<p>When a lockfile exists and is intended for the release:</p>
+<pre><code>npm ci
+</code></pre>
+<p>If no lockfile exists yet, its initial creation belongs to the implementation owner before reproducible release packaging. This documentation pass does not install dependencies or alter that file.</p>
+<h3>5.2 Browser development and production</h3>
+<p>Current entry points:</p>
+<pre><code>npm run dev
+npm run build
+npm run preview
+npm run package:itch
+</code></pre>
+<p>The configured development server binds 127.0.0.1:5173; preview binds 127.0.0.1:4173, both with strict ports. A busy port requires identifying the owning process or selecting a separate approved port; do not terminate unrelated sessions.</p>
+<p>The build script runs TypeScript checking followed by Vite. package:itch runs that build and the packaging script.</p>
+<p>At version 0.1.0 the packaging script writes:</p>
+<pre><code>release/hexxago-browser-0.1.0.zip
+</code></pre>
+<p>The filename is currently hardcoded in scripts/package-itch.mjs. When advancing the version, reconcile that string with package.json and release notes. Do not assume it derives from package.json automatically.</p>
+<h3>5.3 Desktop development and packaging</h3>
+<p>Current entry points:</p>
+<pre><code>npm run desktop
+npm run desktop:install
+npm run desktop:pack
+npm run desktop:win
+npm run desktop:mac
+npm run desktop:linux
+</code></pre>
+<p>Their actual definitions are:</p>
+<ul>
+<li>desktop: production web build, install/check the Electron runtime through the package&#39;s install-electron entry point, then launch Electron.</li>
+<li>desktop:install: install/check that Electron runtime without rebuilding the game.</li>
+<li>desktop:pack: production web build, then electron-builder with an unpacked directory target.</li>
+<li>desktop:win: production web build, then Windows x64 ZIP.</li>
+<li>desktop:mac: production web build, then macOS arm64 ZIP.</li>
+<li>desktop:linux: production web build, then Linux x64 AppImage.</li>
+</ul>
+<p>Artifacts go under release. electron-builder determines the final names; read its output rather than inventing a filename. Packaging on one host may require additional OS-specific tooling. A successful cross-build is not a native launch check.</p>
+<p>This plan does not add another framework, rewrite the board in a desktop engine or require a Steamworks API integration just to preserve the local game.</p>
+<p>The repository also has npm run docs, which renders the design/research/assets/release/verification documents into public/docs.html. It depends on all five source documents, including docs/VERIFICATION.md supplied by the integration owner. Rendering is documentation packaging, not browser or game acceptance; rebuild the game after rendering when that atlas should be included in dist.</p>
+<h3>5.4 Expected release-support scripts</h3>
+<p>The existing scripts cover production build, browser ZIP and desktop targets. Future small release helpers may be useful for:</p>
+<ul>
+<li>Checking the browser ZIP entry point, case-sensitive paths and size limits.</li>
+<li>Recording SHA-256 values and a file inventory.</li>
+<li>Recording dependency/source versions.</li>
+<li>Producing SteamPipe configuration from an operator&#39;s assigned application/depot IDs.</li>
+<li>Launching a candidate locally without modifying public channels.</li>
+</ul>
+<p>These are expected capabilities, not delivered helper files or prerequisites invented beyond observed release needs. Prefer the current scripts and a small manual checklist before adding a release framework.</p>
+<h2>6. Browser ZIP verification</h2>
+<p>The operator should verify the produced artifact, not only inspect dist before archiving.</p>
+<p>At minimum:</p>
+<ol>
+<li>Confirm the archive exists and opens without CRC errors.</li>
+<li>Confirm index.html is at its root, not inside dist/.</li>
+<li>Confirm emitted JavaScript, CSS, backdrop, all required WAVs and license notices are included.</li>
+<li>Confirm case-sensitive references resolve.</li>
+<li>Confirm no node_modules tree, private credentials, machine-local source paths, research dump or temporary screenshots were unintentionally bundled.</li>
+<li>Record the ZIP SHA-256 and compressed/extracted sizes.</li>
+<li>Serve the extracted contents through HTTP, including a non-root path, and exercise the actual production build.</li>
+</ol>
+<p>A safe local inspection example, after the artifact exists:</p>
+<pre><code>python3 - &lt;&lt;&#39;PY&#39;
+from pathlib import Path
+import hashlib, zipfile
+archive = Path(&quot;release/hexxago-browser-0.1.0.zip&quot;)
+with zipfile.ZipFile(archive) as package:
+    assert package.testzip() is None
+    assert &quot;index.html&quot; in package.namelist()
+    assert not any(name.startswith(&quot;dist/&quot;) for name in package.namelist())
+    print(&quot;Files:&quot;, len(package.infolist()))
+    print(&quot;Extracted bytes:&quot;, sum(item.file_size for item in package.infolist()))
+print(&quot;SHA-256:&quot;, hashlib.sha256(archive.read_bytes()).hexdigest())
+PY
+</code></pre>
+<p>This example checks structure and integrity only. It cannot establish playability, all relative paths, host permissions or successful audio decoding.</p>
+<p>The inspected <a href="https://itch.io/docs/creators/html5">itch guide</a> states at most 1,000 extracted files, 500 MB total extracted content, 200 MB for any individual file and a 240-character maximum filename including its path. Recheck the live guide before upload if the artifact approaches a limit. Those platform limits are not desirable size targets for a small board game.</p>
+<p>The delivered art is approximately 2.4 MB and all seven WAVs total 5,077,100 bytes according to ASSETS.md. Final chunk and ZIP sizes must be measured, not estimated from those assets.</p>
+<h2>7. itch.io browser release</h2>
+<h3>7.1 Page concept</h3>
+<p>Suggested title: HEXXAGO: The Resource Frontier.</p>
+<p>Short pitch: “Clone, leap and connect across a peaceful hex frontier. Choose equal-stat country teams, outmaneuver three local AI levels, or share a hotseat match.”</p>
+<p>Explain the exact Resource mode economy: capture sites, earn round income, optionally spend three ore on one defensive shield; energy and food break a territory tie. Do not imply a campaign, networking, nation-specific powers or an expanded research system.</p>
+<p>The browser edition is intended as a complete small game, not a misleading storefront for unavailable premium abilities.</p>
+<h3>7.2 Operator actions, only when publication is authorized</h3>
+<p>These are future operator steps, not actions performed here:</p>
+<ol>
+<li>Use an operator-owned itch.io account and a deliberately chosen project page.</li>
+<li>Set the kind to HTML Game.</li>
+<li>Upload the verified browser ZIP.</li>
+<li>Mark that upload as playable in the browser.</li>
+<li>Set an embed or click-to-launch fullscreen presentation that the actual responsive game supports.</li>
+<li>Keep the page private/restricted for review until an actual hosted iframe check is complete.</li>
+<li>Enter accurate description, controls, content and license/provenance information.</li>
+<li>Publish only after the owner explicitly approves the reviewed page and exact build.</li>
+<li>Read back the public page and play the hosted artifact rather than relying on the upload receipt.</li>
+</ol>
+<p><a href="https://itch.io/docs/creators/html5">itch.io&#39;s HTML5 documentation</a> supports ZIP or single-file HTML games and explains embedding. HEXXAGO is a multi-file build, so its appropriate artifact is the ZIP.</p>
+<h3>7.3 Optional butler workflow</h3>
+<p>butler is an optional upload tool, not necessary for producing the ZIP. The <a href="https://itch.io/docs/butler/pushing.html">official push guide</a> supports a directory or ZIP, named channels and a user-provided version.</p>
+<p>An illustrative command, after the operator has configured their own project and authorized an upload:</p>
+<pre><code>butler push release/hexxago-browser-0.1.0.zip YOUR_ACCOUNT/YOUR_PROJECT:html5 --userversion 0.1.0
+</code></pre>
+<p>YOUR_ACCOUNT and YOUR_PROJECT are placeholders, not an existing page or claimed login. Do not paste credentials into this document or the command line.</p>
+<p>The butler channel name alone does not establish browser play. Its documentation says to set the page to HTML and tag the uploaded channel as playable through the Edit game page after the first push.</p>
+<p>Use distinct channels for desktop candidates, such as windows-beta, mac-beta and linux-beta, only when corresponding verified artifacts exist. A channel tag is not a compatibility test.</p>
+<h3>7.4 Hosted-browser acceptance</h3>
+<p>On the actual itch-hosted production build verify:</p>
+<ul>
+<li>No missing chunks, images, WAVs or case-sensitive path errors.</li>
+<li>The initial audio unlock works after a real user gesture.</li>
+<li>Fullscreen/iframe size changes preserve control access and hex hit testing.</li>
+<li>Solo, hotseat, all difficulties and both modes can start.</li>
+<li>Shield and resource rules match help text.</li>
+<li>Local continuation survives the intended page reload flow, or storage limitations are stated honestly.</li>
+<li>DOM keyboard controls and dialogs work inside the iframe.</li>
+<li>Music is optional and mute behaves as described.</li>
+<li>The displayed version matches the uploaded artifact.</li>
+</ul>
+<p>Mark Mobile Friendly only after interaction on a real mobile browser. A responsive stylesheet or successful desktop device emulation is useful evidence, but not equivalent to touch-device acceptance.</p>
+<h3>7.5 Updating and restoring</h3>
+<p>Keep the previous verified artifact and its version/hash locally. An update must preserve local save compatibility or explain a known format break.</p>
+<p>If a newly uploaded build fails, restore the previous known build on the same intended channel and read back what users receive. Do not make a public rollback claim from a local filename change.</p>
+<h2>8. Desktop packaging plan</h2>
+<h3>8.1 Why an optional Electron shell</h3>
+<p>It packages the same Phaser/Vite build rather than creating a second rules engine. The renderer gets the same art, maps, country registry and sounds. This minimizes divergence between browser and desktop gameplay.</p>
+<p>The inspected wrapper already disables Node integration in the renderer, enables context isolation and sandboxing, denies permission requests, rejects external new windows/navigation and allows same-origin local document windows. These choices align with <a href="https://www.electronjs.org/docs/latest/tutorial/security">Electron&#39;s security guidance</a>.</p>
+<p>Before distribution, verify the complete packaged application. Also review a suitable content-security policy for the final local bundle. The current index.html has no explicit CSP meta tag, and source-level restrictions are not a comprehensive security audit.</p>
+<p>No privileged preload or renderer IPC is currently needed. A future save-file or Steam feature should expose the smallest explicit interface rather than enabling Node integration to simplify it.</p>
+<h3>8.2 Windows first</h3>
+<p>Initial candidate: Windows x64 ZIP from desktop:win.</p>
+<p>The ZIP should contain the complete unpacked application and required Electron runtime files, not just the game executable. Its exact contents and notices come from the produced artifact.</p>
+<p>Proposed initial verification environment: a real Windows 11 x64 system. Windows 10 support should only be listed after compatibility with the selected Electron runtime and an actual launch check are established. Do not copy HEXSTORM&#39;s system requirements.</p>
+<p>Verify:</p>
+<ul>
+<li>Extract into a directory with spaces and start the application.</li>
+<li>Load all bundled code, art and audio without an internet connection.</li>
+<li>Start a solo game, make moves and observe an AI reply.</li>
+<li>Start hotseat, Classic and Resource games.</li>
+<li>Exercise shield, automatic pass and a terminal result.</li>
+<li>Close/relaunch and inspect local continuation.</li>
+<li>Toggle music, mute and reduced motion.</li>
+<li>Resize the window, move it across displays if available, and verify ordinary display scaling.</li>
+<li>Test keyboard controls and modal dismissal.</li>
+<li>Confirm no unexpected external navigation or permission prompt.</li>
+</ul>
+<p>Record OS build, architecture, artifact hash, package version and exact result. This is the point at which the game can be called Windows-verified.</p>
+<p>The current ZIP target is not an installer. It does not establish Start-menu integration, uninstall behavior, update service or code signing. An installer can be a later convenience if actual user needs justify it.</p>
+<h3>8.3 macOS roadmap</h3>
+<p>The current command produces an arm64 ZIP and explicitly leaves identity null. Treat such a build as an unsigned local/internal candidate. It is not a signed/notarized public macOS release.</p>
+<p>Next steps:</p>
+<ul>
+<li>Build and launch on Apple Silicon.</li>
+<li>Verify local assets, audio, saves, focus and fullscreen/window behavior.</li>
+<li>Decide whether Intel macOS is supported; the current script does not build x64 or universal.</li>
+<li>For an intended public distribution, use the operator&#39;s approved signing/notarization workflow and verify the resulting artifact.</li>
+<li>Test the distributed archive on a separate appropriate macOS environment.</li>
+</ul>
+<p>Do not instruct players to disable security settings as the standard release path. This task neither obtains signing credentials nor requests an account/payment.</p>
+<h3>8.4 Linux roadmap</h3>
+<p>The configured artifact is an x64 AppImage. Packaging does not prove it starts on the user&#39;s distribution, bundled graphics stack or desktop environment.</p>
+<p>Verify on a named Linux x64 distribution:</p>
+<ul>
+<li>Runtime startup and any AppImage prerequisites.</li>
+<li>Software/hardware rendering behavior where available.</li>
+<li>Audio decoding and output.</li>
+<li>Keyboard, focus, window resize and close/relaunch.</li>
+<li>Local save persistence and permissions.</li>
+<li>Offline start after extraction/installation.</li>
+</ul>
+<p>Record the tested distribution and version. Do not claim all Linux systems, ARM Linux or Steam Deck support from one x64 build.</p>
+<h3>8.5 Native runtime versus store SDK</h3>
+<p>The local game does not need a Steamworks API call to resolve turns, play audio or store a local browser save. Optional achievements, overlay integrations, cloud files and controller features are separate features requiring implementation and actual Steam acceptance.</p>
+<p>No Steam app ID file, test Spacewar ID or reference-game ID should be bundled as if it belonged to HEXXAGO.</p>
+<h2>9. Steam onboarding and realistic schedule</h2>
+<h3>9.1 Required operator process</h3>
+<p>Valve&#39;s <a href="https://partner.steamgames.com/doc/gettingstarted/onboarding">onboarding guide</a> describes legal identification, applicable agreements, bank/tax information, identity verification, an application fee, store preparation and review. Its <a href="https://partner.steamgames.com/steamdirect">Steam Direct page</a> describes a product fee of USD 100 or equivalent, with applicable recoupment conditions.</p>
+<p>These are platform facts for future planning. This task does not request those details, ask the user to pay, promise eligibility, handle financial information or create a listing.</p>
+<p>The operator chooses the legal publishing entity and obtains their own assigned app/depot IDs through Steamworks. The reference app 4402950 and demo ID are unrelated to this project and must never be reused.</p>
+<h3>9.2 Observed timing inconsistency</h3>
+<p>The official sources read during this task disagree:</p>
+<ul>
+<li>The inspected onboarding documentation says a 21-day fee-to-release waiting period.</li>
+<li>The inspected Steam Direct page says 30 days.</li>
+<li>The <a href="https://partner.steamgames.com/doc/store/releasing">release-process page</a> requires an approved store presence to have been Coming Soon for at least two weeks, with the build reviewed before release.</li>
+</ul>
+<p>Do not silently convert that conflict into a confirmed universal rule. For planning, reserve at least the longer 30-day window and confirm the actual app&#39;s Steamworks checklist before announcing a date. This is a conservative scheduling assumption, not an extra game acceptance requirement or a promise from Valve.</p>
+<p>The release-process guide describes a typical store-page review of three to five business days and advises submitting the page at least seven days before the desired go-live date. Review feedback and operator onboarding can extend the schedule. A packaged game can be ready well before its store launch is eligible.</p>
+<h3>9.3 Sequential Steam path</h3>
+<ol>
+<li>Complete a verified local Windows candidate and provenance record.</li>
+<li>Operator completes Steamworks onboarding and receives the actual app/depot setup.</li>
+<li>Prepare truthful store copy and art.</li>
+<li>Configure launch options and an OS-specific depot.</li>
+<li>Upload a candidate through SteamPipe to a private testing branch.</li>
+<li>Install it through Steam on a suitable test account/environment and exercise the actual distributed build.</li>
+<li>Submit store and build checklists for Valve review.</li>
+<li>Resolve actual review feedback.</li>
+<li>Make the reviewed Coming Soon page visible when the operator approves it.</li>
+<li>Satisfy the app&#39;s actual timing/checklist requirements.</li>
+<li>Obtain final operator publication authorization.</li>
+<li>Release the selected build and verify the public page and a real installation.</li>
+</ol>
+<p>Store and build work can overlap where Steamworks permits it; the numbered list expresses dependencies, not a fabricated fixed calendar.</p>
+<h2>10. SteamPipe, depots and launch configuration</h2>
+<h3>10.1 Windows depot contents</h3>
+<p>The Windows depot should receive the complete verified desktop application directory. The launch executable and working directory must match the actual package.</p>
+<p>Keep macOS and Linux in separate platform-specific depots when those candidates are ready. Do not enable an unverified platform merely because a build command exists.</p>
+<p><a href="https://partner.steamgames.com/doc/sdk/uploading">Valve&#39;s upload guide</a> documents SteamPipe build scripts, depots, content roots, output/cache directories and test branches.</p>
+<h3>10.2 Expected local configuration</h3>
+<p>A future SteamPipe app-build file will specify:</p>
+<ul>
+<li>The operator-assigned HEXXAGO AppID.</li>
+<li>A version/source description.</li>
+<li>A content root pointing at the verified package.</li>
+<li>A separate build-output/cache directory.</li>
+<li>The corresponding assigned depot and recursive file mapping.</li>
+<li>A private test branch where appropriate.</li>
+</ul>
+<p>Those files are not created in this documentation assignment. AppID and DepotID must come from the real app, not a convenient example number.</p>
+<p>An illustrative invocation after the operator supplies an authorized build environment:</p>
+<pre><code>steamcmd +login BUILD_ACCOUNT +run_app_build /absolute/path/to/app_build.vdf +quit
+</code></pre>
+<p>BUILD_ACCOUNT and the VDF path are placeholders. Let the operator complete interactive authentication/Steam Guard using their approved workflow. Do not store a password or token in the repository, VDF, command history or release notes.</p>
+<h3>10.3 Steam installation acceptance</h3>
+<p>After upload, install from the actual private branch:</p>
+<ul>
+<li>Confirm the expected version and complete depot contents.</li>
+<li>Launch using Steam&#39;s configured launch option.</li>
+<li>Confirm a normal player can start without a developer checkout or Node installation.</li>
+<li>Verify all local assets, audio and saves.</li>
+<li>Test Steam offline mode where applicable after the necessary installation/account setup.</li>
+<li>Verify the game exits cleanly and relaunches.</li>
+<li>Check that updates do not unexpectedly reset local saves.</li>
+</ul>
+<p>A SteamPipe “build accepted” receipt proves upload acceptance. It does not establish installation, game launch, review or publication.</p>
+<h3>10.4 Store features to leave unchecked until implemented</h3>
+<p>Do not advertise Steam Cloud, achievements, Remote Play, full controller support, Steam Deck verification, online PvP or cross-platform saves based on the reference game.</p>
+<p>The current scope supports solo and shared-device hotseat in game source. The precise Steam feature labels should be selected by the operator to match the verified build and Valve definitions. A controller-friendly Electron runtime does not make this canvas game fully gamepad controlled.</p>
+<h2>11. Store materials and assets checklist</h2>
+<h3>11.1 Copy</h3>
+<p>Prepare:</p>
+<ul>
+<li>Title and original logo.</li>
+<li>A concise one-sentence description.</li>
+<li>A longer explanation of clone, jump, conversion, resources, shields and terminal scoring.</li>
+<li>Solo/hotseat and the three actual AI difficulties.</li>
+<li>Equal-stat country treatment and fictional peaceful setting.</li>
+<li>Honest local-save and offline boundaries.</li>
+<li>Supported OS/architecture and measured system requirements.</li>
+<li>Content/AI disclosures consistent with the actual shipped assets.</li>
+<li>Support/contact route chosen by the publishing owner.</li>
+</ul>
+<p>Never reuse HEXSTORM&#39;s story, fortress names, character descriptions, screenshots, capsule art, review claims or store badges. Do not describe HEXXAGO as officially associated with either reference.</p>
+<h3>11.2 itch.io assets</h3>
+<p>Prepare an original cover, real gameplay screenshots and a short optional gameplay clip. Use readable board/ledger states rather than only the atmospheric hero art.</p>
+<p>The cover can share the original HEXXAGO key-art language. Exact upload sizes should be checked in the actual page editor before export; this task did not inspect an authenticated itch editor and does not invent its current required cover dimensions.</p>
+<h3>11.3 Steam store graphics</h3>
+<p>The <a href="https://partner.steamgames.com/doc/store/assets/standard">official store-asset guide</a> inspected during this task specifies:</p>
+<ul>
+<li>Header capsule: 920 × 430 pixels.</li>
+<li>Small capsule: 462 × 174 pixels.</li>
+<li>Main capsule: 1232 × 706 pixels.</li>
+<li>Vertical capsule: 748 × 896 pixels.</li>
+<li>Screenshots: at least 1920 × 1080 pixels, 16:9.</li>
+</ul>
+<p>Use Valve&#39;s current downloadable templates and previews before final export. Do not add review scores, discounts, unsupported text claims or time-sensitive marketing text to ordinary capsules in place of the permitted game identity.</p>
+<p>The original backdrop is 1672 × 941. It is not by itself a native 1920 × 1080 gameplay screenshot or a complete set of platform capsules. Capture real production gameplay at the required resolution and create appropriate art compositions; do not relabel or stretch a menu backdrop as gameplay evidence.</p>
+<h3>11.4 Steam library graphics</h3>
+<p>The inspected <a href="https://partner.steamgames.com/doc/store/assets/libraryassets">library-asset guide</a> specifies:</p>
+<ul>
+<li>Library capsule: 600 × 900 pixels.</li>
+<li>Library header: 920 × 430 pixels.</li>
+<li>Library hero: 3840 × 1240 pixels.</li>
+<li>Transparent library logo: 1280 pixels wide and/or 720 pixels tall, using the logo&#39;s appropriate aspect ratio and the preview placement tool.</li>
+</ul>
+<p>The logo rule is not simply “fill a 1280 × 720 opaque rectangle.” Keep the logo transparent and legible over the separately composed hero.</p>
+<h3>11.5 Gameplay screenshots and trailer</h3>
+<p>Screenshot concepts:</p>
+<ol>
+<li>Resource Frontier with both country ledgers and legal clone/jump hints.</li>
+<li>A contested resource cluster with a visible ore shield and accurate help.</li>
+<li>Hotseat setup demonstrating equal-stat country choices.</li>
+<li>Classic mode with no resource economy.</li>
+<li>A real results panel with both final territory totals.</li>
+</ol>
+<p>Capture actual application states; do not composite fake features into a “screenshot.” A staged but valid local match is acceptable if accurately represented.</p>
+<p>A short trailer should open on interaction, not a long logo sequence: select, clone, jump, convert, shield, result. Use the original audio or a clearly licensed alternative. Do not show abilities, input methods or platform features that the release does not contain.</p>
+<h3>11.6 Minimum and recommended requirements</h3>
+<p>Do not copy the reference game&#39;s Windows 10/2 GB/WebGL requirements. Our Electron runtime, resource use, supported OS and graphics behavior must be measured on the actual game.</p>
+<p>Before filling the store fields record:</p>
+<ul>
+<li>Tested OS and architecture.</li>
+<li>CPU and graphics environment.</li>
+<li>Installed package size.</li>
+<li>Startup memory and an ordinary match&#39;s resource use.</li>
+<li>Display/input limitations.</li>
+<li>Whether audio and offline launch work.</li>
+</ul>
+<p>A performance target can be written before measurement; label it a target. “Runs on any computer” and “Steam Deck verified” are not acceptable substitutes for evidence.</p>
+<h2>12. License, origin and content disclosure</h2>
+<h3>12.1 Project material</h3>
+<p>The project metadata currently says UNLICENSED. Do not invent an open-source license grant for the game itself. The owner should choose the distribution terms, notices and support policy appropriate to the release.</p>
+<p>The project-generated image and original synthesized audio are recorded in <a href="#assets">ASSETS.md</a>, including source information, prompts, dimensions and hashes. No assertion of exclusive copyright in generated artwork is needed to describe what was produced.</p>
+<p>Small country symbols are project-authored approximations used as team identifiers. Do not imply endorsement by a government or use a reference game&#39;s logo as the product mark.</p>
+<h3>12.2 Dependencies</h3>
+<p><a href="https://github.com/phaserjs/phaser/blob/v3.90.0/LICENSE.md">Phaser 3.90.0</a> is MIT licensed; preserve its notice and any notices that the emitted bundles require. The repository includes public/licenses/Phaser-MIT.txt and THIRD_PARTY_NOTICES.md.</p>
+<p>For desktop artifacts retain Electron&#39;s license, Chromium/Node and other bundled third-party notices. Consult the actual generated package; asar packaging is not a reason to drop runtime notices.</p>
+<p>Build tools and transitive packages have their own licenses. The lockfile and installed package notices are the release inputs. Do not claim that an MIT top-level dependency automatically licenses every asset or bundled component.</p>
+<p>No source-game executable, sound, screenshot or extracted asset should be included. A secondary page calling the historical game freeware is not a replacement for a license.</p>
+<h3>12.3 Generated-content disclosure</h3>
+<p>Valve&#39;s <a href="https://partner.steamgames.com/doc/gettingstarted/contentsurvey">Content Survey guidance</a> distinguishes development-created content consumed by players from content generated during gameplay. The operator should describe the actual generated illustration and any other shipped generated material according to the live survey.</p>
+<p>This build uses local prepared art and synthesized audio. Its move-selection “AI” is deterministic game logic, not a live generative service. Do not claim that generated content is absent, and do not invent a runtime model/guardrail integration that the game does not have.</p>
+<p>Any disclosure language is a draft until the publisher completes the current survey for the actual release.</p>
+<h2>13. Privacy, saves and network behavior</h2>
+<p>The intended runtime has no account, telemetry service, advertising SDK or multiplayer server. This source-level design does not substitute for observing the actual packaged/network behavior before release.</p>
+<p>Browser save storage key currently used by the frontend:</p>
+<pre><code>hexxago-frontier-v1
+</code></pre>
+<p>The current JSON payload contains version, state, config and prefs. A local match can also be downloaded as a JSON file. Download is not import or cross-device synchronization.</p>
+<p>Do not include user saves, private test data or developer account credentials in dist or desktop packages. If a public save example is added, make it a deliberately constructed game-only example.</p>
+<p>Browser storage availability differs by origin, private mode and embedded-frame policy. The release should handle storage denial without preventing a new game, and accurately explain whether persistence was actually available.</p>
+<h2>14. Release record and version discipline</h2>
+<p>For each candidate keep a local record of:</p>
+<ul>
+<li>Game version and source revision, or an explicit uncommitted-work snapshot identifier.</li>
+<li>Node/npm/toolchain versions and lockfile hash.</li>
+<li>Build and package commands actually run.</li>
+<li>Artifact names, sizes and SHA-256 values.</li>
+<li>Browser/OS/architecture checks actually performed.</li>
+<li>Any known limitations.</li>
+<li>Signing/notarization result where applicable.</li>
+<li>Channel/depot/branch and upload receipt, when authorized and performed.</li>
+<li>Public listing/build readback, only when actually published.</li>
+</ul>
+<p>This can be a short release note or manifest maintained by the integration owner; it need not become a new service or proof framework. A changed source file after the build means that build no longer proves the current source.</p>
+<p>Keep the original verified artifacts for restoration. Do not repackage a different payload under the same public version without a clear correction/version record.</p>
+<h2>15. Launch-day and update checklist</h2>
+<h3>Before an authorized public launch</h3>
+<ul>
+<li>The actual game is playable from the production artifact.</li>
+<li>Help and store copy match its current mechanics.</li>
+<li>Countries remain equal-stat identities.</li>
+<li>All required art/audio/notices are local and attributed.</li>
+<li>Keyboard, reduced motion and storage limitations are described honestly.</li>
+<li>The specific supported platform artifacts have actual launch evidence.</li>
+<li>Signing/notarization and platform review are complete where claimed.</li>
+<li>The actual store checklist and waiting requirements are satisfied.</li>
+<li>The owner has reviewed the page, build and release date.</li>
+</ul>
+<h3>At launch</h3>
+<ul>
+<li>Select the reviewed artifact/build, not a newer unreviewed folder.</li>
+<li>Perform only the explicitly authorized publication.</li>
+<li>Read back the public listing and download/install the distributed build.</li>
+<li>Verify visible version, play launch and support links.</li>
+<li>Record remaining issues without claiming a broader platform pass.</li>
+</ul>
+<h3>After launch</h3>
+<ul>
+<li>Triage reproducible gameplay, save, asset and platform failures.</li>
+<li>Preserve existing working save formats where possible.</li>
+<li>Verify a concrete reported symptom after fixing it.</li>
+<li>Publish a small accurate changelog.</li>
+<li>Keep the prior verified artifact available for an authorized restoration.</li>
+<li>Add optional features only after the complete current game remains working.</li>
+</ul>
+<h2>16. Roadmap and explicit deferrals</h2>
+<p><strong>First deliverable:</strong> complete local browser skirmish and a verified itch-ready ZIP.</p>
+<p><strong>Next candidate:</strong> verified Windows x64 desktop ZIP from the same game build.</p>
+<p><strong>Store phase:</strong> operator-led Steamworks onboarding, store materials, private-branch installation, review and authorized release.</p>
+<p><strong>Platform expansion:</strong> independently verified and appropriately distributed macOS arm64, then Linux x64; Intel/universal macOS and other architectures only by an explicit support decision.</p>
+<p><strong>Optional later features:</strong> gamepad UI, achievements, Steam Cloud, import/export round trips, accessibility refinement, additional validated maps and localization.</p>
+<p>None of those future features is a blocker invented for the current local browser game. They must also not be claimed as delivered. Actual build/run/package evidence determines what can be shipped today.</p>
+</section><section id="verification" class="document"><div class="section-label">What was verified</div><h1>Verification and delivery record · v0.1</h1>
+<p>The following evidence was collected on 30 October 2026 local time (31 October UTC). Source review, engine execution, full application play, packaging, device acceptance and storefront publication are separate claims.</p>
+<h2>Rules and AI execution</h2>
+<p>The actual TypeScript modules ran under Node 26. Checks covered the 58-space board, three opening pieces per side, reflection symmetry that exchanges the players, equal resource access, clone/jump semantics, neighbouring conversion, shield purchase and expiry, immutable input states, rejected illegal moves, forced passes, income and terminal scoring.</p>
+<p>Twelve complete AI matches covered both modes × both resource layouts × all three difficulty levels. They reached legal terminal states within the 180-turn limit. These are engine executions, distinct from the application checks below.</p>
+<p>Independent review reproduced and fixed two rules/AI issues:</p>
+<ul>
+<li>The AI could buy a shield for a piece it immediately jumped away from. It now chooses a move before purchasing a shield and excludes the planned jump&#39;s source.</li>
+<li>Final recurring income could affect tie-breaks differently depending on the last mover. Terminal scoring now precedes recurring income for both seats. Final capture/conversion awards remain earned.</li>
+</ul>
+<h2>Browser application play</h2>
+<p>The complete Phaser application ran in the existing managed Brave session. The coordinator used actual canvas pointer input to select a Brazil piece and clone onto an energy node, observed the AI reply and round income, then undid the human move and AI response.</p>
+<p>A complete Resource Frontier match used the actual keyboard board buttons, setup form, shield button, application controller, engine, rendering, event log, save path and results dialog. Canada played Norway; 94 movement actions plus two automatic passes produced 96 completed turns, 49 shield purchases, a full board and a 20–38 result. The browser reported no runtime exceptions during that match. Move choices came from the project&#39;s own AI module; no state fixtures replaced the game path.</p>
+<p>Other application checks:</p>
+<ul>
+<li>Help, field guide and settings opened through their real controls.</li>
+<li>The setup form changed countries and selected local hotseat play.</li>
+<li>Keyboard board exposed 58 labelled cell buttons.</li>
+<li>A solo Classic match survived reload with an exactly equal serialized state, including turn, history, resources and repetition state.</li>
+<li>All seven WAVs loaded after a player gesture.</li>
+<li>Sound/music settings and reduced motion are available; music is opt-in.</li>
+</ul>
+<h2>Responsive and pointer checks</h2>
+<p>At 390 × 844 CSS pixels, page width remained 390 pixels and the setup dialog fit the viewport. Initial testing found two actual presentation defects: a hidden Classic shield control was still displayed, and a resized canvas could use inconsistent dimensions. Both were fixed.</p>
+<p>The final mobile canvas measures 354 × 230.09375 pixels, preserving its 1000:650 logical aspect. Phaser&#39;s input scale agrees on both axes. A real pointer selection at (-4,4) followed by (-4,3) committed exactly one legal clone. Hidden keyboard controls remain hidden until requested; opening them exposes all 58 cells.</p>
+<p>At the desktop viewport, the complete board, country cards and contextual guidance render. Country flags, terrain, legal destinations, hover conversion previews and landing feedback are actual Phaser objects/graphics.</p>
+<h2>Desktop application</h2>
+<p>The macOS arm64 application was packaged with Electron 45.2.1 and electron-builder 26.18.0, then launched from its actual <code>.app</code> executable. Native accessibility readback identified the local <code>hexxago://app/index.html</code> game, board and menus. A resource capture through the native keyboard board changed Brazil to four territories; the AI then reached four territories, advanced the round to two and credited both energy ledgers.</p>
+<p>A separate Electron runtime check loaded the <strong>packaged ASAR&#39;s actual desktop entry point</strong>, fetched every bundled WAV through the custom local origin and decoded all seven as stereo audio. Durations were 0.18, 0.42, 0.67, 0.65, 2.6, 0.26 and 24 seconds. This establishes bundled asset fetch/decode; it does not establish playback quality on every speaker or device.</p>
+<p>The desktop shell uses sandboxed rendering, disabled renderer Node integration, context isolation, denied permission requests and constrained local document windows. No gameplay server is required.</p>
+<p>The macOS candidate is an unsigned development build. Windows and Linux packaging commands are implemented; those operating systems, Steam Deck and gamepad support were not accepted on devices during this task. There is no Steamworks Cloud/achievement integration.</p>
+<h2>Build and package</h2>
+<p><code>npm run build</code> performs TypeScript checking and creates the production browser payload. Relative paths bundle Phaser, styles, country art, the archipelago image, audio and the Phaser license. <code>npm run package:itch</code> produces a ZIP with <code>index.html</code> at its root.</p>
+<p><code>npm run docs</code> renders the five original project documents into the standalone Design Atlas. Raw third-party page text in <code>docs/research.json</code> is excluded. The public asset set was reviewed for personal data, credentials, private URLs and company content. A local generation-cache path was removed from the asset notes. Nonvisual PNG certificate metadata was removed without changing the image&#39;s compressed pixel data.</p>
+<p>The delivered folder contains only the new game&#39;s production output, atlas and release downloads. It is published under the user&#39;s existing output site; unrelated site files are preserved. The public game and atlas URLs are read back before final handoff. Store account publication is distinct from this personal demo site.</p>
+<h2>Remaining release work</h2>
+<ul>
+<li>Create the owner&#39;s itch.io listing and upload/preview the already prepared browser ZIP.</li>
+<li>Produce and exercise a Windows candidate on the intended Windows environment before claiming Windows acceptance.</li>
+<li>Complete Steamworks operator onboarding, store materials, content disclosure, private-depot installation, review and release.</li>
+<li>Sign/notarize desktop distributions if required by the intended release channel.</li>
+</ul>
+<p>No itch.io or Steam store listing was created or published during this task. Future campaigns, online play, cloud saves, achievements, nation abilities and gamepad support are design backlog items.</p>
+</section><footer>Original project art and synthesized audio. No reference-game assets are bundled. Store publication and platform acceptance are documented separately from local implementation.</footer></body></html>
