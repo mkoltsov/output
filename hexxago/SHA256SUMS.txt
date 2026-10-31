@@ -2,3 +2,5 @@
 e90bb45da4a43846d25bf9b0caa9c8a2900551b04c816e69126c999ab2c424ec  downloads/hexxago-macos-arm64-0.1.0.tar.xz
 185b25f7874d509df602840c7aff3e1509469e77dc430e1ba4a9d804eb1ab467  downloads/hexxago-last-signal-browser-0.3.0.zip
 f01ab4a08ed1a32ffef101cfdcb4b70b45b2ff118cbb71d0e49414afa38962e1  downloads/hexxago-last-signal-macos-arm64-0.3.0.tar.xz
+45b2c6ff70c667ea71f929f64067a09920806c7e5c9711d1ba10d92b79f7d66f  downloads/hexxago-last-signal-browser-0.3.1.zip
+9ba720116e78bf493b7f4c62bf9c84dd2eac4ec8d453061f3b0f1043bbf7eaa0  downloads/hexxago-last-signal-macos-arm64-0.3.1.tar.xz
