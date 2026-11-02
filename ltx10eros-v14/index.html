@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LTX 10Eros v1.4 local workflow</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+    body { max-width: 860px; margin: 0 auto; padding: 32px 20px; background: #111; color: #eee; }
+    video { display: block; width: min(100%, 520px); max-height: 75vh; margin: 24px 0; background: #000; }
+    a { color: #8bc6ff; }
+    code { background: #252525; padding: 2px 5px; border-radius: 4px; }
+    .note { color: #bbb; }
+  </style>
+</head>
+<body>
+  <h1>LTX 10Eros v1.4 — local ComfyUI workflow</h1>
+  <p>
+    Runtime-verified on an NVIDIA RTX 5060 Ti with 16 GB VRAM. This local adaptation uses
+    the v1.4 FP8-mixed checkpoint and its attached DMD Fro99 LoRA at strength 1.
+  </p>
+  <video controls preload="metadata" src="validation.mp4"></video>
+  <p><a href="LTX-2.3-10Eros-v1.4-I2V-Audio.json" download>Download the editable ComfyUI workflow</a></p>
+  <p class="note">
+    Validation profile: fictional input fixture, 97 frames, 24 fps, 768 × 1,024 output,
+    9-step DMD first pass, 4-point upscale pass, generated stereo audio.
+    Replace <code>example.png</code> and the validation prompt before normal use.
+  </p>
+</body>
+</html>

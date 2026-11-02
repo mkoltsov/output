@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Games to Play</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17181c;
+      --muted: #5c6370;
+      --line: #d8dce3;
+      --paper: #f7f7f4;
+      --panel: #ffffff;
+      --nes: #c7372f;
+      --snes: #4969a8;
+      --ready: #177245;
+      --missing: #a33b2b;
+      --gold: #c58a24;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(23, 24, 28, 0.04) 1px, transparent 1px),
+        linear-gradient(rgba(23, 24, 28, 0.04) 1px, transparent 1px),
+        var(--paper);
+      background-size: 24px 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 360px);
+      gap: 28px;
+      align-items: center;
+      min-height: 260px;
+      padding: 42px 0 34px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(2.4rem, 7vw, 5.8rem);
+      line-height: 0.92;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 18px 0 0;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .pixel-shelf {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      align-self: stretch;
+      min-height: 176px;
+    }
+
+    .cart {
+      min-height: 42px;
+      border: 2px solid var(--ink);
+      box-shadow: 4px 4px 0 rgba(23, 24, 28, 0.18);
+    }
+
+    .cart:nth-child(4n+1) { background: var(--nes); }
+    .cart:nth-child(4n+2) { background: var(--snes); }
+    .cart:nth-child(4n+3) { background: var(--gold); }
+    .cart:nth-child(4n) { background: #2f8d74; }
+
+    main {
+      padding: 28px 0 44px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 30px 0 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      letter-spacing: 0;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      color: var(--muted);
+      background: #f0f2f5;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .rank {
+      width: 64px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status {
+      width: 132px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      height: 30px;
+      border-radius: 999px;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .yes { background: var(--ready); }
+    .no { background: var(--missing); }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .sources {
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .sources a {
+      color: #225aa8;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .hero,
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .pixel-shelf {
+        min-height: 112px;
+      }
+
+      th,
+      td {
+        padding: 11px 9px;
+      }
+
+      .rank {
+        width: 44px;
+      }
+
+      .status {
+        width: 102px;
+      }
+
+      .badge {
+        min-width: 76px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap hero">
+      <div>
+        <h1>Games to Play</h1>
+        <p class="subtitle">A short queue of the most recommended NES and SNES games, matched against the current game library.</p>
+      </div>
+      <div class="pixel-shelf" aria-hidden="true">
+        <div class="cart"></div><div class="cart"></div><div class="cart"></div><div class="cart"></div>
+        <div class="cart"></div><div class="cart"></div><div class="cart"></div><div class="cart"></div>
+        <div class="cart"></div><div class="cart"></div><div class="cart"></div><div class="cart"></div>
+        <div class="cart"></div><div class="cart"></div><div class="cart"></div><div class="cart"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="summary" aria-label="Library summary">
+      <div class="metric">
+        <span>NES ready now</span>
+        <strong>1 / 10</strong>
+      </div>
+      <div class="metric">
+        <span>SNES ready now</span>
+        <strong>9 / 10</strong>
+      </div>
+      <div class="metric">
+        <span>Best next pickup</span>
+        <strong>Super Metroid</strong>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>NES</h2>
+        <div class="count">1 available, 9 missing</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th class="rank">Rank</th>
+            <th>Game</th>
+            <th class="status">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="rank">1</td><td>Super Mario Bros. 3</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">2</td><td>The Legend of Zelda</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">3</td><td>Mega Man 2</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">4</td><td>Metroid</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">5</td><td>Castlevania III: Dracula's Curse</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">6</td><td>Contra</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">7</td><td>Kirby's Adventure</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">8</td><td>Ninja Gaiden</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">9</td><td>Punch-Out!!</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">10</td><td>Super Mario Bros.</td><td class="status"><span class="badge no">Missing</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>SNES</h2>
+        <div class="count">9 available, 1 missing</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th class="rank">Rank</th>
+            <th>Game</th>
+            <th class="status">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="rank">1</td><td>Super Metroid</td><td class="status"><span class="badge no">Missing</span></td></tr>
+          <tr><td class="rank">2</td><td>The Legend of Zelda: A Link to the Past</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">3</td><td>Chrono Trigger</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">4</td><td>Super Mario World</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">5</td><td>Final Fantasy VI <span class="note">(Final Fantasy III in the US SNES release)</span></td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">6</td><td>Donkey Kong Country 2: Diddy's Kong Quest</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">7</td><td>Super Mario World 2: Yoshi's Island</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">8</td><td>EarthBound</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">9</td><td>Mega Man X</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+          <tr><td class="rank">10</td><td>Super Castlevania IV</td><td class="status"><span class="badge yes">Ready</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="sources">
+      Ranking shortlist compiled from GamesRadar's NES and SNES rankings, Nintendo Life's NES rankings, and the local availability check. Public page excludes local file paths and machine details.
+      Sources:
+      <a href="https://www.gamesradar.com/best-nes-games-all-time/">GamesRadar NES</a>,
+      <a href="https://www.gamesradar.com/best-snes-games-all-time/">GamesRadar SNES</a>,
+      <a href="https://www.nintendolife.com/guides/50-best-nes-games-of-all-time">Nintendo Life NES</a>.
+    </section>
+  </main>
+</body>
+</html>

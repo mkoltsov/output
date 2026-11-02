@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Red Hood Options for 2nd Gen Toyota Matrix</title>
+  <meta name="description" content="Verified red or paint-to-match hood options for a 2009-2014 Toyota Matrix.">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f3ef;
+      --ink: #171717;
+      --muted: #5f6268;
+      --panel: #ffffff;
+      --line: #d9d4ca;
+      --red: #b7192a;
+      --red-deep: #7e111d;
+      --green: #1b6b48;
+      --gold: #a56a16;
+      --blue: #1d5f8f;
+      --soft-red: #fbebed;
+      --soft-blue: #e8f2f8;
+      --soft-green: #e8f4ee;
+      --soft-gold: #f8f1e5;
+      --shadow: 0 18px 48px rgba(34, 24, 18, .12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--red-deep);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    main {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      min-height: min(72vh, 760px);
+      gap: 28px;
+      align-items: stretch;
+      padding: 28px 0 34px;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 0;
+    }
+
+    .eyebrow {
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 7px 11px;
+      border: 1px solid rgba(183, 25, 42, .28);
+      background: var(--soft-red);
+      color: var(--red-deep);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(38px, 5.4vw, 72px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 20px 0 0;
+      max-width: 720px;
+      color: #373a3f;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .hero-panel {
+      min-height: 440px;
+      border: 1px solid rgba(126, 17, 29, .18);
+      background: #111;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-panel img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #2c2c2c;
+    }
+
+    .hero-caption {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, .92);
+      border: 1px solid rgba(255, 255, 255, .35);
+      color: #202226;
+      font-size: 13px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: -8px 0 30px;
+    }
+
+    .metric {
+      min-height: 112px;
+      padding: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 28px rgba(25, 22, 17, .05);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 23px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    section {
+      margin-top: 28px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .section-note {
+      max-width: 860px;
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      display: flex;
+      flex-direction: column;
+      min-height: 410px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 34px rgba(25, 22, 17, .07);
+    }
+
+    .option-media {
+      display: block;
+      aspect-ratio: 16 / 10;
+      background: #2b2d31;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .option-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .option-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 27px;
+      padding: 5px 9px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .pill.good {
+      background: var(--soft-green);
+      border-color: rgba(27, 107, 72, .22);
+      color: var(--green);
+    }
+
+    .pill.price {
+      background: var(--soft-gold);
+      border-color: rgba(165, 106, 22, .24);
+      color: #74460c;
+    }
+
+    .pill.fit {
+      background: var(--soft-blue);
+      border-color: rgba(29, 95, 143, .22);
+      color: var(--blue);
+    }
+
+    .option h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .option p {
+      margin: 0 0 11px;
+      color: #3a3d42;
+    }
+
+    .details {
+      display: grid;
+      gap: 7px;
+      margin: 8px 0 16px;
+      padding: 0;
+      list-style: none;
+      color: #303238;
+      font-size: 14px;
+    }
+
+    .details li {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 9px;
+      padding-top: 7px;
+      border-top: 1px solid #ebe7df;
+    }
+
+    .details b {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .button-row {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 12px;
+      background: var(--red);
+      color: #fff;
+      border: 1px solid var(--red);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--red-deep);
+      border-color: rgba(126, 17, 29, .3);
+    }
+
+    .info-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .8fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .info {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 18px;
+      box-shadow: 0 12px 34px rgba(25, 22, 17, .06);
+    }
+
+    .info h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .checks {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checks li {
+      padding-left: 22px;
+      position: relative;
+    }
+
+    .checks li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .62em;
+      width: 9px;
+      height: 9px;
+      background: var(--red);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 34px rgba(25, 22, 17, .06);
+    }
+
+    th,
+    td {
+      padding: 12px 11px;
+      border-bottom: 1px solid #ebe7df;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      color: #34373c;
+      background: #faf8f4;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding-left: 18px;
+      color: #303238;
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 940px) {
+      .hero,
+      .info-band {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 0;
+      }
+
+      .hero-panel {
+        min-height: 360px;
+      }
+
+      .summary,
+      .option-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      main {
+        width: min(100vw - 22px, 1180px);
+        padding-top: 12px;
+      }
+
+      .summary,
+      .option-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        padding: 16px 0 4px;
+      }
+
+      .hero-panel {
+        min-height: 300px;
+      }
+
+      .details li {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      th,
+      td {
+        padding: 10px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <div class="eyebrow">Verified May 25, 2026</div>
+        <h1 id="page-title">Red Hood Options for 2nd Gen Toyota Matrix</h1>
+        <p class="lead">For a 2009-2014 Toyota Matrix hood, the shared identifiers to match are OEM <strong>5330102220</strong> and Partslink <strong>TO1230212</strong>. The most practical red choices found are painted-to-match retail hoods; a cheaper used red hood will depend on local salvage inventory.</p>
+      </div>
+      <figure class="hero-panel">
+        <img src="https://www.revemoto.com/cdn/shop/products/2009ToyotaMatrixHoodPaintedRadiantRed_3L5.jpg?v=1753527516&amp;width=1200" alt="Radiant Red Toyota Matrix replacement hood">
+        <figcaption class="hero-caption">Radiant Red 3L5 example image from the active ReveMoto product listing.</figcaption>
+      </figure>
+    </section>
+
+    <div class="summary" aria-label="Summary">
+      <div class="metric">
+        <strong>$616.55+</strong>
+        <span>Lowest verified painted total before shipping: Painted Auto Parts base price plus paint add-on.</span>
+      </div>
+      <div class="metric">
+        <strong>3L5</strong>
+        <span>Radiant Red appears directly on active listings. Confirm against the door-jamb paint code.</span>
+      </div>
+      <div class="metric">
+        <strong>3R3</strong>
+        <span>Barcelona Red Mica is also listed by Paint N Ship as an available paint code.</span>
+      </div>
+      <div class="metric">
+        <strong>2009-2014</strong>
+        <span>Fitment range verified on Painted Auto Parts and Paint N Ship listings.</span>
+      </div>
+    </div>
+
+    <section aria-labelledby="options-title">
+      <h2 id="options-title">Best Current Options</h2>
+      <p class="section-note">These are public retail pages that responded during verification. Prices and stock can change, so the buy links are the source of truth before ordering.</p>
+
+      <div class="option-grid">
+        <article class="option">
+          <a class="option-media" href="https://paintedautoparts.com/toyota-matrix-hood-oem-5330102220-2009-2014.html">
+            <img src="https://paintedautoparts.com/media/catalog/product/cache/b8e23478f5ef2fc7f76b29a198859567/t/o/to1230212_nbox.webp" alt="Toyota Matrix hood listing image from Painted Auto Parts">
+          </a>
+          <div class="option-body">
+            <div class="status-row">
+              <span class="pill good">Active page</span>
+              <span class="pill price">Lowest verified price</span>
+            </div>
+            <h3>Painted Auto Parts</h3>
+            <p>Best starting point if the goal is a new painted hood at the lowest verified retail price.</p>
+            <ul class="details">
+              <li><b>Price</b><span>$341.55 base; paint add-on observed as +$275, making about $616.55 before shipping.</span></li>
+              <li><b>Fitment</b><span>2009, 2010, 2011, 2012, 2013, 2014 Toyota Matrix.</span></li>
+              <li><b>IDs</b><span>OEM 5330102220; Partslink TO1230212.</span></li>
+              <li><b>Status</b><span>Product metadata shows in stock at verification time.</span></li>
+            </ul>
+            <div class="button-row">
+              <a class="button" href="https://paintedautoparts.com/toyota-matrix-hood-oem-5330102220-2009-2014.html">Open Listing</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="option">
+          <a class="option-media" href="https://paintnship.com/collections/2010-toyota-matrix/products/2009-2014-toyota-matrix-hood-5330102220-to1230212">
+            <img src="https://paintnship.com/cdn/shop/files/s-l1600_cc2849f3-77f4-4360-a218-d65a2a8d3e54_1200x1200.webp?v=1755094766" alt="Paint N Ship Toyota Matrix hood product image">
+          </a>
+          <div class="option-body">
+            <div class="status-row">
+              <span class="pill good">Active page</span>
+              <span class="pill fit">Red codes listed</span>
+            </div>
+            <h3>Paint N Ship</h3>
+            <p>Higher price, but the listing explicitly exposes multiple paint-code variants including the two red choices.</p>
+            <ul class="details">
+              <li><b>Price</b><span>$974.00.</span></li>
+              <li><b>Fitment</b><span>2009-2014 Toyota Matrix.</span></li>
+              <li><b>Red</b><span>3L5 Radiant Red and 3R3 Barcelona Red Mica are present in the variant list.</span></li>
+              <li><b>IDs</b><span>Manufacturer number 5330102220; Partslink TO1230212.</span></li>
+            </ul>
+            <div class="button-row">
+              <a class="button" href="https://paintnship.com/collections/2010-toyota-matrix/products/2009-2014-toyota-matrix-hood-5330102220-to1230212">Open Listing</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="option">
+          <a class="option-media" href="https://www.revemoto.com/products/2009-toyota-matrix-hood-painted">
+            <img src="https://www.revemoto.com/cdn/shop/products/2009ToyotaMatrixHoodPaintedRadiantRed_3L5.jpg?v=1753527516&amp;width=900" alt="ReveMoto Radiant Red Toyota Matrix hood">
+          </a>
+          <div class="option-body">
+            <div class="status-row">
+              <span class="pill good">Active page</span>
+              <span class="pill fit">3L5 shown</span>
+            </div>
+            <h3>ReveMoto</h3>
+            <p>Most expensive verified choice, but it shows the Radiant Red 3L5 variant and a red product image.</p>
+            <ul class="details">
+              <li><b>Price</b><span>$1,370.00.</span></li>
+              <li><b>Fitment</b><span>Listing title is 2009 Toyota Matrix; page assets and image metadata reference 2009-2013 Matrix hood.</span></li>
+              <li><b>Red</b><span>Radiant Red 3L5 variant observed in product data.</span></li>
+              <li><b>IDs</b><span>SKU/MPN family includes 5330102220; product image metadata includes TO1230212.</span></li>
+            </ul>
+            <div class="button-row">
+              <a class="button" href="https://www.revemoto.com/products/2009-toyota-matrix-hood-painted">Open Listing</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="used-title">
+      <h2 id="used-title">Used Red Hood Search</h2>
+      <p class="section-note">A used red hood is probably the cheapest route, but it is location-bound because hoods are bulky and salvage yards often require pickup.</p>
+      <div class="info-band">
+        <div class="info">
+          <h3>What is proven</h3>
+          <ul class="checks">
+            <li>The part interchange target is a 2009-2014 Toyota Matrix hood, OEM 5330102220 / Partslink TO1230212.</li>
+            <li>Retail paint-to-match sources currently have active public pages for this hood.</li>
+            <li>The red paint codes observed on active listings are 3L5 Radiant Red and 3R3 Barcelona Red Mica.</li>
+          </ul>
+        </div>
+        <div class="info">
+          <h3>What is not yet verified</h3>
+          <ul class="checks">
+            <li>A currently available local used red hood was not verified without a ZIP or pickup area.</li>
+            <li>An exact color match is not proven until the vehicle paint code is checked on the driver-side door jamb sticker.</li>
+            <li>Shipping, tax, and packaging fees were not included except where the vendor page itself exposes the product price.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="compare-title">
+      <h2 id="compare-title">Comparison</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Verified Price</th>
+            <th>Red Support</th>
+            <th>Best Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Painted Auto Parts</td>
+            <td>$341.55 base + observed paint add-on</td>
+            <td>Paint-to-code workflow; enter the car paint code.</td>
+            <td>Lowest verified new painted route.</td>
+          </tr>
+          <tr>
+            <td>Paint N Ship</td>
+            <td>$974.00</td>
+            <td>3L5 Radiant Red and 3R3 Barcelona Red Mica variants listed.</td>
+            <td>Clear paint-code selection and fitment detail.</td>
+          </tr>
+          <tr>
+            <td>ReveMoto</td>
+            <td>$1,370.00</td>
+            <td>3L5 Radiant Red variant and image shown.</td>
+            <td>Premium painted listing with a red visual reference.</td>
+          </tr>
+          <tr>
+            <td>Local salvage yard</td>
+            <td>Unknown</td>
+            <td>Potentially exact used red panel if one is nearby.</td>
+            <td>Cheapest possible path, but needs ZIP/city and condition checks.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section aria-labelledby="sources-title">
+      <h2 id="sources-title">Sources</h2>
+      <ul class="source-list">
+        <li><a href="https://paintedautoparts.com/toyota-matrix-hood-oem-5330102220-2009-2014.html">Painted Auto Parts: 2009-2014 Toyota Matrix Hood OEM 5330102220</a></li>
+        <li><a href="https://paintnship.com/collections/2010-toyota-matrix/products/2009-2014-toyota-matrix-hood-5330102220-to1230212">Paint N Ship: 2009-2014 Toyota Matrix Hood 5330102220 / TO1230212</a></li>
+        <li><a href="https://www.revemoto.com/products/2009-toyota-matrix-hood-painted">ReveMoto: 2009 Toyota Matrix Hood Painted</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      Public artifact generated May 25, 2026. This page intentionally includes only public product information and no private user details.
+    </footer>
+  </main>
+</body>
+</html>
