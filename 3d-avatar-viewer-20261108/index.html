@@ -111,12 +111,23 @@ function requestRender() {
     const delta = Math.min(0.1, Math.max(0, (now - lastFrame) / 1000)); lastFrame = now;
     for (const viewer of viewers) {
       if (viewer.playing) viewer.mixer?.update(delta);
-      viewer.renderer.render(viewer.scene, viewer.camera);
+      if (resizeViewer(viewer)) viewer.renderer.render(viewer.scene, viewer.camera);
     }
     if (viewers.some(viewer => viewer.playing)) requestRender();
   };
   frameId = requestAnimationFrame(draw);
   fallback = setTimeout(() => draw(performance.now()), 40);
+}
+
+function resizeViewer(viewer) {
+  const width = viewer.viewport.clientWidth, height = viewer.viewport.clientHeight;
+  if (width < 1 || height < 1) return false;
+  if (viewer.renderWidth !== width || viewer.renderHeight !== height) {
+    viewer.renderer.setSize(width, height, false);
+    viewer.camera.aspect = width / height; viewer.camera.updateProjectionMatrix();
+    viewer.renderWidth = width; viewer.renderHeight = height;
+  }
+  return true;
 }
 
 function animationKey(name) {
@@ -240,7 +251,7 @@ for (const definition of definitions) {
   scene.add(hemisphere, key, fill);
   const grid = new THREE.GridHelper(4, 8, 0x687b91, 0x354558);
   grid.position.y = -0.005; scene.add(grid);
-  const viewer = { ...definition, scene, camera, renderer, controls, lights: { hemisphere, key, fill }, model: null, sequence: 0, normalDefaults: new Map(), mixer: null, clips: [], action: null, playing: false, skeleton: null };
+  const viewer = { ...definition, scene, camera, renderer, controls, viewport, lights: { hemisphere, key, fill }, model: null, sequence: 0, normalDefaults: new Map(), mixer: null, clips: [], action: null, playing: false, skeleton: null };
   applyLighting(viewer);
   viewers.push(viewer);
   function setPropVisibility(key) {
@@ -285,10 +296,7 @@ for (const definition of definitions) {
     synchronizing = false;
   });
   new ResizeObserver(() => {
-    const width = viewport.clientWidth, height = viewport.clientHeight;
-    if (width < 1 || height < 1) return;
-    renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix();
-    requestRender();
+    if (resizeViewer(viewer)) requestRender();
   }).observe(viewport);
   panel.querySelector('.yaw-slider').addEventListener('input', event => {
     viewer.yaw = Number(event.target.value); panel.querySelector('.yaw-output').value = `${viewer.yaw}°`;
