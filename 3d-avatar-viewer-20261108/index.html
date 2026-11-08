@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Photo-to-3D comparison</title>
+<style>
+  :root { color-scheme: dark; font: 15px/1.5 system-ui, sans-serif; background: #10151c; color: #e7edf5; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; }
+  main { max-width: 1700px; margin: auto; }
+  h1 { margin: 0 0 6px; font-size: clamp(24px, 3vw, 36px); }
+  p { color: #acbacb; margin: 6px 0 18px; }
+  button, input { font: inherit; }
+  button { border: 1px solid #40516a; border-radius: 7px; background: #253348; color: inherit; padding: 7px 13px; cursor: pointer; }
+  button:hover { background: #354860; }
+  button:focus-visible, input:focus-visible { outline: 2px solid #83c8ff; outline-offset: 3px; }
+  .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; margin: 18px 0; }
+  .toolbar label { display: flex; align-items: center; gap: 7px; }
+  .viewers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .viewers.focused { grid-template-columns: 1fr; }
+  .viewers.focused article:not(.expanded) { display: none; }
+  .animation-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .animation-controls select { max-width: 100%; font: inherit; }
+  article { min-width: 0; border: 1px solid #334258; border-radius: 12px; overflow: hidden; background: #19222f; }
+  .panel { padding: 14px; }
+  h2 { margin: 0 0 10px; font-size: 20px; }
+  input[type=file] { display: block; max-width: 100%; font-size: 13px; }
+  .viewport { height: clamp(300px, 42vw, 560px); background: #18212d; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  .yaw { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; }
+  .yaw input { flex: 1; min-width: 60px; }
+  output { width: 46px; text-align: right; }
+  .status { min-height: 44px; margin: 10px 0 0; overflow-wrap: anywhere; font-size: 13px; }
+  .error { color: #ffb4a8; }
+  .normal-reset { margin-top: 8px; padding: 4px 9px; font-size: 12px; }
+  footer { margin-top: 22px; font-size: 13px; color: #acbacb; }
+  @media (max-width: 900px) { .viewers { grid-template-columns: 1fr; } body { padding: 14px; } .viewport { height: 450px; } }
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<main>
+  <h1>Photo-to-3D comparison</h1>
+  <p>Choose the three local GLB files. Compare the face, hands, clothing, silhouette, and unseen sides under the same lighting.</p>
+  <div class="toolbar" aria-label="View controls">
+    <button type="button" data-view="front">Front</button>
+    <button type="button" data-view="side">Side</button>
+    <button type="button" data-view="back">Back</button>
+    <button type="button" data-view="three-quarter">Three-quarter</button>
+    <label><input type="checkbox" id="wireframe"> Wireframe</label>
+    <label><input type="checkbox" id="sync" checked> Synchronize orbit and zoom</label>
+  </div>
+  <section class="viewers" aria-label="Local model viewers"></section>
+  <footer>Files stay in this browser tab; no model is uploaded. Library code loads from jsDelivr. Only self-contained GLB files are accepted. Models are shown Y-up, centered, and scaled to a common height of 2 viewer units. Drag to orbit; scroll to zoom. Display scale does not establish real-world dimensions. Normal-map controls initially reflect each loaded file's own strength; changing a slider adjusts shading without modifying the file.</footer>
+</main>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const definitions = [
+  { id: 'trellis', name: 'TRELLIS.2', yaw: 0 },
+  { id: 'pixal', name: 'Pixal3D', yaw: 0 },
+  { id: 'hunyuan', name: 'Hunyuan3D', yaw: 90 },
+];
+const viewers = [];
+let synchronizing = false;
+let renderPending = false;
+let lastFrame = performance.now();
+const wireframe = document.querySelector('#wireframe');
+const synchronized = document.querySelector('#sync');
+const presets = { front: [0, 1.1, 4.3], side: [4.3, 1.1, 0], back: [0, 1.1, -4.3], 'three-quarter': [3, 1.6, 3] };
+
+function requestRender() {
+  if (renderPending) return;
+  renderPending = true;
+  requestAnimationFrame(now => {
+    renderPending = false;
+    const delta = Math.min(0.1, Math.max(0, (now - lastFrame) / 1000)); lastFrame = now;
+    for (const viewer of viewers) {
+      if (viewer.playing) viewer.mixer?.update(delta);
+      viewer.renderer.render(viewer.scene, viewer.camera);
+    }
+    if (viewers.some(viewer => viewer.playing)) requestRender();
+  });
+}
+
+function embeddedOnly(buffer) {
+  const view = new DataView(buffer);
+  if (buffer.byteLength < 20 || view.getUint32(0, true) !== 0x46546c67 || view.getUint32(4, true) !== 2)
+    throw new Error('Choose a valid GLB 2.0 file.');
+  if (view.getUint32(8, true) !== buffer.byteLength) throw new Error('The GLB file is incomplete.');
+  const length = view.getUint32(12, true);
+  if (view.getUint32(16, true) !== 0x4e4f534a || 20 + length > buffer.byteLength)
+    throw new Error('The GLB JSON chunk is invalid.');
+  const json = JSON.parse(new TextDecoder().decode(buffer.slice(20, 20 + length)).replace(/\0+$/, ''));
+  for (const item of [...(json.buffers || []), ...(json.images || [])])
+    if (typeof item.uri === 'string' && !item.uri.startsWith('data:'))
+      throw new Error('This GLB references external files. Export it with embedded geometry and textures.');
+}
+
+function disposeModel(model) {
+  const textures = new Set(), materials = new Set(), geometries = new Set();
+  model.traverse(object => {
+    if (object.geometry) geometries.add(object.geometry);
+    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      if (!material) continue;
+      materials.add(material);
+      for (const value of Object.values(material)) if (value?.isTexture) textures.add(value);
+    }
+  });
+  textures.forEach(value => { value.source?.data?.close?.(); value.dispose(); });
+  materials.forEach(value => value.dispose());
+  geometries.forEach(value => value.dispose());
+}
+
+function applyWireframe(viewer) {
+  viewer.model?.traverse(object => {
+    for (const material of Array.isArray(object.material) ? object.material : [object.material])
+      if (material && 'wireframe' in material) material.wireframe = wireframe.checked;
+  });
+}
+
+for (const definition of definitions) {
+  const panel = document.createElement('article');
+  panel.innerHTML = `<div class="panel"><h2>${definition.name}</h2><input type="file" accept=".glb,model/gltf-binary" aria-label="Choose ${definition.name} GLB"></div><div class="viewport"></div><div class="panel"><label class="yaw">Yaw <input class="yaw-slider" type="range" min="-180" max="180" value="${definition.yaw}" aria-label="${definition.name} yaw"><output class="yaw-output">${definition.yaw}°</output></label><label class="yaw">Normal map <input class="normal-slider" type="range" min="0" max="2" step="0.05" value="0.25" aria-label="${definition.name} normal-map strength" disabled><output class="normal-output">0.25</output></label><button class="normal-reset" type="button" disabled>File normal default</button><p class="status" role="status">Choose a local GLB file.</p></div>`;
+  document.querySelector('.viewers').append(panel);
+  const animationControls = document.createElement('div');
+  animationControls.className = 'animation-controls';
+  animationControls.innerHTML = `<button class="expand-view" type="button">Expand view</button><select class="animation-select" aria-label="${definition.name} animation" disabled><option>No animations</option></select><button class="animation-play" type="button" disabled>Play</button><button class="animation-reset" type="button" disabled>Reset pose</button>`;
+  panel.querySelector('.panel:last-child').prepend(animationControls);
+  const animationSelect = panel.querySelector('.animation-select'), animationPlay = panel.querySelector('.animation-play'), animationReset = panel.querySelector('.animation-reset');
+  panel.querySelector('.expand-view').addEventListener('click', event => {
+    const expanded = !panel.classList.contains('expanded');
+    for (const other of document.querySelectorAll('.viewers article')) {
+      other.classList.remove('expanded'); other.querySelector('.expand-view').textContent = 'Expand view';
+    }
+    panel.classList.toggle('expanded', expanded); document.querySelector('.viewers').classList.toggle('focused', expanded);
+    event.target.textContent = expanded ? 'Compare models' : 'Expand view'; requestRender();
+  });
+  const viewport = panel.querySelector('.viewport'), status = panel.querySelector('.status');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x18212d);
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
+  camera.up.set(0, 1, 0);
+  camera.position.set(...presets.front);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1;
+  viewport.append(renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 1, 0);
+  controls.enablePan = true;
+  controls.minDistance = 0.4;
+  controls.maxDistance = 12;
+  controls.update();
+  scene.add(new THREE.HemisphereLight(0xdcecff, 0x606070, 2.2));
+  for (const [position, intensity] of [[[3, 5, 4], 3], [[-3, 3, -3], 1.5]]) {
+    const light = new THREE.DirectionalLight(0xffffff, intensity);
+    light.position.set(...position); scene.add(light);
+  }
+  const grid = new THREE.GridHelper(4, 8, 0x687b91, 0x354558);
+  grid.position.y = -0.005; scene.add(grid);
+  const viewer = { ...definition, scene, camera, renderer, controls, model: null, sequence: 0, normalDefaults: new Map(), mixer: null, clips: [], action: null, playing: false };
+  viewers.push(viewer);
+  function stopAnimation() {
+    viewer.playing = false; viewer.mixer?.stopAllAction(); viewer.action = null; animationPlay.textContent = 'Play'; requestRender();
+  }
+  animationSelect.addEventListener('change', stopAnimation);
+  animationReset.addEventListener('click', stopAnimation);
+  animationPlay.addEventListener('click', () => {
+    if (!viewer.mixer || !viewer.clips.length) return;
+    if (!viewer.action) viewer.action = viewer.mixer.clipAction(viewer.clips[Number(animationSelect.value)]).reset().play();
+    viewer.playing = !viewer.playing; viewer.action.paused = !viewer.playing;
+    animationPlay.textContent = viewer.playing ? 'Pause' : 'Play'; lastFrame = performance.now(); requestRender();
+  });
+  controls.addEventListener('change', () => {
+    requestRender();
+    if (!synchronized.checked || synchronizing) return;
+    synchronizing = true;
+    for (const other of viewers) if (other !== viewer) {
+      other.camera.position.copy(camera.position); other.controls.target.copy(controls.target); other.controls.update();
+    }
+    synchronizing = false;
+  });
+  new ResizeObserver(() => {
+    const width = viewport.clientWidth, height = viewport.clientHeight;
+    renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix();
+    requestRender();
+  }).observe(viewport);
+  panel.querySelector('.yaw-slider').addEventListener('input', event => {
+    viewer.yaw = Number(event.target.value); panel.querySelector('.yaw-output').value = `${viewer.yaw}°`;
+    if (viewer.model) viewer.model.rotation.y = THREE.MathUtils.degToRad(viewer.yaw);
+    requestRender();
+  });
+  const normalSlider = panel.querySelector('.normal-slider'), normalOutput = panel.querySelector('.normal-output');
+  const normalReset = panel.querySelector('.normal-reset');
+  normalSlider.addEventListener('input', () => {
+    const value = Number(normalSlider.value); normalOutput.value = value.toFixed(2);
+    for (const [material, base] of viewer.normalDefaults) {
+      const magnitude = Math.max(Math.abs(base.x), Math.abs(base.y));
+      material.normalScale.copy(magnitude > 0 ? base : new THREE.Vector2(1, 1)).multiplyScalar(value / (magnitude || 1));
+    }
+    requestRender();
+  });
+  normalReset.addEventListener('click', () => {
+    for (const [material, base] of viewer.normalDefaults) material.normalScale.copy(base);
+    const base = viewer.normalDefaults.values().next().value;
+    normalSlider.value = Math.max(Math.abs(base.x), Math.abs(base.y)); normalOutput.value = Number(normalSlider.value).toFixed(2); requestRender();
+  });
+  panel.querySelector('input[type=file]').addEventListener('change', async event => {
+    const file = event.target.files[0]; if (!file) return;
+    const sequence = ++viewer.sequence; let url, loaded;
+    status.classList.remove('error'); status.textContent = 'Loading local GLB…';
+    try {
+      const buffer = await file.arrayBuffer(); embeddedOnly(buffer);
+      url = URL.createObjectURL(new Blob([buffer], { type: 'model/gltf-binary' }));
+      const manager = new THREE.LoadingManager();
+      manager.setURLModifier(value => {
+        if (!value.startsWith('blob:') && !value.startsWith('data:')) throw new Error('External model resources are disabled.');
+        return value;
+      });
+      loaded = await new GLTFLoader(manager).loadAsync(url);
+      if (sequence !== viewer.sequence) { disposeModel(loaded.scene); return; }
+      const model = new THREE.Group(), content = new THREE.Group();
+      content.add(loaded.scene); model.add(content);
+      const box = new THREE.Box3().setFromObject(content), size = box.getSize(new THREE.Vector3());
+      if (!(size.y > 0) || !Number.isFinite(size.y)) throw new Error('The model has no measurable height.');
+      content.position.set(-(box.min.x + box.max.x) / 2, -box.min.y, -(box.min.z + box.max.z) / 2);
+      model.scale.setScalar(2 / size.y); model.rotation.y = THREE.MathUtils.degToRad(viewer.yaw);
+      stopAnimation();
+      if (viewer.mixer) { viewer.mixer.uncacheRoot(viewer.mixer.getRoot()); viewer.mixer = null; }
+      if (viewer.model) { scene.remove(viewer.model); disposeModel(viewer.model); }
+      viewer.model = model; scene.add(model); applyWireframe(viewer);
+      viewer.clips = loaded.animations || []; viewer.mixer = viewer.clips.length ? new THREE.AnimationMixer(loaded.scene) : null;
+      animationSelect.replaceChildren();
+      if (!viewer.clips.length) animationSelect.add(new Option('No animations', ''));
+      viewer.clips.forEach((clip, index) => animationSelect.add(new Option(`${clip.name || `Animation ${index + 1}`} (${clip.duration.toFixed(1)} s)`, String(index))));
+      animationSelect.disabled = animationPlay.disabled = animationReset.disabled = !viewer.clips.length;
+      let triangles = 0, meshes = 0, skinned = 0; const textureSizes = new Set(); viewer.normalDefaults.clear();
+      model.traverse(object => { if (object.isMesh) {
+        meshes++; skinned += object.isSkinnedMesh ? 1 : 0; triangles += (object.geometry.index?.count ?? object.geometry.attributes.position?.count ?? 0) / 3;
+        for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+          if (material?.map?.image) textureSizes.add(`${material.map.image.width}×${material.map.image.height}`);
+          if (material?.normalMap && material.normalScale) viewer.normalDefaults.set(material, material.normalScale.clone());
+        }
+      } });
+      normalSlider.disabled = normalReset.disabled = viewer.normalDefaults.size === 0;
+      const base = viewer.normalDefaults.values().next().value;
+      if (base) { const strength = Math.max(Math.abs(base.x), Math.abs(base.y)); normalSlider.max = Math.max(2, strength); normalSlider.value = strength; normalOutput.value = strength.toFixed(2); }
+      status.textContent = `${file.name} · ${Math.round(triangles).toLocaleString()} triangles · ${meshes} meshes · base colour: ${[...textureSizes].join(', ') || 'none'} · ${skinned ? `${skinned} skinned meshes` : 'no skinning rig'}`;
+      requestRender();
+    } catch (error) {
+      if (loaded?.scene && viewer.model?.children[0]?.children[0] !== loaded.scene) disposeModel(loaded.scene);
+      if (sequence === viewer.sequence) { status.classList.add('error'); status.textContent = error.message; }
+    } finally { if (url) URL.revokeObjectURL(url); }
+  });
+}
+
+wireframe.addEventListener('change', () => { viewers.forEach(applyWireframe); requestRender(); });
+document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {
+  synchronizing = true;
+  for (const viewer of viewers) {
+    viewer.camera.position.set(...presets[button.dataset.view]); viewer.controls.target.set(0, 1, 0); viewer.controls.update();
+  }
+  synchronizing = false;
+}));
+requestRender();
+</script>
+</body>
+</html>
