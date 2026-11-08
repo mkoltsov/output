@@ -386,6 +386,7 @@ for (const definition of definitions) {
 wireframe.addEventListener('change', () => { viewers.forEach(applyWireframe); requestRender(); });
 skeleton.addEventListener('change', () => { viewers.forEach(viewer => { if (viewer.skeleton) viewer.skeleton.visible = skeleton.checked; }); requestRender(); });
 lighting.addEventListener('change', () => { viewers.forEach(applyLighting); requestRender(); });
+window.addEventListener('resize', requestRender);
 document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {
   synchronizing = true;
   for (const viewer of viewers) {
