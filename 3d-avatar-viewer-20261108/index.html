@@ -48,10 +48,12 @@
   <p>Choose the three local GLB files. Compare the face, hands, clothing, silhouette, and unseen sides under the same lighting.</p>
   <div class="toolbar" aria-label="View controls">
     <button type="button" data-view="front">Front</button>
+    <button type="button" data-view="face">Face</button>
     <button type="button" data-view="side">Side</button>
     <button type="button" data-view="back">Back</button>
     <button type="button" data-view="three-quarter">Three-quarter</button>
     <label><input type="checkbox" id="wireframe"> Wireframe</label>
+    <label><input type="checkbox" id="skeleton"> Show rig</label>
     <label><input type="checkbox" id="sync" checked> Synchronize orbit and zoom</label>
   </div>
   <section class="viewers" aria-label="Local model viewers"></section>
@@ -72,8 +74,9 @@ let synchronizing = false;
 let renderPending = false;
 let lastFrame = performance.now();
 const wireframe = document.querySelector('#wireframe');
+const skeleton = document.querySelector('#skeleton');
 const synchronized = document.querySelector('#sync');
-const presets = { front: [0, 1.1, 4.3], side: [4.3, 1.1, 0], back: [0, 1.1, -4.3], 'three-quarter': [3, 1.6, 3] };
+const presets = { front: [0, 1.1, 4.3], face: [0, 1.82, 1.3], side: [4.3, 1.1, 0], back: [0, 1.1, -4.3], 'three-quarter': [3, 1.6, 3] };
 
 function requestRender() {
   if (renderPending) return;
@@ -167,7 +170,7 @@ for (const definition of definitions) {
   }
   const grid = new THREE.GridHelper(4, 8, 0x687b91, 0x354558);
   grid.position.y = -0.005; scene.add(grid);
-  const viewer = { ...definition, scene, camera, renderer, controls, model: null, sequence: 0, normalDefaults: new Map(), mixer: null, clips: [], action: null, playing: false };
+  const viewer = { ...definition, scene, camera, renderer, controls, model: null, sequence: 0, normalDefaults: new Map(), mixer: null, clips: [], action: null, playing: false, skeleton: null };
   viewers.push(viewer);
   function stopAnimation() {
     viewer.playing = false; viewer.mixer?.stopAllAction(); viewer.action = null; animationPlay.textContent = 'Play'; requestRender();
@@ -191,6 +194,7 @@ for (const definition of definitions) {
   });
   new ResizeObserver(() => {
     const width = viewport.clientWidth, height = viewport.clientHeight;
+    if (width < 1 || height < 1) return;
     renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix();
     requestRender();
   }).observe(viewport);
@@ -236,6 +240,7 @@ for (const definition of definitions) {
       model.scale.setScalar(2 / size.y); model.rotation.y = THREE.MathUtils.degToRad(viewer.yaw);
       stopAnimation();
       if (viewer.mixer) { viewer.mixer.uncacheRoot(viewer.mixer.getRoot()); viewer.mixer = null; }
+      if (viewer.skeleton) { scene.remove(viewer.skeleton); viewer.skeleton.geometry.dispose(); viewer.skeleton.material.dispose(); viewer.skeleton = null; }
       if (viewer.model) { scene.remove(viewer.model); disposeModel(viewer.model); }
       viewer.model = model; scene.add(model); applyWireframe(viewer);
       viewer.clips = loaded.animations || []; viewer.mixer = viewer.clips.length ? new THREE.AnimationMixer(loaded.scene) : null;
@@ -251,6 +256,12 @@ for (const definition of definitions) {
           if (material?.normalMap && material.normalScale) viewer.normalDefaults.set(material, material.normalScale.clone());
         }
       } });
+      if (skinned) {
+        viewer.skeleton = new THREE.SkeletonHelper(loaded.scene);
+        viewer.skeleton.material.vertexColors = false; viewer.skeleton.material.color.setHex(0xffcc55);
+        viewer.skeleton.material.depthTest = false; viewer.skeleton.renderOrder = 10;
+        viewer.skeleton.visible = skeleton.checked; scene.add(viewer.skeleton);
+      }
       normalSlider.disabled = normalReset.disabled = viewer.normalDefaults.size === 0;
       const base = viewer.normalDefaults.values().next().value;
       if (base) { const strength = Math.max(Math.abs(base.x), Math.abs(base.y)); normalSlider.max = Math.max(2, strength); normalSlider.value = strength; normalOutput.value = strength.toFixed(2); }
@@ -264,10 +275,11 @@ for (const definition of definitions) {
 }
 
 wireframe.addEventListener('change', () => { viewers.forEach(applyWireframe); requestRender(); });
+skeleton.addEventListener('change', () => { viewers.forEach(viewer => { if (viewer.skeleton) viewer.skeleton.visible = skeleton.checked; }); requestRender(); });
 document.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => {
   synchronizing = true;
   for (const viewer of viewers) {
-    viewer.camera.position.set(...presets[button.dataset.view]); viewer.controls.target.set(0, 1, 0); viewer.controls.update();
+    viewer.camera.position.set(...presets[button.dataset.view]); viewer.controls.target.set(0, button.dataset.view === 'face' ? 1.8 : 1, 0); viewer.controls.update();
   }
   synchronizing = false;
 }));
