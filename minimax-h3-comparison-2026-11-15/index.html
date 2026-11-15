@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MiniMax H3 comparison · RTX 5060 Ti · 15 November 2026</title><style>
+:root{color-scheme:light dark;font-family:system-ui,sans-serif;line-height:1.5;background:#11151c;color:#e6eaf1}
+body{max-width:1280px;margin:auto;padding:28px}h1{font-size:1.8rem;line-height:1.2}h2{font-size:1.2rem;margin-top:28px}
+a{color:#9ac9ff}p{max-width:100ch}small,.muted{color:#aeb9ca}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.92rem}
+th,td{text-align:left;border-bottom:1px solid #364253;padding:12px 10px;vertical-align:top}th{color:#b9d6ff;background:#19212e;white-space:nowrap}
+.scroll{overflow-x:auto}.panel{border:1px solid #364253;border-radius:12px;padding:16px;background:#171f2b;margin:14px 0}.lead{font-size:1.05rem;color:#d3e5ff}
+.quality{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.quality .panel{margin:0}code{font-size:.9em}.tag{display:inline-block;background:#23394c;border-radius:5px;padding:2px 7px;font-size:.78rem}
+button,select,input{font:inherit}button,select{border:1px solid #516480;border-radius:7px;background:#202e41;color:#eff5ff;padding:8px 11px}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.controls label{display:flex;gap:7px;align-items:center}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.card{min-width:0;border:1px solid #364253;border-radius:12px;overflow:hidden;background:#171f2b}.card h2{font-size:1rem;margin:12px}.card p{font-size:.88rem;margin:12px}.card video{width:100%;height:auto;aspect-ratio:2/3;display:block;background:#050609;object-fit:contain}.timing{font-variant-numeric:tabular-nums;color:#b9d6ff}.timeline{display:flex;gap:12px;align-items:center}.timeline input{flex:1}.timeline output{min-width:100px;font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}body{padding:16px}}@media(max-width:560px){.quality,.grid{grid-template-columns:1fr}}@media print{:root{color-scheme:light;background:white;color:black}body{padding:0}.panel,th{background:#f0f3f7}small,.muted{color:#445}a{color:#14519a}}
+</style></head><body>
+<h1>MiniMax H3 on an RTX 5060 Ti: four local configurations</h1>
+<p class="muted">15 November 2026 · RTX 5060 Ti, 16 GB VRAM · 64 GB system memory</p>
+<p class="muted">Measured on ComfyUI 0.44.0 before the separate H3 Image setup.</p>
+<p class="lead">Fastest measured warmed run: Eros beta 7 fix1 learned HQ, 80.5 s (1.82× the baseline throughput). This is a speed result; quality and task differences are considered separately below.</p>
+<p>Eight completed image-to-video generations: one benign synthetic office scene, two fixed seeds,
+512 × 768, 124 frames at 24 fps (5.17 s), with audio. The source, prompt, encoder and VAEs were shared.
+This is a screening comparison of two samples per configuration, not a universal quality ranking.</p>
+<h2>Measured generation time and memory</h2>
+<div class="scroll"><table><thead><tr><th>Configuration</th><th>Weights<br>GB</th><th>Sampling</th>
+<th>First run<br>total / sampler s</th><th>Warmed run<br>total / sampler s</th>
+<th>Peak GPU<br>GiB</th><th>Peak server RSS<br>GiB</th></tr></thead><tbody><tr><td><strong>Current Eros beta 5 INT8</strong></td><td>20.970</td><td>8 steps · res_multistep / simple</td><td>183.7 / 127.2</td><td>146.9 / 121.9</td><td>15.32</td><td>14.70</td></tr><tr><td><strong>Eros beta 5 optimized W4A8</strong></td><td>13.998</td><td>8 steps · res_multistep / simple</td><td>145.4 / 110.9</td><td>126.8 / 103.6</td><td>15.37</td><td>11.84</td></tr><tr><td><strong>Base H3 calibrated NVFP4</strong></td><td>12.694</td><td>20 steps · res_multistep / simple</td><td>273.0 / 240.5</td><td>254.4 / 231.6</td><td>15.46</td><td>9.79</td></tr><tr><td><strong>Eros beta 7 fix1 learned HQ</strong></td><td>18.734</td><td>8 steps · er_sde / sgm_uniform · VSA keeps 10%</td><td>92.0 / 61.2</td><td>80.5 / 56.6</td><td>15.37</td><td>15.51</td></tr></tbody></table></div>
+<p class="muted">First runs used seed 424242 after model unloading and execution-cache reset.
+Second runs used seed 424243 with the prior session warmed. Those second-seed runs are the more
+comparable timing view. Peak memory is the maximum sampled across each configuration’s two runs.</p>
+<h2>What limits the comparison</h2>
+<p>The baseline and optimized W4A8 use the same beta 5 tune and identical sampling settings;
+that pair isolates the model representation most directly. Calibrated NVFP4 uses base H3 and
+20 steps rather than the Eros tune’s 8. Beta 7 also changes the tune, sampler, scheduler and
+sparse attention. Its timing difference cannot be attributed to checkpoint precision alone.
+Native VSA sparse execution was observed in both beta 7 runs. ComfyUI also reported that this checkpoint has no learned coarse gate branch; its VSA fine stage ran without that branch.</p>
+<p>Operating-system file caches were not controlled. Model downloads and separate image-model staging
+overlapped portions of the batch, and disk/network load was not isolated. Small timing differences should be treated
+cautiously. Sampler times are websocket node wall times, including loading/transfers; they are not
+GPU kernel timings. GPU memory was sampled every 2 s across the whole board, including desktop use;
+process RSS covers the server process. Sampled peaks can miss brief spikes. Weight sizes use decimal GB;
+memory readings use GiB.</p>
+<h2>Output checks and quality notes</h2>
+<p>All eight audited files contain the expected 124-frame, 512 × 768, 24 fps video and stereo
+32 kHz audio. Decoded AAC samples exceeded full scale in 7 of the eight clips;
+that metric alone does not establish audible clipping. Frame differences and audio measurements
+confirm changing imagery and audio samples, not natural motion, intelligibility or exact dialogue.</p>
+<div class="quality"><article class="panel"><h2>Current Eros beta 5 INT8</h2><p>Both clips preserve the subject, glasses, clothing and office, and perform the small arm/head movement. Fruit shape/placement changes more in one seed. No gross visual failure in the sampled frames.</p><p><a href="https://huggingface.co/TenStrip/10Eros-Max" rel="noreferrer">Model source</a></p></article><article class="panel"><h2>Eros beta 5 optimized W4A8</h2><p>Both clips preserve the same subject and office and perform the movement. Sampled visual quality is close to current INT8, with small pose/hand/texture differences. These samples do not establish zero quantization loss.</p><p><a href="https://huggingface.co/TenStrip/10Eros-Max/blob/main/10Eros_Max_h3_TURBO-hybrid_beta5_w4a8_14gb_optimized.safetensors" rel="noreferrer">Model source</a></p></article><article class="panel"><h2>Base H3 calibrated NVFP4</h2><p>Both seeds preserve the subject and office and perform the requested small movement. Sampled frames show no clear visual improvement over beta5 W4A8 in this scene. The 20-step base recipe uses less server RAM but takes substantially longer per clip; it changes the tune as well as quantization. Speech accuracy was not transcribed.</p><p><a href="https://huggingface.co/nynxz/MiniMax-H3-Experiments" rel="noreferrer">Model source</a></p></article><article class="panel"><h2>Eros beta 7 fix1 learned HQ</h2><p>Both seeds preserve the subject, clothing and office and perform the arm/head movement without a gross visual failure in the sampled frames. The hand initially rises before lowering, so action timing differs slightly from the request. This is the fastest tested configuration, with a larger server RAM footprint than beta5 W4A8. Native sparse execution was observed; the runtime reports no learned coarse gate branch. Only the single-pass recipe was tested.</p><p><a href="https://huggingface.co/LokkenJP/TenEros_Max_optimized_learned" rel="noreferrer">Model source</a></p></article></div>
+<p class="muted">Generated videos, source images, workflow graphs and local runtime records remain local.
+This page contains aggregate measurements and review notes only.</p>
+</body></html>
