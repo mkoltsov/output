@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ComfyUI observability implementation plan</title>
+<style>
+:root{color-scheme:light dark;font-family:system-ui,sans-serif;line-height:1.6;background:#10151f;color:#e8edf6}body{max-width:960px;margin:auto;padding:36px 24px 70px}h1,h2,h3{line-height:1.2}h1{font-size:2.4rem}h2{margin-top:2.3rem;color:#9cd9ff}a{color:#9cd9ff}code{background:#222c3e;padding:.12em .3em;border-radius:4px;overflow-wrap:anywhere}.lead{font-size:1.2rem}.note,.flow{background:#182334;border:1px solid #35455d;padding:18px 22px;border-radius:12px}.flow{font-family:ui-monospace,monospace;white-space:pre-wrap}li{margin:.5em 0}.muted{color:#b8c5d9}.badge{display:inline-block;padding:3px 10px;border-radius:16px;background:#294035;color:#bbf0cd}footer{border-top:1px solid #35455d;margin-top:40px;padding-top:20px;font-size:.9rem}@media print{:root{color-scheme:light;background:white;color:#111}h2,a{color:#145578}.note,.flow,code{background:#f1f5f9;color:#111}.muted{color:#444}}
+</style></head><body>
+<p class="muted">Investigation date: 16 November 2026 · Sanitized technical plan</p>
+<h1>Measure ComfyUI runs with OpenTelemetry</h1>
+<p class="lead">Start with an external observer of the existing jobs API. Send one trace per run through the existing Alloy gateway. Add detailed node observation as a separately verified second phase.</p>
+<p class="badge">Plan only — instrumentation has not been deployed</p>
+<div class="note"><strong>Publication boundary.</strong> This page contains the implementation plan and sanitized findings. It excludes credentials, tenant identifiers, private endpoints, machine addresses, user paths, run identifiers, prompts, workflow contents and generated media.</div>
+
+<h2>What the investigation established</h2>
+<ul>
+<li><strong>Active collector:</strong> Grafana Alloy runs as a user service. Readiness and component-health endpoints returned success. Its OTLP trace pipeline is receiver → memory limiter → resource detection → batch → authenticated OTLP HTTP export to Grafana Cloud.</li>
+<li><strong>Active transport:</strong> accepted and exported span counters increased during observation. The trace exporter queue was empty in both samples; no collector warning/error journal entries appeared in the inspected 30-minute window. Historical failed-send counters exist, so this does not prove lossless delivery.</li>
+<li><strong>Network boundary:</strong> OTLP receivers listen only on loopback. A sender on another machine needs a deliberate transport path.</li>
+<li><strong>Existing metrics:</strong> a separate Prometheus pipeline scrapes a textfile collector every 120 seconds. An existing automation failure summary is consumed by the automation snapshot/Morning Digest code.</li>
+<li><strong>Existing benchmark artifacts:</strong> a one-shot LTX benchmark helper and saved metrics are present on the execution host. These establish prior benchmark instrumentation, not general monitoring of ordinary ComfyUI runs.</li>
+<li><strong>Available run data:</strong> the installed jobs API returned acceptance, execution-start and terminal timestamps, outcome, workflow ID and output count for recent completed jobs. The observed history also contains timestamped lifecycle and cache events.</li>
+<li><strong>Not verified:</strong> no new diagnostic span was submitted and retrieved from Grafana. No general ComfyUI telemetry service was deployed. Output existence or an application success event does not establish visual quality.</li>
+</ul>
+
+<h2>Recommended first phase</h2>
+<div class="flow">ComfyUI jobs/history API
+    ↓ loopback read-only polling
+External observer on execution host
+    ↓ bounded local spool + authenticated SSH tunnel
+Alloy gateway on collector host
+    ↓ existing authenticated export
+Grafana Cloud traces
+
+Observer aggregates → atomic textfile relay → existing metrics scrape
+Sanitized run failures → existing automation summary → Morning Digest</div>
+<p>Run the observer in its own environment and user service. Keep ComfyUI's Python dependencies and execution process unchanged. Use <code>OTEL_SERVICE_NAME=comfyui-observer</code>, explicit source host identity and the observed ComfyUI revision. Cloud credentials remain on the collector host.</p>
+<p>Use the existing bootstrap/wrapper patterns where appropriate, but give the observer its own lifecycle: a cron process span is not a workflow run span. Instrument observer HTTP/network calls every third logical call and always record their failures. Exclude the telemetry exporter from recursive instrumentation, and surface export/tunnel failures through dedicated observer-health signals.</p>
+
+<h3>Trace structure</h3>
+<ul>
+<li><code>comfyui.run</code>: accepted timestamp → terminal timestamp.</li>
+<li><code>comfyui.queue</code>: accepted timestamp → execution-start timestamp.</li>
+<li><code>comfyui.execute</code>: execution-start timestamp → terminal timestamp.</li>
+</ul>
+<p>Reconstruct timestamps from the server's millisecond timestamps, converting correctly to the SDK's nanosecond units. Polling adds discovery delay, not polling-sized uncertainty to these stored durations. Detect missing or inconsistent timestamps; do not fabricate precise intervals. Run totals exclude request validation before acceptance and may exclude final post-execution bookkeeping.</p>
+<p>Allowlisted trace attributes: opaque run/workflow identifiers, configured workflow family, execution host, ComfyUI revision, outcome, output count, cached-node count when available, and sanitized error/node types. Keep raw prompt graphs, node inputs, preview paths, media, exception messages and tracebacks out of export by default. Optional benchmark parameters require an explicit safe-field mapping.</p>
+
+<h3>Acquisition and recovery</h3>
+<p>Poll bounded pages from <code>/api/jobs</code>, with an overlapping reconciliation window and pagination until the checkpoint is reached. Inspect per-run history only when needed. Do not repeatedly fetch complete queues or histories containing large workflows. Keep a durable local ledger keyed by execution-instance identity and run ID, deterministic trace/span IDs, and bounded retention.</p>
+<p>Persist newly observed terminal runs before export, replay after outages, and distinguish discovered, queued-for-export and acknowledged records. Stable IDs help control replay, but do not claim exactly-once backend ingestion across an acknowledgement loss. History is held in process memory with a finite cap, so a sufficiently long outage or restart can permanently remove evidence.</p>
+<p>A disappearing queued item, lost server connection or missing terminal event is an <em>unknown/incomplete observation</em> unless corroborated. Record known user interruption separately from execution failure. A server-reported success is application success; validation of generated media remains a separate concern.</p>
+
+<h2>Gateway change required before cross-host traces</h2>
+<p>The current resource-detection stage detects the collector machine. Its installed Alloy version defaults to <code>override=true</code>. This creates a source-identity hazard for remote spans. Prefer a dedicated receiver/route for remote observer data that retains the memory limiter and batching while bypassing collector-host resource detection. Merely preserving supplied fields can still fill missing fields with gateway identity.</p>
+<p>Back up the affected gateway configuration, validate a candidate configuration, then apply the smallest route change. Preserve existing local automation pipelines. Keep receivers bound to loopback and use an SSH tunnel for the pilot. Verify source identity in the retrieved trace. Alloy's <a href="https://raw.githubusercontent.com/grafana/alloy/v1.16.1/internal/component/otelcol/processor/resourcedetection/resourcedetection.go">installed-version resource detector source</a> confirms the override default.</p>
+
+<h2>Metrics and operational diagnosis</h2>
+<p>Record every observed run in counters and duration histograms, independently of HTTP span sampling. Initially export all run-level traces, since each run needs only a few spans. Sample routine observer API calls every third call, retaining all failures. Reduce successful trace detail only after measuring volume; head sampling cannot later recover a trace that develops an error.</p>
+<ul>
+<li>Run counts by bounded workflow family and outcome; separate failed, interrupted and unknown observations.</li>
+<li>Queue, execution and total duration histograms; compare like-for-like workflow revisions and cache conditions.</li>
+<li>Queue depth, age of oldest queued run, current run age, server reachability and observer heartbeat.</li>
+<li>Export backlog, oldest unexported record, dropped records, tunnel availability and last successful gateway contact.</li>
+<li>Later, execution-host CPU/RAM and GPU memory/utilization/temperature sampled on a bounded cadence, correlated by source host and time. This is correlation, not proof that resource pressure caused a failure.</li>
+</ul>
+<p>Write aggregates atomically to the existing textfile directory on the collector host. A file written only on the execution host is not scraped by the remote collector. Relay monotonic counters/histogram buckets without resetting them at each poll, and publish freshness metrics. Do not place run IDs, trace IDs, prompt text or arbitrary errors in metric labels. The current 120-second scrape cadence suits aggregate dashboards; use observer state for prompt stale-run detection.</p>
+<p>Relay each sanitized failed run once into the established failure-summary format, with <code>kind=automation-job</code> and a trace ID. Keep observer transport errors separate from failed workflow runs, and avoid counting one run failure again for each failed HTTP poll. Extend the existing automation snapshot/Morning Digest renderer; do not add another notification scheduler. Emit stale/unavailable status when the observer or relay stops.</p>
+
+<h2>Second phase: trustworthy node spans</h2>
+<p>A generic independent WebSocket connection cannot reliably see jobs submitted by another client: lifecycle and node events are addressed to the submitting client ID. Reusing that ID replaces the browser's socket mapping. Normal history also lacks general per-node timing, and the <code>executed</code> event is not emitted for every node.</p>
+<p>Add a narrowly scoped local event bridge only if node attribution is needed. Keep export outside core ComfyUI. Verify its lifecycle integration against the installed revision: progress-handler registration is replaced per run, and lazy evaluation, asynchronous nodes and expanded subgraphs make “the next node starts when the previous one ends” an invalid general timing rule.</p>
+<p>Capture explicit timestamped starts, finishes and failures with run/node identity and cache/attempt/subgraph information. Name spans for stable node classes. Treat application timing as distinct from CUDA kernel timing; avoid per-node GPU synchronization that would distort performance. Submission validation errors require caller/proxy or explicit submission hooks because rejected requests never enter jobs/history.</p>
+
+<h2>Implementation order and acceptance criteria</h2>
+<ol>
+<li><strong>Offline observer:</strong> exercise recorded synthetic job data for success, failure, interruption, cache reuse, missing timestamps, pagination, restart and replay. Verify sanitization and bounded labels.</li>
+<li><strong>Gateway and transport:</strong> back up and validate the separate remote route, establish the tunnel, submit a small diagnostic trace, and retrieve it by trace ID. Check source host, timestamps, parenting and exporter health.</li>
+<li><strong>Read-only pilot:</strong> observe existing jobs without altering the queue; compare exported durations and outcomes against the exact jobs API records. Mark pre-pilot history separately to avoid confusing backfill with new runs.</li>
+<li><strong>Metrics and digest:</strong> verify the remote textfile is scraped, fresh data reaches Grafana, and a synthetic sanitized failure appears in a renderer-only snapshot preview. Verify that notifications are not accidentally sent during the preview.</li>
+<li><strong>Controlled failure and outage tests:</strong> after the queue drains, use an isolated minimal test to prove failure attribution. Simulate observer/tunnel interruption without disturbing ComfyUI; verify bounded buffering, replay, freshness and duplicate control.</li>
+<li><strong>Node pilot:</strong> only after both running and pending queues are empty, load the bridge in an isolated or scheduled test. Verify cached, asynchronous and expanded-node cases before broad use.</li>
+</ol>
+<p>Measure pilot overhead and actual daily trace volume before setting a budget. As a planning formula, three spans per run means roughly <code>3 × observed runs</code> run-level spans, plus sampled transport diagnostics. Node spans add the number of observed node attempts. These are estimates, not measured cloud intake.</p>
+<p>Rollback: stop the independent observer and tunnel, preserve its ledger, and restore only the backed-up gateway route if needed. No change to active workflows is required for phase one.</p>
+
+<h2>Evidence and references</h2>
+<p>Live evidence came from collector service state, sockets, sanitized configuration, readiness/health responses, two counter snapshots, recent collector journal inspection, existing helper code, installed ComfyUI source and read-only jobs/history responses. No credentials, raw run data or private endpoint configuration accompany this public page.</p>
+<p>Relevant installed ComfyUI source locations: <code>server.py</code> jobs routes and WebSocket routing; <code>comfy_execution/jobs.py</code> lifecycle normalization; <code>execution.py</code> lifecycle message timestamps/history and node execution; <code>comfy_execution/progress.py</code> progress-handler lifecycle. These locations describe the inspected checkout and must be rechecked after upgrades.</p>
+<p>Official references: <a href="https://grafana.com/docs/alloy/latest/reference/components/otelcol/otelcol.receiver.otlp/">Alloy OTLP receiver</a>; <a href="https://grafana.com/docs/alloy/latest/reference/components/otelcol/otelcol.processor.resourcedetection/">resource detection</a>; <a href="https://opentelemetry.io/docs/concepts/sampling/">OTel sampling</a>; <a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md">tail sampling and decision windows</a>. Long-running workflow traces need deliberate handling before adopting tail sampling.</p>
+<footer>This is an investigated proposal. Deployment, new-span retrieval, detailed node timing and media-quality verification remain implementation work.</footer>
+</body></html>
