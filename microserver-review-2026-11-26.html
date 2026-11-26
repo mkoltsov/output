@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Microserver setup and automation review</title>
+<style>
+:root{color-scheme:light;--ink:#142719;--muted:#435749;--paper:#fbf9ef;--panel:#fffefa;--border:#d9e0d1;--accent:#24553a;--tint:#e7efe2}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font:16px/1.58 system-ui,sans-serif}
+header{background:#203f2e;color:#fcfcf4;padding:clamp(2.1rem,7vw,5.1rem) 0 2.25rem;}
+.wrap{width:min(990px,calc(100% - 2.4rem));margin-inline:auto}
+header p{margin:0;color:#dbe8d9}
+h1{font:500 clamp(2.65rem,7vw,5.75rem)/.98 Georgia,serif;letter-spacing:-.055em;max-width:13ch;margin:.55rem 0 1.2rem}
+h2{font:500 clamp(1.7rem,4vw,2.6rem)/1.08 Georgia,serif;letter-spacing:-.025em;margin:0 0 1rem}
+nav{display:flex;flex-wrap:wrap;gap:.28rem .95rem;margin-top:1.45rem}
+nav a{color:#edf8e9;text-underline-offset:.25rem;white-space:nowrap}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.7rem;margin:1.65rem 0 2.4rem}
+.cards div{padding:1rem 1.1rem;background:var(--tint);border:1px solid var(--border);border-radius:.45rem}
+.cards strong{display:block;color:var(--accent);font-size:1.9rem;line-height:1.1;margin-bottom:.2rem;font-variant-numeric:tabular-nums}
+section{margin:0 0 2.5rem;scroll-margin-top:1rem}
+section p{max-width:74ch}
+.table{overflow:auto;border:1px solid var(--border);border-radius:.45rem;background:var(--panel)}
+table{border-collapse:collapse;width:100%;text-align:left;font-variant-numeric:tabular-nums}
+thead{background:var(--tint);color:var(--accent)}
+th,td{padding:.62rem .88rem;border-bottom:1px solid var(--border);vertical-align:top}
+th[scope=row]{font-weight:600}
+tbody tr:last-child>*{border-bottom:0}
+li{margin:.48rem 0}
+.muted,footer{color:var(--muted)}
+footer{border-top:1px solid var(--border);padding:1.25rem 0 2.25rem}
+@media(max-width:560px){th,td{padding:.48rem .52rem;font-size:.85rem}.wrap{width:calc(100% - 1.5rem)}}
+</style>
+<header><div class="wrap"><p>SNAPSHOT</p><h1>Microserver setup and automation review</h1>
+<p>26 November 2026 · 00:03 </p><nav aria-label="Report sections"><a href="#host">Host</a><a href="#application">Application outcomes</a><a href="#user">User timers</a><a href="#system">System timers</a><a href="#workers">Services</a><a href="#scope">Coverage</a></nav></div></header>
+<main class="wrap">
+<div class="cards">
+<div><strong>37</strong>active timers</div><div><strong>36</strong>latest recurring job exits successful</div>
+<div><strong>1</strong>one-time run pending</div><div><strong>0</strong>failed systemd units</div>
+</div>
+<section id="host"><h2>Host and storage</h2>
+<ul>
+<li>Raspberry Pi 400 with four cores, Debian 13.4 and 37 days of uptime. About 2.5 GB of 4.0 GB RAM was available. The CPU was 37–39 °C and reported zero throttle flags.</li>
+<li>The microSD root filesystem was 53% used with 111 GB free. The NVMe data filesystem was 65% used with 89 GB free. Project trees, cache and active automation state are on the NVMe. It reported 51 °C, zero media errors and zero SMART critical warnings.</li>
+<li>The root filesystem uses a 60-second commit interval. Journald is volatile and swap uses in-memory zram. The historical device sampler measured 503 MB/h before the 20 November changes and 8.2 MB/h during its final six hours on 21 November. Those figures describe the archived measurement windows.</li>
+<li>File-share and remote administration services were active. The UPS reported mains power and 100% charge. Battery runtime was a device estimate.</li>
+</ul></section>
+<section id="application"><h2>Application outcomes</h2>
+<ul>
+<li><strong>Backup.</strong> The latest daily archive completed successfully, and its upload receipt records remote integrity verification. A current restore was outside this review.</li>
+<li><strong>Twice-daily summary.</strong> Both latest messages were reported sent by the application, and the retry queue was empty. One event-data source was degraded. Inbox delivery was unverified.</li>
+<li><strong>Weekly usage report.</strong> The latest invocation skipped delivery because an entire reporting week had yet to accumulate. Sampling is current.</li>
+<li><strong>Climate collector.</strong> Two upstream weather HTTP 503 failures in the detector window were followed by a successful export.</li>
+<li><strong>Messaging worker.</strong> The worker was connected with an empty queue. Cumulative coverage gaps are visible in telemetry. A new end-to-end delivery was unverified.</li>
+<li><strong>Printing.</strong> The API responded. The printer connection was closed, with no print running. The completion monitor had no pending notifications.</li>
+<li><strong>Scanning.</strong> The primary scanner completed all five configured targets. The secondary trial recorded six healthy sources. Its scheduled comparison was still pending.</li>
+</ul></section>
+<section id="user"><h2>User timers</h2><div class="table"><table><thead><tr><th scope="col">Automation</th><th scope="col">Cadence</th><th scope="col">Last exit</th><th scope="col">Latest result</th></tr></thead><tbody><tr><th scope="row">DNS telemetry</th><td>Every minute</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Usage sampling</th><td>Every minute</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Presence sampling</th><td>Every 2 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Incident dispatcher</th><td>Every 2 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Deals monitor supervisor</th><td>Every 2 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Host, power, UPS and DNS checks</th><td>Every 2 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Automation log error detector</th><td>Every 5 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Reminder queue</th><td>Every 5 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Browser lease cleanup</th><td>Every 10 minutes</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Climate metrics</th><td>Every 10 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Digest retry queue</th><td>Hourly</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Primary comparison scanner</th><td>Every 2 hours</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Secondary scanner trial</th><td>Hourly</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Climate history and preference learning</th><td>Hourly</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Idle container check</th><td>Hourly</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Offsite archive backup</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Application log rotation</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Daytime activity summary</th><td>Half-hourly during its configured window</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Mailbox session check</th><td>Three times daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Morning summary</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Feed monitor</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Scanner comparison</th><td>One-time run</td><td>Pending</td><td>Awaiting first run</td></tr><tr><th scope="row">Evening summary</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Climate control</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Weekly planner</th><td>Weekly</td><td>22 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Weekly newsletter summary</th><td>Weekly</td><td>22 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Weekly usage report</th><td>Weekly</td><td>23 Nov</td><td>Exit 0</td></tr></tbody></table></div></section><section id="system"><h2>System timers</h2><div class="table"><table><thead><tr><th scope="col">Automation</th><th scope="col">Cadence</th><th scope="col">Last exit</th><th scope="col">Latest result</th></tr></thead><tbody><tr><th scope="row">NVMe SMART collection</th><td>Every 10 minutes</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">System log rotation</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">System configuration snapshot</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Manual index refresh</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Package upgrade maintenance</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Package index maintenance</th><td>Twice daily with randomized delay</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Temporary directory cleanup</th><td>Daily</td><td>25 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Package database backup</th><td>Daily</td><td>26 Nov</td><td>Exit 0</td></tr><tr><th scope="row">ext4 scrub check</th><td>Weekly</td><td>22 Nov</td><td>Exit 0</td></tr><tr><th scope="row">Filesystem trim maintenance</th><td>Weekly</td><td>23 Nov</td><td>Exit 0</td></tr></tbody></table></div></section><section id="workers"><h2>Persistent services and on-demand infrastructure</h2><div class="table"><table><thead><tr><th scope="col">Component</th><th scope="col">Observed state</th><th scope="col">Evidence</th></tr></thead><tbody><tr><th scope="row">Observability collector</th><td>Running</td><td>Local health checks passed. The metrics sender advanced during the review.</td></tr><tr><th scope="row">Messaging event reader</th><td>Running</td><td>Fresh heartbeat and empty queue. Historical coverage gaps recorded.</td></tr><tr><th scope="row">Forum and deals polling worker</th><td>Running</td><td>Continuous child process under the scheduled supervisor.</td></tr><tr><th scope="row">Reminder web application</th><td>Running</td><td>Local HTTP check succeeded.</td></tr><tr><th scope="row">Printing server and completion monitor</th><td>Running</td><td>Application API reachable. Printer disconnected.</td></tr><tr><th scope="row">Media preview application</th><td>Running</td><td>Local HTTP check succeeded.</td></tr><tr><th scope="row">Shared browser</th><td>Running on demand</td><td>Debugging endpoint reachable. Separate lease cleanup timer active.</td></tr><tr><th scope="row">Remote desktop connector</th><td>Running</td><td>Process and launch state verified.</td></tr><tr><th scope="row">Local agent backend</th><td>Process present</td><td>Process observed. Its original start path was unverified.</td></tr><tr><th scope="row">Container engine and socket</th><td>Active</td><td>Zero containers found across all states.</td></tr><tr><th scope="row">Network shares, DNS discovery, time sync and UPS</th><td>Active</td><td>System services and sampled host-health data checked.</td></tr></tbody></table></div></section><section id="scope"><h2>Evidence and coverage</h2>
+<p>Timer results come from the systemd managers and the latest completed target service invocation. These show scheduler state and exit status. Application metrics, receipts and local API responses support the outcomes above.</p>
+<p>The current user’s crontab has zero commands. System cron is active, with installed maintenance entries and a custom boot recovery hook. The live inventory also includes one user path trigger and three system path triggers. Nine disabled user timers include standalone collectors now grouped under a single timer, retired jobs, the completed write sampler and a user cleanup timer.</p>
+<p>Other users’ private crontabs and external schedulers remain unverified. The local journal is retention-limited. The review used existing evidence for sends and backups, and used read-only probes for current endpoints.</p>
+</section></main><footer><div class="wrap">Public inventory with generic workflow labels and aggregated operational details.</div></footer></html>
