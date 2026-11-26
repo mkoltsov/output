@@ -1,65 +1,76 @@
-# Thanksgiving 2026 deals by configuration and use
+# Thanksgiving 2026 deals by exact model
 
-The U.S. watch ran **November 26, 2026, from 1:57 to 5:57 a.m. EST**, with full seller checks at **5:48–5:49 a.m. EST** and a **5:55 a.m. EST** spot check confirming the lead MSI, MacBook Air, Ryobi, and Dreame Z20 prices and purchase availability. It used Slickdeals leads and comparable products, then checked public merchant listings. Every computer below ships with at least 32 GB installed. Prices are in U.S. dollars before tax. Coupon eligibility depends on checkout.
+The U.S. watch ran **November 26, 2026, from 1:57 to 5:57 a.m. EST**, with full seller checks at **5:48–5:49 a.m. EST** and a **5:55 a.m. EST** spot check confirming the lead MSI, MacBook Air, Ryobi, and Dreame Z20 prices and purchase availability. It used Slickdeals leads and comparable products, then checked public merchant listings. Every computer listed has at least 32 GB of installed memory. Prices are in U.S. dollars before tax. Coupon eligibility depends on checkout.
 
-## 32 GB Windows work laptops with 1–2 TB storage
 
-The **new MSI Venture A16 AI at $977.50** gets you a Ryzen 9 270, 32 GB, a 2 TB SSD and a touchscreen, sold and shipped by Amazon. It is about $182 below the same listing’s $1,159.19 tracked Amazon average, based on a short price history. For an OLED display, the **ASUS Vivobook S16 at $1,169.99** has 32 GB and a 1 TB SSD, also sold and shipped by Amazon. [MSI at Amazon](https://www.amazon.com/dp/B0GP88HH1Y) · [MSI specifications](https://us.msi.com/Business-Productivity/Venture-A16-AI-A2HM/Specification) · [MSI price history](https://camelcamelcamel.com/product/B0GP88HH1Y) · [ASUS at Amazon](https://www.amazon.com/dp/B0GWFX7BY3)
+## Dyson V8 Absolute and V8 Origin
 
-## Refurbished 32 GB mobile workstations under $650
-
-The **Dell Precision 3571** has a Core i7-12800H, NVIDIA RTX A1000, 32 GB and a 512 GB SSD. Newegg’s eBay listing showed **$769.99 before the `CYBERFINDS20` code and $615.99 with it** through November 30. It labels the unit Very Good Refurbished and shows one year of Allstate coverage, free shipping and free 30-day returns. The listing leaves individual battery health unspecified. [Newegg on eBay](https://www.ebay.com/itm/389934601702) · [eBay coupon terms](https://www.ebay.com/e/daily-deals/26-rw47-cyber-week-sfc)
-
-## 32 GB gaming laptops with RTX 5070 or RTX 5080
-
-The **$1,699.99 Acer Predator Helios Neo 16 AI** at B&H includes an RTX 5070 laptop GPU, 32 GB and a 1 TB SSD. The **new $2,899 MSI Stealth A18 AI+** from Amazon steps up to an RTX 5080 laptop GPU and a 2 TB SSD, with 32 GB. Verify the MSI display configuration before buying if screen resolution or refresh rate matters. Published specifications for the exact model conflict. [Acer at B&H](https://www.bhphotovideo.com/c/product/1899207-REG/acer_phn16_73_95g8_16_predator_helios_neo.html) · [MSI at Amazon](https://www.amazon.com/dp/B0GXQ6X3SD) · [MSI store](https://us-store.msi.com/Stealth-A18-AI-A3HWIG-028US)
-
-## 32 GB MacBook Air with 512 GB or 1 TB storage
-
-The **$1,549 M5 MacBook Air** at B&H ships with 32 GB and a 512 GB SSD, saving $150 against Apple’s same configuration. For 1 TB of storage, B&H showed a new **32 GB M5 Air for $1,849**. Apple Certified Refurbished had the **32 GB/1 TB M5 Air for $1,699** with a one-year warranty. [B&H 512 GB Air](https://www.bhphotovideo.com/c/product/1957234-REG/apple_mba_m5_25_13_macbook_air_m5.html) · [Apple Air comparison](https://www.apple.com/shop/buy-mac/macbook-air/13-inch-sky-blue-m5-chip-10-core-cpu-10-core-gpu-32gb-memory-512gb-storage) · [B&H 1 TB Air](https://www.bhphotovideo.com/c/product/1957241-REG/apple_mba_m5_32_13_macbook_air_m5.html) · [Apple refurbished 1 TB Air](https://www.apple.com/shop/product/g1l82ll/a)
-
-## 32 GB MacBook Pro with a 1 TB SSD
-
-B&H’s **$2,199 M6 MacBook Pro** includes 32 GB, a 1 TB SSD and a 96 W adapter. It was $50 below Amazon’s comparable listing. B&H marked the Pro as limited supply. [B&H MacBook Pro](https://www.bhphotovideo.com/c/product/2010284-REG/apple_z1up_05_14_macbook_pro_m6.html) · [Amazon MacBook Pro](https://www.amazon.com/dp/B0HPGT8TG5)
-
-## Mac mini with 48 GB of unified memory
-
-B&H showed the **48 GB/512 GB M4 Pro Mac mini at $1,849**. [B&H Mac mini](https://www.bhphotovideo.com/c/product/1859285-REG/apple_z1jv_macmini14_mac_mini_m4_pro_12c.html)
-
-## RTX 5060 and 5060 Ti desktops with 32 GB RAM under $1,500 shipped
-
-Costco’s **iBUYPOWER Element EBI7N56T03 is $1,414.98 shipped for members** through December 6 while supplies last. It includes the RTX 5060 Ti 8 GB, 32 GB of system RAM, a 2 TB SSD, a two-year warranty and 90-day returns. The **$1,314.98 shipped CyberPowerPC** has an RTX 5060, 32 GB and 1 TB, with member pricing through November 30. The extra $100 buys the graphics upgrade and doubles SSD capacity. [Costco RTX 5060 Ti](https://www.costco.com/p/-/4201009213) · [Costco RTX 5060](https://www.costco.com/p/-/4000445406)
-
-## 32 GB gaming desktops with RTX 5070 or RX 9070 XT
-
-For an RTX 5070, Woot’s **Thermaltake Versa i570S** has 32 GB and 1 TB. Code `BESTOFPC` brings its $1,939.99 base price to **$1,648.99 for first-time customers or $1,745.99 for returning customers**, once per customer through December 5 at 12:58 a.m. ET or while supplies last. Woot lists a 90-day warranty and free standard shipping with Prime. [Woot desktop and coupon](https://computers.woot.com/offers/thermaltake-lcgs-versa-i570s-i9-14900kf-rtx-5070z-1)
-
-For a higher desktop GPU tier, Amazon sold and shipped the **$2,239.99 Lenovo Legion Tower 5** with a Ryzen 7 7800X3D, Radeon RX 9070 XT, 32 GB and a 1 TB SSD. It remained available in the closing checks. [Lenovo at Amazon](https://www.amazon.com/dp/B0GNC8GSDW)
-
-## New cordless stick vacuums under $180
+Dyson’s official eBay store listed the certified-refurbished **V8 Absolute Silver/Black (447266-03) for $179.99** and the **V8 Origin Red/Black (400493-06) for $151.99** with code **CYBERFINDS20**. The Absolute’s extra **$28** adds a Fluffy hard-floor head and more tools to the Motorbar kit. Both listings showed free shipping, seller-paid 30-day returns, and two years of Allstate coverage. [V8 Absolute on eBay](https://www.ebay.com/itm/940071741546) · [V8 Origin on eBay](https://www.ebay.com/itm/940071741481)
 
 The **$129 Ryobi ONE+ HP pet stick kit PBLSV716K** at Home Depot includes an 18 V, 4.0 Ah battery and charger, with free shipping and 90-day returns shown. That is $70 below a late-October Slickdeals offer for the same kit at Home Depot. The **$169.99 new Dreame Z20** includes separate multi-surface and soft-roller floor heads, a motorized mini-brush and a freestanding base. Dreame lists two years of body coverage and one year for the battery, with a 30-day return window and buyer-paid shipping on approved non-defective returns. The **$136 Shark PowerPro IZ370H** uses a single all-floor head and showed free shipping and holiday returns through January 31 at Walmart. [Ryobi](https://www.homedepot.com/p/319713490) · [October Ryobi offer](https://slickdeals.net/f/20215359) · [Dreame Z20](https://www.dreametech.com/products/z20-cordless-stick-vacuum) · [Dreame terms](https://support.dreametech.com/hc/en-us/articles/16736241560079-After-Sales-Policy) · [Shark at Walmart](https://www.walmart.com/ip/14567965283)
 
-## Certified-refurbished Dyson V15 with both floor heads
+## Dyson Outsize Plus Extra
+
+The **$199.99 certified-refurbished Outsize Plus Extra Nickel** from Dyson’s eBay store included the wider Digital Motorbar XL and a low-reach adapter. It was **$20 more than the V8 Absolute** and offered a larger bin. The price used **CYBERFINDS20**, with free shipping, seller-paid 30-day returns, and two years of Allstate coverage. [Dyson Outsize on eBay](https://www.ebay.com/itm/277719757635)
+
+## Dyson V15 Detect and V15s Detect Submarine
+
+The **$351.99 certified-refurbished V15s Detect Submarine Yellow/Nickel** included the Submarine wet roller, Fluffy Optic, and Digital Motorbar heads. Dyson’s official eBay listing showed **CYBERFINDS20**, free shipping, seller-paid 30-day returns, and two years of Allstate coverage. It cost **$60 more** than the V15 Detect offer. [Dyson V15s on eBay](https://www.ebay.com/itm/940071741583)
 
 **Confirm battery inclusion before ordering the $291.99 Dyson V15 Detect.** Dyson’s official eBay store showed SKU 447261-02 at $364.99 before `CYBERFINDS20`. The certified-refurbished Yellow/Nickel listing names the Fluffy Optic and Digital Motorbar heads and a charger, with free shipping, seller-paid 30-day returns and two years of Allstate coverage. The associated eBay catalog entry calls the model **“No Batteries.”** Dyson’s outlet page for the same SKU describes a click-in battery. The seller’s box list leaves battery inclusion unresolved. Dyson’s own outlet offered the same SKU for $289.99 with final sale and a six-month warranty. The $291.99 eBay deal is $8 below the November 6 offer for the exact listing. The code runs through November 30 Pacific, with up to $500 off eligible items and a two-use limit. [Dyson eBay listing](https://www.ebay.com/itm/940049834957) · [Linked eBay catalog](https://www.ebay.com/p/21107927132) · [Dyson Outlet](https://www.dyson.com/outlet/refurbished-vacuum-cleaners/cordless/v15-detect-yellow-nickel) · [November 6 offer](https://slickdeals.net/f/20270091) · [eBay coupon terms](https://www.ebay.com/e/daily-deals/26-rw47-cyber-week-sfc)
 
-## Self-emptying robot vacuum-mops with pads or a roller
+## Dyson 360 Vis Nav and Car+Boat bundle
+
+Amazon sold and shipped the **Dyson 360 Vis Nav and Car+Boat bundle for $509.94**, with returns displayed through January 31, 2027. The bundle includes a separate Dyson handheld for the car and upholstery. [Dyson bundle at Amazon](https://www.amazon.com/dp/B0FL99BFXC)
 
 The **$399.99 Dreame L40s Ultra** uses mop pads and showed free shipping, with white units scheduled to ship starting December 5. For automated mopping, the **$499.99 Dreame Aqua10 Ultra Roller** adds a self-washing roller and a dock that empties the dustbin, washes the mop and dries it. [Dreame L40s Ultra](https://www.dreametech.com/products/l40s-ultra-robot-vacuum) · [Dreame Aqua10 Ultra Roller](https://www.dreametech.com/products/aqua10-ultra-roller-robot-vacuum)
 
-## Insulated food jars under $20
+## Dyson Purifier Hot+Cool Formaldehyde HP09
+
+Dyson’s official eBay store showed the certified-refurbished **HP09 White/Gold for $251.99 with CYBERFINDS20**, with free shipping, seller-paid 30-day returns, and two years of Allstate coverage. Walmart showed **$249.98** in Restored Premium condition, sold and shipped by Dyson with free shipping and free 30-day returns. [HP09 on eBay](https://www.ebay.com/itm/277742109186) · [HP09 at Walmart](https://www.walmart.com/ip/20976219740)
+
+## MacBook Air M5 with 32 GB
+
+B&H showed the **32 GB M5 MacBook Air with 512 GB SSD (Z1L9000S0) for $1,549**, a $150 saving against Apple’s price for the same configuration. B&H showed the new **32 GB/1 TB M5 Air (Z1L8000KL) for $1,849**. Apple Certified Refurbished had the **32 GB/1 TB M5 Air for $1,699** with a one-year warranty. [B&H 512 GB Air](https://www.bhphotovideo.com/c/product/1957234-REG/apple_mba_m5_25_13_macbook_air_m5.html) · [Apple Air comparison](https://www.apple.com/shop/buy-mac/macbook-air/13-inch-sky-blue-m5-chip-10-core-cpu-10-core-gpu-32gb-memory-512gb-storage) · [B&H 1 TB Air](https://www.bhphotovideo.com/c/product/1957241-REG/apple_mba_m5_32_13_macbook_air_m5.html) · [Apple refurbished 1 TB Air](https://www.apple.com/shop/product/g1l82ll/a)
+
+B&H’s **$2,199 M6 MacBook Pro** includes 32 GB, a 1 TB SSD and a 96 W adapter. It was $50 below Amazon’s comparable listing. B&H marked the Pro as limited supply. [B&H MacBook Pro](https://www.bhphotovideo.com/c/product/2010284-REG/apple_z1up_05_14_macbook_pro_m6.html) · [Amazon MacBook Pro](https://www.amazon.com/dp/B0HPGT8TG5)
+
+## Mac mini M4 Pro with 48 GB
+
+B&H showed the **48 GB/512 GB M4 Pro Mac mini Z1JV00027 at $1,849**. [B&H Mac mini](https://www.bhphotovideo.com/c/product/1859285-REG/apple_z1jv_macmini14_mac_mini_m4_pro_12c.html) Apple showed the **M5 Pro Mac mini with the same 48 GB memory and 512 GB SSD for $2,299**, a $450 step up. [Apple M5 Pro Mac mini](https://www.apple.com/shop/buy-mac/mac-mini/m5-pro-chip-15-core-cpu-16-core-gpu-48gb-memory-512gb-storage)
+
+## Thermaltake Versa i570S RTX 5070
+
+Woot’s **Thermaltake Versa i570S (H16S-B760-570-LCS)** has an RTX 5070 with 12 GB of graphics memory, 32 GB of RAM, and a 1 TB SSD. Code `BESTOFPC` brings its $1,939.99 base price to **$1,648.99 for first-time customers or $1,745.99 for returning customers**, once per customer through December 5 at 12:58 a.m. ET or while supplies last. Woot lists a 90-day warranty and free standard shipping with Prime. [Woot desktop and coupon](https://computers.woot.com/offers/thermaltake-lcgs-versa-i570s-i9-14900kf-rtx-5070z-1)
+
+Costco’s **iBUYPOWER Element EBI7N56T03 is $1,414.98 shipped for members** through December 6 while supplies last. It includes the RTX 5060 Ti 8 GB, 32 GB of system RAM, a 2 TB SSD, a two-year warranty and 90-day returns. The **$1,314.98 shipped CyberPowerPC** has an RTX 5060, 32 GB and 1 TB, with member pricing through November 30. The extra $100 buys the graphics upgrade and doubles SSD capacity. [Costco RTX 5060 Ti](https://www.costco.com/p/-/4201009213) · [Costco RTX 5060](https://www.costco.com/p/-/4000445406)
+
+For a higher desktop GPU tier, Amazon sold and shipped the **$2,239.99 Lenovo Legion Tower 5** with a Ryzen 7 7800X3D, Radeon RX 9070 XT, 32 GB and a 1 TB SSD. It remained available in the closing checks. [Lenovo at Amazon](https://www.amazon.com/dp/B0GNC8GSDW)
+
+## Alienware 18 Area-51 RTX 5080
+
+The **Alienware 18 Area-51 with RTX 5080, 32 GB RAM, and a 2 TB SSD** appeared on Slickdeals for $3,999.99. Amazon showed the item unavailable during the watch. The MSI Stealth A18 AI+ below had the closest available configuration. [Alienware on Slickdeals](https://slickdeals.net/f/20344368) · [Alienware at Amazon](https://www.amazon.com/dp/B07HJPZJ51)
+
+The **$1,699.99 Acer Predator Helios Neo 16 AI** at B&H includes an RTX 5070 laptop GPU, 32 GB and a 1 TB SSD. The **new $2,899 MSI Stealth A18 AI+** from Amazon steps up to an RTX 5080 laptop GPU and a 2 TB SSD, with 32 GB. Verify the MSI display configuration before buying if screen resolution or refresh rate matters. Published specifications for the exact model conflict. [Acer at B&H](https://www.bhphotovideo.com/c/product/1899207-REG/acer_phn16_73_95g8_16_predator_helios_neo.html) · [MSI at Amazon](https://www.amazon.com/dp/B0GXQ6X3SD) · [MSI store](https://us-store.msi.com/Stealth-A18-AI-A3HWIG-028US)
+
+## MSI Venture A16 AI and ASUS Vivobook S16
+
+The **new MSI Venture A16 AI at $977.50** gets you a Ryzen 9 270, 32 GB, a 2 TB SSD and a touchscreen, sold and shipped by Amazon. It is about $182 below the same listing’s $1,159.19 tracked Amazon average, based on a short price history. For an OLED display, the **ASUS Vivobook S16 at $1,169.99** has 32 GB and a 1 TB SSD, also sold and shipped by Amazon. [MSI at Amazon](https://www.amazon.com/dp/B0GP88HH1Y) · [MSI specifications](https://us.msi.com/Business-Productivity/Venture-A16-AI-A2HM/Specification) · [MSI price history](https://camelcamelcamel.com/product/B0GP88HH1Y) · [ASUS at Amazon](https://www.amazon.com/dp/B0GWFX7BY3)
+
+The **Dell Precision 3571** has a Core i7-12800H, NVIDIA RTX A1000, 32 GB and a 512 GB SSD. Newegg’s eBay listing showed **$769.99 before the `CYBERFINDS20` code and $615.99 with it** through November 30. It labels the unit Very Good Refurbished and shows one year of Allstate coverage, free shipping and free 30-day returns. The listing leaves individual battery health unspecified. [Newegg on eBay](https://www.ebay.com/itm/389934601702) · [eBay coupon terms](https://www.ebay.com/e/daily-deals/26-rw47-cyber-week-sfc)
+
+## Stanley Classic and Hydrapeak food jars
 
 The **$19.50 Stanley Classic Hammertone Silver food jar** holds 0.71 L and matches the lowest Amazon price its exact listing has tracked since July 2023. The **$19.96 Hydrapeak** holds 0.95 L for another $0.46. [Stanley](https://www.amazon.com/dp/B0C2GDLRRJ) · [Stanley price history](https://camelcamelcamel.com/product/B0C2GDLRRJ) · [Hydrapeak](https://www.amazon.com/dp/B0CNQ986VR)
 
-## Heated foot and handheld percussion massagers under $60
+## RENPHO heated foot massager and TOLOCO massage gun
 
 Walmart showed the **RENPHO heated foot massager for $59.99** in black and beige, sold by Renpho and fulfilled by Walmart with free shipping and 90-day returns. The handheld **TOLOCO percussion massager with 10 attachments** showed **$37.98** at Amazon, matching its tracked third-party new low. [RENPHO](https://www.walmart.com/ip/18970458517) · [TOLOCO](https://www.amazon.com/dp/B083L8RNJR) · [TOLOCO price history](https://camelcamelcamel.com/product/B083L8RNJR)
 
-## Freezer-bowl ice cream maker under $55
+## Elite Gourmet EIM263M ice cream maker
 
 The **$51.74 Elite Gourmet 1.9 L ice cream maker** at Amazon was $13.25 below the same model at Walmart. It uses a bowl you freeze ahead of time. [Elite Gourmet at Amazon](https://www.amazon.com/dp/B0GWFRS6KC) · [Walmart comparison](https://www.walmart.com/ip/20598311834)
 
-## Countertop slush machines under $170
+## Ninja SLUSHi FS310 and FS305CO
 
 Walmart’s **$169 new Ninja SLUSHi FS310** showed free shipping and 90-day returns. Woot’s refurbished FS305CO is **$113.99 with `FEAST`** from $133.99, with a 90-day limited warranty and free standard shipping with Prime. Woot lists a two-use limit through December 7 at 11:58 p.m. Central or while supplies last. [Walmart Ninja](https://www.walmart.com/ip/17768001716) · [Woot Ninja and coupon](https://home.woot.com/offers/ninja-slushi-professional-frozen-drink-maker-7)
